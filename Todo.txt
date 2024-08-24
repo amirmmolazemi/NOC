@@ -1,0 +1,4 @@
+// TODO: responsive the Layout
+// TODO: make the logOut work 
+// TODO: add a button to change the language
+// TODO: clean the code
