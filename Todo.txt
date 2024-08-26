@@ -1,1 +1,5 @@
-// TODO: add a button to change the language
+// TODO: make a json for texts
+// TODO: create a hook for use selector
+// TODO: show charts in dashboard
+// TODO: setting page
+// TODO: pack page

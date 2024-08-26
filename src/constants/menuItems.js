@@ -1,14 +1,18 @@
 import Cookies from "js-cookie";
-import { FiHome, FiSettings, FiUpload } from "react-icons/fi";
-import { toast } from "react-toastify";
-
+import { FiHome, FiSettings, FiUpload, FiLogOut } from "react-icons/fi";
 const menuItems = [
-  { title: "Dashboard", icon: FiHome, link: "/" },
-  { title: "Packs", icon: FiUpload, link: "/packs" },
-  { title: "Settings", icon: FiSettings, link: "/settings" },
+  { titleEn: "Dashboard", titleFa: "داشبورد", icon: FiHome, link: "/" },
+  { titleEn: "Packs", titleFa: "پک ها", icon: FiUpload, link: "/packs" },
   {
-    title: "Logout",
+    titleEn: "Settings",
+    titleFa: "تنظیمات",
     icon: FiSettings,
+    link: "/settings",
+  },
+  {
+    titleEn: "Logout",
+    titleFa: "خروج",
+    icon: FiLogOut,
     link: "/login",
     click: () => {
       Cookies.remove("token");

@@ -1,8 +1,16 @@
 import LoginForm from "components/login/LoginForm";
 import bgPicture from "assets/bgPicture.png";
 import partLogo from "assets/partLogo.png";
+import { useEffect } from "react";
+import Cookies from "js-cookie";
+import { useNavigate } from "react-router-dom";
 
 function Login() {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const token = Cookies.get("token");
+    token ? navigate("/dashboard") : navigate("/login");
+  }, []);
   return (
     <div className="min-h-screen flex">
       <div className="flex flex-col justify-center items-center p-8 w-full md:w-5/12 bg-white">

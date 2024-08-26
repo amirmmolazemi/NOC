@@ -16,3 +16,24 @@ body {
   padding: 0;
   box-sizing: border-box;
 }
+
+.rtl {
+  direction: rtl;
+  text-align: right;
+}
+
+.rtl * {
+  direction: rtl;
+}
+
+.sidebar-open {
+  transform: translateX(0);
+  opacity: 1;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+.sidebar-closed {
+  transform: translateX(-100%);
+  opacity: 0;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}

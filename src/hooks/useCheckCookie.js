@@ -1,12 +1,10 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { jwtDecode } from "jwt-decode";
 import Cookies from "js-cookie";
 import api from "configs/api";
-const useCheckCookie = (fetchUrl) => {
+const useCheckCookie = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({});
 
   useEffect(() => {
     const checkToken = async () => {
@@ -26,15 +24,6 @@ const useCheckCookie = (fetchUrl) => {
             },
           }
         );
-
-        const decoded = jwtDecode(token);
-        // const res = await api.get(fetchUrl, {
-        //   headers: {
-        //     Authorization: token,
-        //   },
-        // });
-
-        setData({ user: decoded, otherData: "res.data" });
       } catch (error) {
         Cookies.remove("token");
         navigate("/login");
@@ -44,9 +33,9 @@ const useCheckCookie = (fetchUrl) => {
     };
 
     checkToken();
-  }, [fetchUrl, navigate]);
+  }, [navigate]);
 
-  return { data, loading };
+  return { loading };
 };
 
 export default useCheckCookie;

@@ -1,9 +1,9 @@
-// src/components/Sidebar.jsx
 import { FiX } from "react-icons/fi";
+import { useSelector } from "react-redux";
 import Logo from "./Logo";
 import NavMenu from "./NavMenu";
 import ThemeToggle from "./ThemeToggle";
-import { useSelector } from "react-redux";
+import LanguageToggle from "./LanguageToggle";
 
 function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
   const darkMode = useSelector((state) => state.theme.darkMode);
@@ -17,6 +17,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
       >
         <Logo />
         <NavMenu />
+        <LanguageToggle />
         <ThemeToggle />
       </aside>
 
@@ -32,7 +33,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
                 ? "bg-gray-800 text-gray-100"
                 : "bg-gray-100 text-gray-800"
             } transition-transform duration-300 md:hidden ${
-              isSidebarOpen ? "transform-none" : "-translate-x-full"
+              isSidebarOpen ? "sidebar-open" : "sidebar-closed"
             }`}
           >
             <button
@@ -42,6 +43,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
               <FiX />
             </button>
             <NavMenu onClick={() => setIsSidebarOpen(false)} />
+            <LanguageToggle />
           </aside>
         </>
       )}

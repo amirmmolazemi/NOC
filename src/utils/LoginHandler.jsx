@@ -12,7 +12,6 @@ const loginHandler = async (username, password) => {
       username,
       password,
     });
-    console.log(data);
     if (data.token) {
       Cookies.set("token", data.token, {
         sameSite: "Strict",
@@ -21,7 +20,6 @@ const loginHandler = async (username, password) => {
     }
     return true;
   } catch (error) {
-    console.log(error);
     const errorMessage = error.response?.data?.error || "internal server error";
     toast.error(errorMessage);
   }
