@@ -1,9 +1,7 @@
-import useCheckCookie from "src/hooks/useCheckCookie";
+import { useSelector } from "react-redux";
 
-function Dashboard({ darkMode }) {
-  // const { data, loading } = useCheckCookie("");
-
-  // if (loading) return <h1>Loading ....</h1>;
+function Dashboard() {
+  const darkMode = useSelector((state) => state.theme.darkMode);
 
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6">
