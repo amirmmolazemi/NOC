@@ -7,7 +7,7 @@ function Header({ isSidebarOpen, setIsSidebarOpen }) {
 
   return (
     <div
-      className={`md:hidden flex items-center justify-between p-4 fixed top-0 left-0 w-full z-20 ${
+      className={`md:hidden flex items-center justify-between p-4 fixed top-0 left-0 w-full z-1 ${
         darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-100 text-gray-800"
       }`}
     >

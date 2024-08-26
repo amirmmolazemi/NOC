@@ -18,7 +18,7 @@ function NavMenu({ onClick }) {
           >
             <Link
               to={item.link}
-              onClick={item.click}
+              onClick={onClick}
               className="flex flex-col items-center text-center"
             >
               <item.icon />

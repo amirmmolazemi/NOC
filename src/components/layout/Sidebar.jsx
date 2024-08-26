@@ -16,11 +16,10 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
         } transition-transform duration-300 hidden md:flex`}
       >
         <Logo />
-        <NavMenu />
+        <NavMenu onClick={() => setIsSidebarOpen(false)} />
         <LanguageToggle />
         <ThemeToggle />
       </aside>
-
       {isSidebarOpen && (
         <>
           <div
@@ -28,7 +27,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
             onClick={() => setIsSidebarOpen(false)}
           />
           <aside
-            className={`fixed inset-0 z-30 p-6 flex flex-col items-center ${
+            className={`fixed top-0 left-0 z-30 w-[45%] sm:w-[60%] h-full p-6 flex flex-col items-center ${
               darkMode
                 ? "bg-gray-800 text-gray-100"
                 : "bg-gray-100 text-gray-800"
