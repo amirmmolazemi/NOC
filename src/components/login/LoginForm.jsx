@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import loginHandler from "utils/LoginHandler";
+import loginHandler from "utils/loginHandler";
 import TextInput from "./TextInput";
 import Checkbox from "./Checkbox";
 import Button from "./Button";

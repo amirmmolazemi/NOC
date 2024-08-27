@@ -9,12 +9,14 @@
     "message": "صفحه‌ای که به دنبال آن هستید وجود ندارد",
     "buttonText": "بازگشت به صفحه اصلی"
   },
-  "menuItems": {
+  "menu": {
     "dashboard": "داشبورد",
     "packs": "پک ها",
     "alerts": "اعلان ها",
     "incidents": "وقایع",
     "settings": "تنظیمات",
-    "logout": "خروج"
+    "logout": "خروج",
+    "user": "افزودن کاربر",
+    "team": "افزودن تیم"
   }
 }

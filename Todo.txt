@@ -1,5 +1,24 @@
-// TODO: setting page
-// TODO: pack page
-// TODO: alerts page
-// TODO: incidents page
-// TODO: admin add user or team page
+// TODO: dashboard page {
+    // FIXME: add date and hi mr and some extra things 
+}
+// TODO: setting page {
+    // FIXME: add inputs and put their data on that to see
+    // FIXME: change the level of AI 
+}
+// TODO: pack page {
+    // FIXME: some boxes that when we click them show details (show alerts inside of the pack)
+    // FIXME: add incident 
+    // FIXME: add alert 
+    // FIXME: assign  
+}
+// TODO: alerts page {
+    // FIXME: show alerts  
+    // FIXME: assign to someone (by 724)
+}
+// TODO: incidents page {
+    // FIXME: show incidents
+    // FIXME: assign to someone (by 724)
+}
+// TODO: admin add user or team page {
+    // FIXME: 
+}

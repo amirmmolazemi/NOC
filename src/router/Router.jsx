@@ -7,6 +7,8 @@ import NotFound from "pages/404";
 import Packs from "pages/Packs";
 import Alerts from "pages/Alerts";
 import Incidents from "pages/Incidents";
+import AddUser from "pages/AddUser";
+import AddTeam from "pages/AddTeam";
 
 const routes = [
   { path: "/", element: <Dashboard /> },
@@ -15,6 +17,8 @@ const routes = [
   { path: "/packs", element: <Packs /> },
   { path: "/alerts", element: <Alerts /> },
   { path: "/incidents", element: <Incidents /> },
+  { path: "/user", element: <AddUser /> },
+  { path: "/team", element: <AddTeam /> },
   { path: "*", element: <NotFound /> },
 ];
 

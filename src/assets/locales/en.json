@@ -9,12 +9,14 @@
     "message": "The page you are looking for does not exist",
     "buttonText": "Return to Homepage"
   },
-  "menuItems": {
+  "menu": {
     "dashboard": "Dashboard",
     "packs": "Packs",
     "settings": "Settings",
-    "alerts": "alerts",
-    "incidents": "incidents",
-    "logout": "Logout"
+    "alerts": "Alerts",
+    "incidents": "Incidents",
+    "logout": "Log out",
+    "user": "Add User",
+    "team": "Add Team"
   }
 }

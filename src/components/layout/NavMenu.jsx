@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import useMenuItems from "hooks/menuItems";
+import useMenuItems from "hooks/useMenuItems";
 
 function NavMenu({ onClick }) {
   const menuItems = useMenuItems();
