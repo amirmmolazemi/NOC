@@ -20,32 +20,30 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
         <LanguageToggle />
         <ThemeToggle />
       </aside>
-      {isSidebarOpen && (
-        <>
-          <div
-            className="fixed inset-0 bg-black opacity-50 z-10"
-            onClick={() => setIsSidebarOpen(false)}
-          />
-          <aside
-            className={`fixed top-0 left-0 z-30 w-[45%] sm:w-[60%] h-full p-6 flex flex-col items-center ${
-              darkMode
-                ? "bg-gray-800 text-gray-100"
-                : "bg-gray-100 text-gray-800"
-            } transition-transform duration-300 md:hidden ${
-              isSidebarOpen ? "sidebar-open" : "sidebar-closed"
-            }`}
-          >
-            <button
-              onClick={() => setIsSidebarOpen(false)}
-              className="self-end text-3xl mb-4"
-            >
-              <FiX />
-            </button>
-            <NavMenu onClick={() => setIsSidebarOpen(false)} />
-            <LanguageToggle />
-          </aside>
-        </>
-      )}
+
+      <div
+        className={`fixed inset-0 z-10 transition-opacity duration-300 ${
+          isSidebarOpen
+            ? "opacity-50 bg-black"
+            : "opacity-0 pointer-events-none"
+        }`}
+        onClick={() => setIsSidebarOpen(false)}
+      />
+
+      <aside
+        className={`fixed top-0 left-0 z-30 w-[50%] sm:w-[60%] h-full p-6 flex flex-col items-center transform transition-transform duration-300 md:hidden ${
+          darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-100 text-gray-800"
+        } ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
+      >
+        <button
+          onClick={() => setIsSidebarOpen(false)}
+          className="self-end text-3xl mb-4"
+        >
+          <FiX />
+        </button>
+        <NavMenu onClick={() => setIsSidebarOpen(false)} />
+        <LanguageToggle />
+      </aside>
     </>
   );
 }

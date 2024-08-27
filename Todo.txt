@@ -1,24 +1,27 @@
 // TODO: dashboard page {
-    // FIXME: add date and hi mr and some extra things 
+    // FIXME: add some extra things 
 }
 // TODO: setting page {
     // FIXME: add inputs and put their data on that to see
     // FIXME: change the level of AI 
 }
 // TODO: pack page {
-    // FIXME: some boxes that when we click them show details (show alerts inside of the pack)
-    // FIXME: add incident 
-    // FIXME: add alert 
     // FIXME: assign  
 }
 // TODO: alerts page {
     // FIXME: show alerts  
-    // FIXME: assign to someone (by 724)
 }
 // TODO: incidents page {
     // FIXME: show incidents
-    // FIXME: assign to someone (by 724)
 }
 // TODO: admin add user or team page {
     // FIXME: 
 }
+
+
+const utcDate = new Date('2024-08-27T06:04:06.768Z'); // Create date object in UTC
+
+const tehranOffset = 3.5 * 60; // Tehran is UTC+3:30
+const localTehranTime = new Date(utcDate.getTime() + tehranOffset * 60 * 1000);
+
+console.log(localTehranTime.toISOString().slice(0, 19).replace('T', ' ')); 
