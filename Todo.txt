@@ -1,5 +1,5 @@
-// TODO: make a json for texts
-// TODO: create a hook for use selector
-// TODO: show charts in dashboard
 // TODO: setting page
 // TODO: pack page
+// TODO: alerts page
+// TODO: incidents page
+// TODO: admin add user or team page

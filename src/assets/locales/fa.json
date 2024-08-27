@@ -1,0 +1,20 @@
+{
+  "activeTorrents": "تورنت‌های فعال",
+  "downloads": "دانلودها",
+  "uploads": "آپلودها",
+  "seedRatio": "نمیدونم معناش چیه",
+  "notFound": {
+    "title": "۴۰۴",
+    "subtitle": "صفحه یافت نشد",
+    "message": "صفحه‌ای که به دنبال آن هستید وجود ندارد",
+    "buttonText": "بازگشت به صفحه اصلی"
+  },
+  "menuItems": {
+    "dashboard": "داشبورد",
+    "packs": "پک ها",
+    "alerts": "اعلان ها",
+    "incidents": "وقایع",
+    "settings": "تنظیمات",
+    "logout": "خروج"
+  }
+}

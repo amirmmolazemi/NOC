@@ -1,72 +1,61 @@
-import { useSelector } from "react-redux";
-import Loader from "src/components/loader/Loader";
-import useCheckCookie from "src/hooks/useCheckCookie";
+import { useEffect, useMemo } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { Bar, Line, Doughnut, Radar } from "react-chartjs-2";
+import enLocale from "assets/locales/en.json";
+import faLocale from "assets/locales/fa.json";
+import useCheckCookie from "hooks/useCheckCookie";
+import useRegisterChart from "hooks/useRegisterChart";
+import Loader from "components/loader/Loader";
+import DashboardCard from "components/dashboard/DashboardCard";
+import getChartData from "helpers/getChartData";
+import { setRole } from "Redux/slices/userSlice";
 
 function Dashboard() {
+  useRegisterChart();
   const darkMode = useSelector((state) => state.theme.darkMode);
   const language = useSelector((state) => state.language.language);
+  const locale = language === "en" ? enLocale : faLocale;
+  const chartData = useMemo(
+    () => getChartData(locale, darkMode),
+    [locale, darkMode]
+  );
+  const { data, loading } = useCheckCookie();
+  const dispatch = useDispatch();
 
-  const { loading } = useCheckCookie();
-  if (loading) return <Loader />;
-
-  const getLocalizedText = () => {
-    if (language === "en") {
-      return {
-        activeTorrents: "Active Torrents",
-        downloads: "Downloads",
-        uploads: "Uploads",
-        seedRatio: "Seed Ratio",
-      };
-    } else {
-      return {
-        activeTorrents: "تورنت‌های فعال",
-        downloads: "دانلودها",
-        uploads: "آپلودها",
-        seedRatio: "نسبت سیید",
-      };
+  useEffect(() => {
+    if (data && data.user && data.user.role && data.user.role.name) {
+      dispatch(setRole(data.user.role.name));
     }
-  };
+  }, [data, dispatch]);
 
-  const { activeTorrents, downloads, uploads, seedRatio } = getLocalizedText();
+  if (loading) return <Loader />;
 
   return (
     <section
       className={`grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 ${
-        language === "fa" ? "rtl" : ""
+        language === "fa" && "rtl"
       }`}
     >
-      <div
-        className={`shadow-md rounded-lg p-6 ${
-          darkMode ? "text-white bg-gray-700" : "bg-white text-gray-700"
-        }`}
-      >
-        <h3 className="text-lg font-semibold">{activeTorrents}</h3>
-        <p className="text-2xl font-bold mt-2">15</p>
-      </div>
-      <div
-        className={`shadow-md rounded-lg p-6 ${
-          darkMode ? "text-white bg-gray-700" : "bg-white text-gray-700"
-        }`}
-      >
-        <h3 className="text-lg font-semibold">{activeTorrents}</h3>
-        <p className="text-2xl font-bold mt-2">15</p>
-      </div>
-      <div
-        className={`shadow-md rounded-lg p-6 ${
-          darkMode ? "text-white bg-gray-700" : "bg-white text-gray-700"
-        }`}
-      >
-        <h3 className="text-lg font-semibold">{activeTorrents}</h3>
-        <p className="text-2xl font-bold mt-2">15</p>
-      </div>
-      <div
-        className={`shadow-md rounded-lg p-6 ${
-          darkMode ? "text-white bg-gray-700" : "bg-white text-gray-700"
-        }`}
-      >
-        <h3 className="text-lg font-semibold">{activeTorrents}</h3>
-        <p className="text-2xl font-bold mt-2">15</p>
-      </div>
+      <DashboardCard
+        locale={locale}
+        darkMode={darkMode}
+        chart={<Bar data={chartData} />}
+      />
+      <DashboardCard
+        locale={locale}
+        darkMode={darkMode}
+        chart={<Line data={chartData} />}
+      />
+      <DashboardCard
+        locale={locale}
+        darkMode={darkMode}
+        chart={<Doughnut data={chartData} />}
+      />
+      <DashboardCard
+        locale={locale}
+        darkMode={darkMode}
+        chart={<Radar data={chartData} />}
+      />
     </section>
   );
 }

@@ -3,10 +3,6 @@ import api from "configs/api";
 import { toast } from "react-toastify";
 
 const loginHandler = async (username, password) => {
-  if (!username || !password) {
-    toast.error("Please Enter The Fields");
-    return;
-  }
   try {
     const { data } = await api.post("/auth/login", {
       username,

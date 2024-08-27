@@ -1,10 +1,10 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+const initialState = { language: "en" };
+
 const languageSlice = createSlice({
   name: "language",
-  initialState: {
-    language: "en",
-  },
+  initialState,
   reducers: {
     toggleLanguage: (state) => {
       state.language = state.language === "en" ? "fa" : "en";

@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import loginHandler from "utils/LoginHandler";
 import TextInput from "./TextInput";
 import Checkbox from "./Checkbox";
+import Button from "./Button";
 
 function LoginForm() {
   const [credentials, setCredentials] = useState({
@@ -29,7 +30,6 @@ function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateInputs()) return;
-
     const res = await loginHandler(credentials.username, credentials.password);
     if (res) navigate("/dashboard");
   };
@@ -59,12 +59,7 @@ function LoginForm() {
         checked={showPassword}
         onChange={() => setShowPassword((prev) => !prev)}
       />
-      <button
-        type="submit"
-        className="w-[50%] py-3 mt-4 bg-blue-600 text-white text-lg font-semibold rounded-md hover:bg-blue-700 transition duration-200"
-      >
-        Login
-      </button>
+      <Button />
     </form>
   );
 }

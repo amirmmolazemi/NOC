@@ -26,7 +26,7 @@ function Layout({ children }) {
       <main
         className={`flex-1 p-8 transition-all duration-300 ${
           darkMode ? "bg-gray-900" : "bg-gray-200"
-        } h-[90vh] mt-[75px] rounded-[25px] ${
+        } mt-[75px] mb-4 rounded-[25px] ${
           isSidebarOpen
             ? "ml-0 md:ml-[80px]"
             : "ml-4 md:ml-[calc(80px+1rem)] mr-4"

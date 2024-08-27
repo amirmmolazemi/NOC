@@ -14,6 +14,7 @@ const paths = [
   "pages",
   "styles",
   "utils",
+  "helpers",
 ];
 
 export default defineConfig({

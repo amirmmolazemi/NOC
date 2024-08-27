@@ -13,7 +13,8 @@
       "router/*": ["src/router/*"],
       "pages/*": ["src/pages/*"],
       "styles/*": ["src/styles/*"],
-      "utils/*": ["src/utils/*"]
+      "utils/*": ["src/utils/*"],
+      "helpers/*": ["src/helpers/*"]
     }
   }
 }
