@@ -22,12 +22,6 @@ const useCheckCookie = () => {
           }
         );
         const decoded = jwtDecode(token);
-        // const res = await api.get(fetchUrl, {
-        //   headers: {
-        //     Authorization: token,
-        //   },
-        // });
-        // setData({ user: decoded, otherData: res.data });
         setData({ user: decoded });
         setLoading(false);
       } catch (error) {

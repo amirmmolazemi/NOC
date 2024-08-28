@@ -1,51 +1,52 @@
-import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useState, useEffect } from "react";
+import Card from "components/packs/Card";
 import Loader from "components/loader/Loader";
-import useCheckCookie from "hooks/useCheckCookie";
-import { setRole } from "Redux/slices/userSlice";
-import { useNavigate } from "react-router-dom";
-import enLocale from "assets/locales/en.json";
-import faLocale from "assets/locales/fa.json";
+import useUserRole from "hooks/useUserRole";
+import Pagination from "components/packs/Pagination";
 
 function Packs() {
-  const { data, loading } = useCheckCookie();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const darkMode = useSelector((state) => state.theme.darkMode);
-  const language = useSelector((state) => state.language.language);
-  const locale = language === "en" ? enLocale : faLocale;
-  const [isOpen, setIsOpen] = useState(false);
+  const [page, setPage] = useState(1);
+  const { data, loading } = useUserRole(
+    false,
+    "Team_724",
+    `/notifications?page=${page}`
+  );
+  const [incidents, setIncidents] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    if (data && data.user && data.user.role && data.user.role.name) {
-      dispatch(setRole(data.user.role.name));
-      data.user.role.name !== "Team_724" && navigate("/dashboard");
+    if (data && data.otherData) {
+      setIncidents(data.otherData.packs || []);
+      setPage(data.otherData.page || 1);
+      setTotalPages(data.otherData.totalPages || 1);
     }
-  }, [data, dispatch]);
-
-  const toggleDetails = () => {
-    setIsOpen(!isOpen);
-  };
+  }, [data]);
 
   if (loading) return <Loader />;
+
   return (
-    <div>
-      <div
-        onClick={toggleDetails}
-        className={`shadow-md rounded-lg p-6 mt-6 cursor-pointer transition-all duration-700 ease-in-out overflow-hidden ${
-          darkMode ? "text-white bg-gray-700" : "bg-white text-gray-700"
-        } ${language === "fa" && "rtl"}`}
-        style={{ maxHeight: isOpen ? "500px" : "150px" }} // تنظیم max-height برای انیمیشن
-      >
-        <h3 className="text-lg font-semibold mb-2">{locale.activeTorrents}</h3>
-        <div
-          className={`${
-            isOpen ? "opacity-100" : "opacity-0"
-          } transition-opacity duration-700 ease-in-out`}
-        >
-          {/* content */}
+    <div className="flex flex-col h-full justify-between p-4">
+      {incidents.length > 0 ? (
+        <>
+          {incidents.map((incident) => (
+            <Card key={incident.id} incident={incident}>
+              <div className="flex flex-col sm:flex-row gap-5 mt-5 items-center">
+                <button className="bg-yellow-500 p-3 w-full sm:w-auto rounded-lg text-white font-semibold">
+                  Create Alert
+                </button>
+                <button className="bg-green-500 p-3 w-full sm:w-auto rounded-lg text-white font-semibold">
+                  Create Incident
+                </button>
+              </div>
+            </Card>
+          ))}
+          <Pagination page={page} setPage={setPage} totalPages={totalPages} />
+        </>
+      ) : (
+        <div className="flex items-center justify-center h-full">
+          <h1 className="text-3xl text-center">No incidents found.</h1>
         </div>
-      </div>
+      )}
     </div>
   );
 }

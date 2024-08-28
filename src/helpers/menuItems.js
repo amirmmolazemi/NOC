@@ -13,10 +13,7 @@ import enLocale from "assets/locales/en.json";
 import faLocale from "assets/locales/fa.json";
 
 const menuItems = (language) => {
-  console.log(language);
   const locales = language === "en" ? enLocale : faLocale;
-  console.log(locales);
-
   return [
     {
       title: locales.menu.dashboard,
