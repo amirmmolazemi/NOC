@@ -1,4 +1,5 @@
 import { useSelector } from "react-redux";
+import { FaLongArrowAltRight, FaLongArrowAltLeft } from "react-icons/fa";
 
 function Pagination({ page, setPage, totalPages }) {
   const previousHandler = () => page > 1 && setPage((prev) => prev - 1);
@@ -26,7 +27,7 @@ function Pagination({ page, setPage, totalPages }) {
           }`}
           disabled={page === 1}
         >
-          {`<`}
+          <FaLongArrowAltLeft />
         </button>
         {[1, 2].map(renderPageNumber)}
         {page > 2 && page < totalPages - 1 && (
@@ -46,7 +47,7 @@ function Pagination({ page, setPage, totalPages }) {
           }`}
           disabled={page === totalPages}
         >
-          {`>`}
+          <FaLongArrowAltRight />
         </button>
       </div>
     </div>

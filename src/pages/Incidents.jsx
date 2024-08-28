@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
-import Card from "components/packs/Card";
+import Card from "components/alerts/Card";
 import Loader from "components/loader/Loader";
 import useUserRole from "hooks/useUserRole";
-import Pagination from "components/packs/Pagination";
+import Pagination from "components/alerts/Pagination";
 
 function Incidents() {
   const [page, setPage] = useState(1);

@@ -5,7 +5,6 @@ import {
   FiBell,
   FiLogOut,
   FiAlertCircle,
-  FiPackage,
   FiUser,
 } from "react-icons/fi";
 import { RiTeamLine } from "react-icons/ri";
@@ -20,12 +19,6 @@ const menuItems = (language) => {
       icon: FiHome,
       link: "/",
       roles: ["Admin", "Member", "Head", "Team_724"],
-    },
-    {
-      title: locales.menu.packs,
-      icon: FiPackage,
-      link: "/packs",
-      roles: ["Team_724"],
     },
     {
       title: locales.menu.user,

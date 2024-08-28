@@ -4,7 +4,6 @@ import Login from "pages/Login.jsx";
 import Dashboard from "pages/Dashboard.jsx";
 import Settings from "pages/Settings.jsx";
 import NotFound from "pages/404";
-import Packs from "pages/Packs";
 import Alerts from "pages/Alerts";
 import Incidents from "pages/Incidents";
 import AddUser from "pages/AddUser";
@@ -14,7 +13,6 @@ const routes = [
   { path: "/", element: <Dashboard /> },
   { path: "/dashboard", element: <Dashboard /> },
   { path: "/settings", element: <Settings /> },
-  { path: "/packs", element: <Packs /> },
   { path: "/alerts", element: <Alerts /> },
   { path: "/incidents", element: <Incidents /> },
   { path: "/user", element: <AddUser /> },

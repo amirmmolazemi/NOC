@@ -24,7 +24,7 @@ function Layout({ children }) {
         setIsSidebarOpen={setIsSidebarOpen}
       />
       <main
-        className={`mt-[70px] flex-1 transition-all duration-300 ${
+        className={`mt-[70px] p-4 flex-1 transition-all duration-300 ${
           darkMode ? "bg-gray-900" : "bg-gray-200"
         } mb-7 rounded-[25px] xl:mt-7 ${
           isSidebarOpen

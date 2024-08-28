@@ -11,7 +11,6 @@
   },
   "menu": {
     "dashboard": "Dashboard",
-    "packs": "Packs",
     "settings": "Settings",
     "alerts": "Alerts",
     "incidents": "Incidents",
