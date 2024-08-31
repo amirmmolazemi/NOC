@@ -1,18 +1,15 @@
 import { useSelector } from "react-redux";
-import enLocale from "assets/locales/en.json";
-import faLocale from "assets/locales/fa.json";
 import utcChanger from "utils/utcToTehran";
 
 function Card({ children, incident, isOpen, toggleOpen }) {
   const darkMode = useSelector((state) => state.theme.darkMode);
-  const language = useSelector((state) => state.language.language);
 
   return (
     <div
       className={`shadow-md rounded-lg p-3 mb-2 cursor-pointer transition-all duration-200 ease-in-out overflow-hidden ${
         darkMode ? "text-white bg-gray-700" : "bg-white text-gray-700"
       }`}
-      style={{ maxHeight: isOpen ? "600px" : "110px" }}
+      style={{ maxHeight: isOpen ? "680px" : "110px" }}
     >
       <div onClick={toggleOpen} className="select-none">
         <div className="flex flex-wrap justify-between">

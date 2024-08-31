@@ -1,61 +1,51 @@
+import { useEffect } from "react";
 import Cookies from "js-cookie";
-import { useEffect, useState } from "react";
+import useSWR from "swr";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setRole } from "Redux/slices/userSlice";
 import api from "configs/api";
 import useCheckCookie from "./useCheckCookie";
 
+const fetcher = (url, token) =>
+  api
+    .get(url, { headers: { Authorization: `Bearer ${token}` } })
+    .then((res) => res.data);
+
 function useUserRole(isOnlyAdmin, role, apiEndpoint) {
+  const token = Cookies.get("token");
   const { data: initialData, loading: initialLoading } = useCheckCookie();
-  const [data, setData] = useState(initialData);
-  const [loading, setLoading] = useState(initialLoading);
+  const { data: fetchedData, error } = useSWR(
+    initialData ? [apiEndpoint, token] : null,
+    ([url, token]) => fetcher(url, token),
+    {
+      revalidateOnFocus: false,
+    }
+  );
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchData = async () => {
-      if (!initialData) {
-        setLoading(true);
-        return;
-      }
+    if (!fetchedData) return;
 
-      try {
-        const token = Cookies.get("token");
-        const response = await api.get(apiEndpoint, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        });
-        const mergedData = { ...initialData, otherData: response.data };
-        setData(mergedData);
-        if (
-          mergedData &&
-          mergedData.user &&
-          mergedData.user.role &&
-          mergedData.user.role.name
-        ) {
-          dispatch(setRole(mergedData.user.role.name));
-          if (isOnlyAdmin) {
-            if (mergedData.user.role.name === "Admin") {
-              navigate("/dashboard");
-            }
-          } else {
-            if (mergedData.user.role.name !== role) {
-              navigate("/dashboard");
-            }
-          }
-        }
-      } catch (error) {
-        console.error("Error fetching user role:", error.response.data.error);
-      } finally {
-        setLoading(false);
+    const mergedData = { ...initialData, otherData: fetchedData };
+    if (mergedData.user?.role?.name) {
+      dispatch(setRole(mergedData.user.role.name));
+      if (isOnlyAdmin && mergedData.user.role.name === "Admin") {
+        navigate("/dashboard");
+      } else if (role && mergedData.user.role.name !== role) {
+        navigate("/dashboard");
       }
-    };
+    }
+  }, [fetchedData, dispatch, navigate, isOnlyAdmin, role, initialData]);
 
-    fetchData();
-  }, [initialData, dispatch, navigate, isOnlyAdmin, role, apiEndpoint]);
-  return { data, loading };
+  return {
+    data: fetchedData
+      ? { ...initialData, otherData: fetchedData }
+      : initialData,
+    isLoading: initialLoading || (!fetchedData && !error),
+  };
 }
 
 export default useUserRole;

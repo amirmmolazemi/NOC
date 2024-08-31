@@ -6,7 +6,7 @@ import Pagination from "components/alerts/Pagination";
 
 function Incidents() {
   const [page, setPage] = useState(1);
-  const { data, loading } = useUserRole(
+  const { data, isLoading } = useUserRole(
     true,
     "",
     `/notifications?page=${page}`
@@ -15,25 +15,23 @@ function Incidents() {
   const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
-    if (data && data.otherData) {
+    if (data?.otherData) {
       setIncidents(
-        data.otherData.packs.filter((pack) => pack.type == "Incident") || []
+        data.otherData.packs.filter((pack) => pack.type === "Incident") || []
       );
       setPage(data.otherData.page || 1);
       setTotalPages(data.otherData.totalPages || 1);
     }
   }, [data]);
 
-  if (loading) return <Loader />;
+  if (isLoading) return <Loader />;
 
   return (
     <div className="flex flex-col h-full justify-between p-4">
-      {incidents.length > 0 ? (
+      {incidents.length ? (
         <>
           {incidents.map((incident) => (
-            <Card key={incident.id} incident={incident}>
-              <div className="flex flex-col sm:flex-row gap-5 mt-5 items-center"></div>
-            </Card>
+            <Card key={incident.id} incident={incident} />
           ))}
           <Pagination page={page} setPage={setPage} totalPages={totalPages} />
         </>

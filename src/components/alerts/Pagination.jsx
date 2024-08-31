@@ -12,6 +12,7 @@ function Pagination({ page, setPage, totalPages }) {
       className={`inline-block border border-blue-500 w-7 text-center rounded-md ${
         !darkMode ? "text-black" : "text-white"
       } ${page === num ? "bg-blue-500 text-white" : ""}`}
+      onClick={() => setPage(num)}
     >
       {num}
     </p>
@@ -29,17 +30,27 @@ function Pagination({ page, setPage, totalPages }) {
         >
           <FaLongArrowAltLeft />
         </button>
-        {[1, 2].map(renderPageNumber)}
-        {page > 2 && page < totalPages - 1 && (
+        {totalPages <= 4 ? (
+          Array.from({ length: totalPages }, (_, index) => index + 1).map(
+            renderPageNumber
+          )
+        ) : (
           <>
+            {[1, 2].map(renderPageNumber)}
+            {page > 2 && page < totalPages - 1 && (
+              <>
+                <span className={`text-white ${!darkMode && "text-black"}`}>
+                  ...
+                </span>
+                {renderPageNumber(page)}
+              </>
+            )}
             <span className={`text-white ${!darkMode && "text-black"}`}>
               ...
             </span>
-            {renderPageNumber(page)}
+            {[totalPages - 1, totalPages].map(renderPageNumber)}
           </>
         )}
-        <p className={`text-white ${!darkMode && "text-black"}`}>...</p>
-        {[totalPages - 1, totalPages].map(renderPageNumber)}
         <button
           onClick={nextHandler}
           className={`bg-blue-500 text-white px-2 rounded-md text-sm sm:text-lg cursor-pointer ${
