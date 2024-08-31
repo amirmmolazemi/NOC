@@ -9,8 +9,8 @@ function Pagination({ page, setPage, totalPages }) {
   const renderPageNumber = (num) => (
     <p
       key={num}
-      className={`inline-block border border-blue-500 w-7 text-center rounded-md text-white ${
-        !darkMode && "text-black"
+      className={`inline-block border border-blue-500 w-7 text-center rounded-md ${
+        !darkMode ? "text-black" : "text-white"
       } ${page === num ? "bg-blue-500 text-white" : ""}`}
     >
       {num}

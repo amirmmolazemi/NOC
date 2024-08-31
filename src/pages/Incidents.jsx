@@ -16,7 +16,9 @@ function Incidents() {
 
   useEffect(() => {
     if (data && data.otherData) {
-      setIncidents(data.otherData.packs || []);
+      setIncidents(
+        data.otherData.packs.filter((pack) => pack.type == "Incident") || []
+      );
       setPage(data.otherData.page || 1);
       setTotalPages(data.otherData.totalPages || 1);
     }

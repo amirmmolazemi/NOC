@@ -13,10 +13,10 @@ function Alerts() {
   );
   const [incidents, setIncidents] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
-
   const [notificationType, setNotificationType] = useState("");
   const [priority, setPriority] = useState("");
   const [assignedTeam, setAssignedTeam] = useState("");
+  const [openIncidentId, setOpenIncidentId] = useState(null);
 
   useEffect(() => {
     if (data && data.otherData) {
@@ -33,14 +33,22 @@ function Alerts() {
   if (loading) return <Loader />;
 
   return (
-    <div className="flex flex-col h-full justify-between p-4">
+    <div className="flex flex-col h-full justify-between p-6 lg:p-8">
       {incidents.length > 0 ? (
         <>
           {incidents.map((incident) => (
-            <Card key={incident.id} incident={incident}>
-              <div className="flex flex-col sm:flex-row gap-4 items-center mt-5">
-                {/* Notification Type Dropdown */}
-                <div className="mb-4">
+            <Card
+              key={incident.id}
+              incident={incident}
+              isOpen={openIncidentId === incident.id}
+              toggleOpen={() =>
+                setOpenIncidentId((prevId) =>
+                  prevId === incident.id ? null : incident.id
+                )
+              }
+            >
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 items-start mt-8">
+                <div className="mb-6 w-full lg:w-auto">
                   <label className="block mb-2 font-semibold">
                     Notification Type:
                   </label>
@@ -51,7 +59,7 @@ function Alerts() {
                       setPriority("");
                       setAssignedTeam("");
                     }}
-                    className="p-2 border rounded-lg"
+                    className="p-3 border rounded-lg w-full"
                   >
                     <option value="">Select Notification Type</option>
                     <option value="alert">Alert</option>
@@ -61,45 +69,45 @@ function Alerts() {
 
                 {notificationType && (
                   <>
-                    <div className="flex flex-col gap-2 w-full sm:w-auto">
-                      <label className="block mb-2 font-semibold">
-                        Priority:
-                      </label>
+                    <div className="flex flex-col gap-2 w-full lg:w-auto">
+                      <label className="block font-semibold">Priority:</label>
                       <select
                         value={priority}
                         onChange={(e) => setPriority(e.target.value)}
-                        className="p-2 border rounded-lg"
+                        className="p-3 border rounded-lg w-full"
                       >
                         <option value="">Select Priority</option>
                         <option value="low">Low</option>
                         <option value="medium">Medium</option>
                         <option value="high">High</option>
                       </select>
-                    </div>
 
-                    {notificationType === "incident" && (
-                      <div className="flex flex-col gap-2 w-full sm:w-auto">
-                        <label className="block mb-2 font-semibold">
-                          Assigned To:
-                        </label>
-                        <select
-                          value={assignedTeam}
-                          onChange={(e) => setAssignedTeam(e.target.value)}
-                          className="p-2 border rounded-lg"
-                        >
-                          <option value="">Select Assigned Team</option>
-                          <option value="team1">Team 1</option>
-                          <option value="team2">Team 2</option>
-                          <option value="team3">Team 3</option>
-                        </select>
-                      </div>
-                    )}
+                      {notificationType === "incident" && (
+                        <div className="flex flex-col gap-2 w-full lg:w-auto">
+                          <label className="block font-semibold">
+                            Assigned To:
+                          </label>
+                          <select
+                            value={assignedTeam}
+                            onChange={(e) => setAssignedTeam(e.target.value)}
+                            className="p-3 border rounded-lg w-full"
+                          >
+                            <option value="">Select Assigned Team</option>
+                            <option value="team1">Team 1</option>
+                            <option value="team2">Team 2</option>
+                            <option value="team3">Team 3</option>
+                          </select>
+                        </div>
+                      )}
+                    </div>
                   </>
                 )}
-                <div className="flex flex-col sm:flex-row gap-5 mt-5 items-center">
+                <div className="flex gap-5 items-center">
                   {notificationType === "alert" && (
                     <button
-                      className="bg-yellow-500 p-2 w-full sm:w-auto rounded-lg text-white font-semibold"
+                      className={`${
+                        isButtonDisabled ? "bg-yellow-200" : "bg-yellow-500"
+                      } p-3 w-[50%] lg:w-auto rounded-lg text-white font-semibold cursor-pointer`}
                       disabled={isButtonDisabled}
                     >
                       Create Alert
@@ -107,7 +115,9 @@ function Alerts() {
                   )}
                   {notificationType === "incident" && (
                     <button
-                      className="bg-green-500 p-2 w-full sm:w-auto rounded-lg text-white font-semibold"
+                      className={`${
+                        isButtonDisabled ? "bg-green-200" : "bg-green-500"
+                      } p-3 w-[50%] lg:w-auto rounded-lg text-white font-semibold cursor-pointer`}
                       disabled={isButtonDisabled}
                     >
                       Create Incident
@@ -121,7 +131,9 @@ function Alerts() {
         </>
       ) : (
         <div className="flex items-center justify-center h-full">
-          <h1 className="text-3xl text-center">No incidents found.</h1>
+          <h1 className="text-3xl lg:text-4xl text-center">
+            No Alert found.
+          </h1>
         </div>
       )}
     </div>

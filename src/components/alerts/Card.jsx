@@ -1,16 +1,9 @@
-import { useState } from "react";
+import { useSelector } from "react-redux";
 import enLocale from "assets/locales/en.json";
 import faLocale from "assets/locales/fa.json";
-import { useSelector } from "react-redux";
 import utcChanger from "utils/utcToTehran";
 
-function Card({ children, incident }) {
-  const [isOpen, setIsOpen] = useState(false);
-
-  const toggleDetails = () => {
-    setIsOpen(!isOpen);
-  };
-
+function Card({ children, incident, isOpen, toggleOpen }) {
   const darkMode = useSelector((state) => state.theme.darkMode);
   const language = useSelector((state) => state.language.language);
 
@@ -19,9 +12,9 @@ function Card({ children, incident }) {
       className={`shadow-md rounded-lg p-3 mb-2 cursor-pointer transition-all duration-200 ease-in-out overflow-hidden ${
         darkMode ? "text-white bg-gray-700" : "bg-white text-gray-700"
       }`}
-      style={{ maxHeight: isOpen ? "500px" : "110px" }}
+      style={{ maxHeight: isOpen ? "600px" : "110px" }}
     >
-      <div onClick={toggleDetails} className="select-none">
+      <div onClick={toggleOpen} className="select-none">
         <div className="flex flex-wrap justify-between">
           <h3 className="text-[15px] font-semibold">
             {incident.notifications[0].text}
@@ -37,7 +30,7 @@ function Card({ children, incident }) {
       <div
         className={`${
           isOpen ? "opacity-100" : "opacity-0"
-        } transition-opacity duration-200 ease-in-out`}
+        } transition-opacity duration-100 ease-in-out`}
       >
         {children}
       </div>
