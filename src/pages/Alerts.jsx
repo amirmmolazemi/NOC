@@ -14,7 +14,7 @@ function Alerts() {
   const { data, isLoading } = useUserRole(
     false,
     "Team_724",
-    `/notifications?page=${page}`
+    `/pack?page=${page}`
   );
 
   useEffect(() => {

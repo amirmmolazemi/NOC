@@ -57,7 +57,7 @@ function LoginForm() {
         id="showPassword"
         label="Show Password"
         checked={showPassword}
-        onClick={() => setShowPassword((prev) => !prev)}
+        onChange={() => setShowPassword((prev) => !prev)}
       />
       <Button />
     </form>

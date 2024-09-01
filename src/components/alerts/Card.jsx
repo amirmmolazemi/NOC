@@ -15,7 +15,7 @@ function Card({ incident, isOpen, onCardClick }) {
     data: incidentDetails,
     error,
     isLoading,
-  } = useSWR(isOpen ? `/notifications/${incident.id}` : null, fetcher, {
+  } = useSWR(isOpen ? `/pack/${incident.id}` : null, fetcher, {
     revalidateOnFocus: true,
   });
 

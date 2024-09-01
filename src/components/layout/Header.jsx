@@ -1,5 +1,4 @@
 import { FiMenu, FiX } from "react-icons/fi";
-import ThemeToggle from "./ThemeToggle";
 import { useSelector } from "react-redux";
 
 function Header({ isSidebarOpen, setIsSidebarOpen }) {
@@ -17,7 +16,6 @@ function Header({ isSidebarOpen, setIsSidebarOpen }) {
       >
         {isSidebarOpen ? <FiX /> : <FiMenu />}
       </button>
-      <ThemeToggle />
     </div>
   );
 }
