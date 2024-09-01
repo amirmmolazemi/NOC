@@ -3,6 +3,7 @@ import Card from "components/alerts/Card";
 import Loader from "components/loader/Loader";
 import useUserRole from "hooks/useUserRole";
 import Pagination from "components/alerts/Pagination";
+import { useSelector } from "react-redux";
 
 function Incidents() {
   const [page, setPage] = useState(1);
@@ -13,6 +14,7 @@ function Incidents() {
   );
   const [incidents, setIncidents] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
+  const darkMode = useSelector((state) => state.theme.darkMode);
 
   useEffect(() => {
     if (data?.otherData) {
@@ -37,7 +39,13 @@ function Incidents() {
         </>
       ) : (
         <div className="flex items-center justify-center h-full">
-          <h1 className={`text-3xl text-center`}>No incidents found.</h1>
+          <h1
+            className={`text-3xl text-center mt-auto ${
+              darkMode ? "text-white" : "text-black"
+            }`}
+          >
+            No incidents found.
+          </h1>
         </div>
       )}
     </div>

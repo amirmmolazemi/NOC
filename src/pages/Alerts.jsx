@@ -38,7 +38,7 @@ function Alerts() {
       }`}
     >
       {incidents.length ? (
-        <>
+        <div className="flex flex-col justify-between gap-[60px]">
           {incidents.map((incident) => (
             <Card
               key={incident.id}
@@ -48,7 +48,7 @@ function Alerts() {
             />
           ))}
           <Pagination page={page} totalPages={totalPages} setPage={setPage} />
-        </>
+        </div>
       ) : (
         <div className="flex items-center justify-center">
           <p

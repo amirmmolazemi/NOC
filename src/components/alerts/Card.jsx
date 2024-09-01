@@ -23,10 +23,10 @@ function Card({ incident, isOpen, onCardClick }) {
 
   return (
     <div
-      className={`shadow-md rounded-lg p-3 mb-12 cursor-pointer transition-all duration-200 ease-in-out overflow-hidden ${
+      className={`shadow-md rounded-lg p-3 cursor-pointer transition-all duration-200 ease-in-out overflow-hidden ${
         darkMode ? "text-white bg-gray-700" : "bg-white text-gray-700"
-      }`}
-      style={{ maxHeight: isOpen ? "930px" : "110px" }}
+      } ${isOpen ? "max-h[706px]" : "sm:max-h-[90px] max-h-[108px]"} 
+      `}
     >
       <div onClick={onCardClick}>
         <div className="flex flex-wrap justify-between">
