@@ -11,14 +11,16 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
   return (
     <>
       <aside
-        className={`fixed z-30 w-[90px] h-full p-6 flex flex-col items-center ${
+        className={`fixed z-30 w-[90px] h-full p-6 flex flex-col justify-between items-center ${
           darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-100 text-gray-800"
         } transition-transform duration-300 hidden md:flex`}
       >
         <Logo />
         <NavMenu onClick={() => setIsSidebarOpen(false)} />
-        <LanguageToggle />
-        <ThemeToggle />
+        <div className="flex flex-col items-center mt-6">
+          <LanguageToggle />
+          <ThemeToggle />
+        </div>
       </aside>
       <div
         className={`fixed inset-0 z-10 transition-opacity duration-300 ${
@@ -29,7 +31,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
         onClick={() => setIsSidebarOpen(false)}
       />
       <aside
-        className={`fixed z-30 w-[50%] sm:w-[60%] h-full p-6 flex flex-col items-center transform transition-transform duration-300 md:hidden ${
+        className={`fixed z-30 w-[50%] sm:w-[60%] h-full p-6 flex flex-col justify-between items-center transform transition-transform duration-300 md:hidden ${
           darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-100 text-gray-800"
         } ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
       >
@@ -40,7 +42,10 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
           <FiX />
         </button>
         <NavMenu onClick={() => setIsSidebarOpen(false)} />
-        <LanguageToggle />
+        <div className="flex flex-col justify-center items-center">
+          <LanguageToggle />
+          <ThemeToggle />
+        </div>
       </aside>
     </>
   );

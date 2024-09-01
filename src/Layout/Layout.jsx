@@ -27,9 +27,7 @@ function Layout({ children }) {
         className={`mt-[70px] flex-1 overflow-y-auto transition-all duration-300 ${
           darkMode ? "bg-gray-900" : "bg-gray-200"
         } mb-7 rounded-[25px] md:mt-7 ${
-          isSidebarOpen
-            ? "ml-0 md:ml-[80px]"
-            : "ml-4 md:ml-[calc(80px+1rem)] mr-4"
+          !isSidebarOpen && "mx-4 md:ml-[calc(80px+1rem)]"
         } scrollbar-none 
          `}
       >
