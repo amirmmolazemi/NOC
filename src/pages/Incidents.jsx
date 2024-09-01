@@ -10,7 +10,7 @@ function Incidents() {
   const { data, isLoading } = useUserRole(
     true,
     "",
-    `notifications/incidents?page=${page}`
+    `notifications?page=${page}`
   );
   const [incidents, setIncidents] = useState([]);
   const [totalPages, setTotalPages] = useState(1);

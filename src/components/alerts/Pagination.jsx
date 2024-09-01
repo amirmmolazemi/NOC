@@ -9,7 +9,7 @@ function Pagination({ page, setPage, totalPages }) {
   const renderPageNumber = (num) => (
     <p
       key={num}
-      className={`inline-block border font-semibold border-blue-500 w-7 text-center rounded-md ${
+      className={`inline-block border font-semibold border-blue-500 w-10 text-center rounded-md ${
         !darkMode ? "text-black" : "text-white"
       } ${page === num ? "bg-blue-500 text-white" : ""}`}
       onClick={() => setPage(num)}
@@ -20,7 +20,7 @@ function Pagination({ page, setPage, totalPages }) {
 
   return (
     <div className="flex flex-wrap justify-center items-center mx-auto mb-2 w-full max-w-lg px-4 select-none mt-2">
-      <div className="flex gap-1">
+      <div className="flex gap-1 text-2xl">
         <button
           onClick={previousHandler}
           className={`bg-blue-500 text-white px-2 rounded-md text-sm sm:text-lg cursor-pointer ${
