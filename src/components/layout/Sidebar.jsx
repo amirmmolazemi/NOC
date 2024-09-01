@@ -11,7 +11,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
   return (
     <>
       <aside
-        className={`fixed top-0 left-0 z-30 w-[80px] h-full p-6 flex flex-col items-center ${
+        className={`fixed z-30 w-[90px] h-full p-6 flex flex-col items-center ${
           darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-100 text-gray-800"
         } transition-transform duration-300 hidden md:flex`}
       >
@@ -20,7 +20,6 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
         <LanguageToggle />
         <ThemeToggle />
       </aside>
-
       <div
         className={`fixed inset-0 z-10 transition-opacity duration-300 ${
           isSidebarOpen
@@ -29,9 +28,8 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
         }`}
         onClick={() => setIsSidebarOpen(false)}
       />
-
       <aside
-        className={`fixed top-0 left-0 z-30 w-[50%] sm:w-[60%] h-full p-6 flex flex-col items-center transform transition-transform duration-300 md:hidden ${
+        className={`fixed z-30 w-[50%] sm:w-[60%] h-full p-6 flex flex-col items-center transform transition-transform duration-300 md:hidden ${
           darkMode ? "bg-gray-800 text-gray-100" : "bg-gray-100 text-gray-800"
         } ${isSidebarOpen ? "translate-x-0" : "-translate-x-full"}`}
       >

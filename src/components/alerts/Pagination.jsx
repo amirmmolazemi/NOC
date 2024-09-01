@@ -9,7 +9,7 @@ function Pagination({ page, setPage, totalPages }) {
   const renderPageNumber = (num) => (
     <p
       key={num}
-      className={`inline-block border border-blue-500 w-7 text-center rounded-md ${
+      className={`inline-block border font-semibold border-blue-500 w-7 text-center rounded-md ${
         !darkMode ? "text-black" : "text-white"
       } ${page === num ? "bg-blue-500 text-white" : ""}`}
       onClick={() => setPage(num)}
@@ -19,7 +19,7 @@ function Pagination({ page, setPage, totalPages }) {
   );
 
   return (
-    <div className="flex flex-wrap justify-center items-center mx-auto mb-7 w-full max-w-lg px-4 select-none mt-2">
+    <div className="flex flex-wrap justify-center items-center mx-auto mb-2 w-full max-w-lg px-4 select-none mt-2">
       <div className="flex gap-1">
         <button
           onClick={previousHandler}
@@ -39,13 +39,13 @@ function Pagination({ page, setPage, totalPages }) {
             {[1, 2].map(renderPageNumber)}
             {page > 2 && page < totalPages - 1 && (
               <>
-                <span className={`text-white ${!darkMode && "text-black"}`}>
+                <span className={` ${!darkMode ? "text-black" : "text-white"}`}>
                   ...
                 </span>
                 {renderPageNumber(page)}
               </>
             )}
-            <span className={`text-white ${!darkMode && "text-black"}`}>
+            <span className={` ${!darkMode ? "text-black" : "text-white"}`}>
               ...
             </span>
             {[totalPages - 1, totalPages].map(renderPageNumber)}

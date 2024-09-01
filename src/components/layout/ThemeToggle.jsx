@@ -9,7 +9,7 @@ function ThemeToggle() {
   return (
     <button
       onClick={() => dispatch(toggleDarkMode())}
-      className="text-3xl mb-1 ml-3"
+      className="text-3xl mb-1"
     >
       {darkMode ? <FiSun /> : <FiMoon />}
     </button>

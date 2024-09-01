@@ -5,8 +5,8 @@ function NavMenu({ onClick }) {
   const menuItems = useMenuItems();
 
   return (
-    <nav className="flex-1 mt-5">
-      <ul className="space-y-8 ml-4">
+    <nav className="flex-1">
+      <ul className="space-y-8">
         {menuItems.map((item, index) => (
           <li
             key={index}

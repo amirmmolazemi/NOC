@@ -4,22 +4,17 @@ import useSWR from "swr";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { setRole } from "Redux/slices/userSlice";
-import api from "configs/api";
 import useCheckCookie from "./useCheckCookie";
-
-const fetcher = (url, token) =>
-  api
-    .get(url, { headers: { Authorization: `Bearer ${token}` } })
-    .then((res) => res.data);
+import fetcher from "utils/fetcher";
 
 function useUserRole(isOnlyAdmin, role, apiEndpoint) {
   const token = Cookies.get("token");
   const { data: initialData, loading: initialLoading } = useCheckCookie();
   const { data: fetchedData, error } = useSWR(
     initialData ? [apiEndpoint, token] : null,
-    ([url, token]) => fetcher(url, token),
+    ([url]) => fetcher(url),
     {
-      revalidateOnFocus: false,
+      revalidateOnFocus: true,
     }
   );
 

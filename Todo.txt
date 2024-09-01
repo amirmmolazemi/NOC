@@ -5,23 +5,6 @@
     // FIXME: add inputs and put their data on that to see
     // FIXME: change the level of AI 
 }
-// TODO: pack page {
-    // FIXME: assign  
-}
-// TODO: alerts page {
-    // FIXME: show alerts  
-}
-// TODO: incidents page {
-    // FIXME: show incidents
-}
 // TODO: admin add user or team page {
     // FIXME: 
-}
-
-
-const utcDate = new Date('2024-08-27T06:04:06.768Z'); // Create date object in UTC
-
-const tehranOffset = 3.5 * 60; // Tehran is UTC+3:30
-const localTehranTime = new Date(utcDate.getTime() + tehranOffset * 60 * 1000);
-
-console.log(localTehranTime.toISOString().slice(0, 19).replace('T', ' ')); 
+} 

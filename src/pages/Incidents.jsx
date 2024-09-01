@@ -9,7 +9,7 @@ function Incidents() {
   const { data, isLoading } = useUserRole(
     true,
     "",
-    `/notifications?page=${page}`
+    `notifications/incidents?page=${page}`
   );
   const [incidents, setIncidents] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -37,7 +37,7 @@ function Incidents() {
         </>
       ) : (
         <div className="flex items-center justify-center h-full">
-          <h1 className="text-3xl text-center">No incidents found.</h1>
+          <h1 className={`text-3xl text-center`}>No incidents found.</h1>
         </div>
       )}
     </div>

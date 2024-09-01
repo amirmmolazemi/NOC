@@ -10,7 +10,7 @@ function LanguageToggle() {
   return (
     <button
       onClick={() => dispatch(toggleLanguage())}
-      className="mb-4 ml-3 w-7 h-auto "
+      className="mb-4 w-7 h-auto "
     >
       <img
         src={language === "en" ? flagUk : flagIr}

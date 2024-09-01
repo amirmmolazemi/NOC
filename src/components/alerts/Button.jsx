@@ -1,10 +1,10 @@
-function Button({ color, isButtonDisabled, text }) {
+function Button({ isButtonDisabled, text }) {
   return (
     <button
       className={`${
         isButtonDisabled
-          ? `bg-${color}-200`
-          : `bg-${color}-500 cursor-pointer text-black`
+          ? "bg-red-500 text-white cursor-pointer"
+          : "bg-red-200 text-gray-400"
       } p-3 w-[50%] lg:w-auto rounded-lg font-semibold cursor-not-allowed`}
       disabled={isButtonDisabled}
     >
