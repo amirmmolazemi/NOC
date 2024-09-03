@@ -1,7 +1,7 @@
 import { useState } from "react";
+import { useSelector } from "react-redux";
 import Sidebar from "components/layout/Sidebar";
 import Header from "components/layout/Header";
-import { useSelector } from "react-redux";
 
 function Layout({ children }) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -26,9 +26,9 @@ function Layout({ children }) {
       <div
         className={`mt-[70px] flex-1 overflow-y-auto transition-all duration-300 ${
           darkMode ? "bg-gray-900" : "bg-gray-200"
-        } mb-7 rounded-[25px] md:mt-7 ${
-          !isSidebarOpen && "mx-4 md:ml-[calc(80px+1rem)]"
-        } scrollbar-none 
+        } mb-7 rounded-[25px] md:mt-7 
+          mx-4 md:ml-[calc(80px+1rem)]
+         scrollbar-none 
          `}
       >
         <div className="sm:max-h-[94vh]">{children}</div>

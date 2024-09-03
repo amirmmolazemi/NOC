@@ -15,7 +15,7 @@
     "alerts": "Alerts",
     "incidents": "Incidents",
     "logout": "Log out",
-    "user": "Add User",
-    "team": "Add Team"
+    "user": "Users",
+    "team": "Teams"
   }
 }

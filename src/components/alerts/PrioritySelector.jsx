@@ -1,25 +1,49 @@
-const PrioritySelector = ({ darkMode, priority, setPriority }) => (
-  <div className="flex flex-col">
-    <label
-      className={`block mb-2 font-semibold ${
-        darkMode ? "dark:text-white" : ""
-      }`}
-    >
-      Priority:
-    </label>
-    <select
-      value={priority}
-      onChange={(e) => setPriority(e.target.value)}
-      className={`p-3 border rounded-lg w-full ${
-        darkMode ? "dark:bg-gray-800 dark:border-gray-700 dark:text-white" : ""
-      }`}
-    >
-      <option value="">Select Priority</option>
-      <option value="low">Low</option>
-      <option value="medium">Medium</option>
-      <option value="high">High</option>
-    </select>
-  </div>
-);
+import api from "configs/api";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
+
+const PrioritySelector = ({ darkMode, incident, setPriority, priority }) => {
+  const changeHandler = async (e) => {
+    const { value } = e.target;
+    const token = Cookies.get("token");
+    setPriority(value);
+    try {
+      if (!value) return;
+      await api.post(
+        "/pack/priority",
+        { id: incident.id, priority: value },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      toast.success("Priority saved successfully", { autoClose: 1500 });
+    } catch (error) {
+      console.error("Priority change error:", error);
+      toast.error("Failed to save priority");
+    }
+  };
+
+  return (
+    <div className="flex flex-col">
+      <label
+        className={`block mb-2 font-semibold ${darkMode ? "text-white" : ""}`}
+      >
+        Priority:
+      </label>
+      <select
+        value={priority}
+        onChange={changeHandler}
+        className={`p-3 border rounded-lg w-full ${
+          darkMode
+            ? "bg-gray-800 border-gray-700 text-white"
+            : "bg-white border-gray-200"
+        }`}
+      >
+        <option value="">Select Priority</option>
+        <option value="Low">Low</option>
+        <option value="Medium">Medium</option>
+        <option value="High">High</option>
+      </select>
+    </div>
+  );
+};
 
 export default PrioritySelector;

@@ -10,12 +10,12 @@ function NavMenu({ onClick }) {
         {menuItems.map((item, index) => (
           <li
             key={index}
-            className="flex flex-col cursor-pointer justify-center text-center items-center text-2xl font-semibold"
+            className="flex flex-col justify-center text-center items-center text-2xl font-semibold"
           >
             <Link
               to={item.link}
               onClick={item.click ? item.click : onClick}
-              className="flex flex-col items-center text-center"
+              className="flex flex-col items-center text-center cursor-pointer"
             >
               <item.icon />
               <span className="text-sm mt-2">{item.title}</span>

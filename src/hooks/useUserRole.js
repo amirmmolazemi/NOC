@@ -15,6 +15,8 @@ function useUserRole(isOnlyAdmin, role, apiEndpoint) {
     ([url]) => fetcher(url),
     {
       revalidateOnFocus: true,
+      refreshInterval: 10000,
+      refreshWhenHidden: true,
     }
   );
 

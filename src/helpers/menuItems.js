@@ -23,13 +23,13 @@ const menuItems = (language) => {
     {
       title: locales.menu.user,
       icon: FiUser,
-      link: "/user",
+      link: "/users",
       roles: ["Admin"],
     },
     {
       title: locales.menu.team,
       icon: RiTeamLine,
-      link: "/team",
+      link: "/teams",
       roles: ["Admin"],
     },
     {

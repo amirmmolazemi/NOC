@@ -15,8 +15,8 @@ const routes = [
   { path: "/settings", element: <Settings /> },
   { path: "/alerts", element: <Alerts /> },
   { path: "/incidents", element: <Incidents /> },
-  { path: "/user", element: <AddUser /> },
-  { path: "/team", element: <AddTeam /> },
+  { path: "/users", element: <AddUser /> },
+  { path: "/teams", element: <AddTeam /> },
   { path: "*", element: <NotFound /> },
 ];
 

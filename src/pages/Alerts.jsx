@@ -8,6 +8,7 @@ import Pagination from "components/alerts/Pagination";
 function Alerts() {
   const [page, setPage] = useState(1);
   const [openIncidentId, setOpenIncidentId] = useState(null);
+  const [showModal, setShowModal] = useState(false);
   const darkMode = useSelector((state) => state.theme.darkMode);
   const [incidents, setIncidents] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -18,7 +19,7 @@ function Alerts() {
   );
 
   useEffect(() => {
-    if (data?.otherData) {
+    if (data?.otherData && !openIncidentId && !showModal) {
       setIncidents(data.otherData.packs || []);
       setPage(data.otherData.page || 1);
       setTotalPages(data.otherData.totalPages || 1);
@@ -45,6 +46,8 @@ function Alerts() {
               incident={incident}
               isOpen={incident.id === openIncidentId}
               onCardClick={() => handleCardClick(incident.id)}
+              showModal={showModal}
+              setShowModal={setShowModal}
             />
           ))}
           <Pagination page={page} totalPages={totalPages} setPage={setPage} />
