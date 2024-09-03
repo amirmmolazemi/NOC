@@ -17,7 +17,10 @@ function UserTable({ users, darkMode }) {
 
   const deleteHandler = async (id) => {
     try {
-      await api.delete(`/user/${id}`);
+      const token = Cookies.get("token");
+      await api.delete(`/user/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       toast.success("User deleted successfully!");
     } catch (error) {
       toast.error("Error deleting user");
