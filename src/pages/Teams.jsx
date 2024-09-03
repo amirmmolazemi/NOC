@@ -1,10 +1,10 @@
 import Loader from "components/loader/Loader";
 import useUserRole from "hooks/useUserRole";
 
-function AddUser() {
+function Teams() {
   const { data, loading } = useUserRole(false, "Admin", "/pack");
   if (loading) return <Loader />;
-  return <div>AddUser</div>;
+  return <div>Teams</div>;
 }
 
-export default AddUser;
+export default Teams;

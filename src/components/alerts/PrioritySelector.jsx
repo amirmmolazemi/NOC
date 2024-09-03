@@ -16,7 +16,6 @@ const PrioritySelector = ({ darkMode, incident, setPriority, priority }) => {
       );
       toast.success("Priority saved successfully", { autoClose: 1500 });
     } catch (error) {
-      console.error("Priority change error:", error);
       toast.error("Failed to save priority");
     }
   };

@@ -15,7 +15,7 @@ function Alerts() {
   const { data, isLoading } = useUserRole(
     false,
     "Team_724",
-    `/pack?page=${page}`
+    `/pack?size=8&page=${page}`
   );
 
   useEffect(() => {
@@ -34,12 +34,12 @@ function Alerts() {
 
   return (
     <div
-      className={`flex flex-col h-full justify-between p-6 overflow-y-auto scrollbar-none ${
+      className={`flex flex-col h-full justify-between p-5 overflow-y-auto scrollbar-none ${
         darkMode ? "dark:bg-gray-900" : ""
       }`}
     >
       {incidents.length ? (
-        <div className="flex flex-col justify-between gap-[60px]">
+        <div className="flex flex-col justify-between gap-[5px]">
           {incidents.map((incident) => (
             <Card
               key={incident.id}

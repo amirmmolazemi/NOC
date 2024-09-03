@@ -16,7 +16,9 @@ function useUserRole(isOnlyAdmin, role, apiEndpoint) {
     {
       revalidateOnFocus: true,
       refreshInterval: 10000,
-      refreshWhenHidden: true,
+      revalidateWhenHidden: true,
+      revalidateIfStale: true,
+      revalidateOnReconnect: true,
     }
   );
 

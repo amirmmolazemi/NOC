@@ -6,8 +6,8 @@ import Settings from "pages/Settings.jsx";
 import NotFound from "pages/404";
 import Alerts from "pages/Alerts";
 import Incidents from "pages/Incidents";
-import AddUser from "pages/AddUser";
-import AddTeam from "pages/AddTeam";
+import Users from "pages/Users";
+import Teams from "src/pages/Teams";
 
 const routes = [
   { path: "/", element: <Dashboard /> },
@@ -15,8 +15,8 @@ const routes = [
   { path: "/settings", element: <Settings /> },
   { path: "/alerts", element: <Alerts /> },
   { path: "/incidents", element: <Incidents /> },
-  { path: "/users", element: <AddUser /> },
-  { path: "/teams", element: <AddTeam /> },
+  { path: "/users", element: <Users /> },
+  { path: "/teams", element: <Teams /> },
   { path: "*", element: <NotFound /> },
 ];
 
