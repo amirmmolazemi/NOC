@@ -27,7 +27,6 @@ function useUserRole(isOnlyAdmin, role, apiEndpoint) {
 
   useEffect(() => {
     if (!fetchedData) return;
-
     const mergedData = { ...initialData, otherData: fetchedData };
     if (mergedData.user?.role?.name) {
       dispatch(setRole(mergedData.user.role.name));

@@ -8,3 +8,11 @@
 // TODO: admin add user or team page {
     // FIXME: 
 } 
+
+
+TODO: if in useEffect in Dashboard.jsx
+TODO: locale destructure in Dashboard.jsx
+TODO: change useMenuItem file location
+TODO: clean useUserRole
+TODO: create a modal component in Button.jsx
+TODO: change notificationLabel imported as children props

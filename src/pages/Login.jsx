@@ -1,9 +1,8 @@
-import LoginForm from "components/login/LoginForm";
-import bgPicture from "assets/bgPicture.png";
-import partLogo from "assets/partLogo.png";
 import { useEffect } from "react";
-import Cookies from "js-cookie";
 import { useNavigate } from "react-router-dom";
+import Cookies from "js-cookie";
+import partLogo from "assets/partLogo.png";
+import LoginForm from "components/login/LoginForm";
 
 function Login() {
   const navigate = useNavigate();
@@ -22,10 +21,7 @@ function Login() {
           <LoginForm />
         </div>
       </div>
-      <div
-        className="hidden md:flex w-7/12 bg-cover bg-center rounded-[10px] h-[95vh] mt-6 mr-4"
-        style={{ backgroundImage: `url(${bgPicture})` }}
-      ></div>
+      <div className="hidden md:flex bg-[url('assets/bgPicture.png')] w-7/12 bg-cover bg-center rounded-[10px] h-[95vh] mt-6 mr-4" />
     </div>
   );
 }

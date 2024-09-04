@@ -24,14 +24,11 @@ function Layout({ children }) {
         setIsSidebarOpen={setIsSidebarOpen}
       />
       <div
-        className={`mt-[70px] flex-1 overflow-y-auto transition-all duration-300 ${
+        className={`mt-[70px] flex-1 overflow-y-auto transition-all duration-300 mb-7 rounded-[25px] md:mt-7 mx-4 md:ml-[calc(80px+1rem)] scrollbar-none ${
           darkMode ? "bg-gray-900" : "bg-gray-200"
-        } mb-7 rounded-[25px] md:mt-7 
-          mx-4 md:ml-[calc(80px+1rem)]
-         scrollbar-none 
-         `}
+        }`}
       >
-        <div className="sm:max-h-[94vh]">{children}</div>
+        <div className="sm:max-h-[93vh]">{children}</div>
       </div>
     </div>
   );

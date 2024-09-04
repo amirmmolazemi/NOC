@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
 import { useSelector } from "react-redux";
-import Loader from "components/loader/Loader";
 import useUserRole from "hooks/useUserRole";
+import Loader from "components/loader/Loader";
 import Card from "components/alerts/Card";
 import Pagination from "components/alerts/Pagination";
 
 function Alerts() {
-  const [page, setPage] = useState(1);
+  const [incidents, setIncidents] = useState([]);
   const [openIncidentId, setOpenIncidentId] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const darkMode = useSelector((state) => state.theme.darkMode);
-  const [incidents, setIncidents] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
+  const [page, setPage] = useState(1);
+  const darkMode = useSelector((state) => state.theme.darkMode);
   const { data, isLoading } = useUserRole(
     false,
     "Team_724",
@@ -20,9 +20,10 @@ function Alerts() {
 
   useEffect(() => {
     if (data?.otherData && !openIncidentId && !showModal) {
-      setIncidents(data.otherData.packs || []);
-      setPage(data.otherData.page || 1);
-      setTotalPages(data.otherData.totalPages || 1);
+      const { packs, page, totalPages } = data.otherData;
+      setIncidents(packs || []);
+      setPage(page || 1);
+      setTotalPages(totalPages || 1);
     }
   }, [data]);
 

@@ -6,7 +6,7 @@ import Checkbox from "./Checkbox";
 import Button from "./Button";
 
 function LoginForm() {
-  const [credentials, setCredentials] = useState({
+  const [inputs, setInputs] = useState({
     username: "",
     password: "",
   });
@@ -14,15 +14,10 @@ function LoginForm() {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCredentials((prev) => ({ ...prev, [name]: value }));
-  };
-
   const validateInputs = () => {
     const newErrors = {};
-    if (!credentials.username) newErrors.username = "Username is required";
-    if (!credentials.password) newErrors.password = "Password is required";
+    if (!inputs.username) newErrors.username = "Username is required";
+    if (!inputs.password) newErrors.password = "Password is required";
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
@@ -30,35 +25,26 @@ function LoginForm() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!validateInputs()) return;
-    const res = await loginHandler(credentials.username, credentials.password);
+    const res = await loginHandler(inputs.username, inputs.password);
     if (res) navigate("/dashboard");
   };
 
   return (
     <form onSubmit={handleSubmit}>
       <TextInput
-        id="username"
         name="username"
-        placeholder="Username"
-        value={credentials.username}
-        onChange={handleChange}
+        value={inputs.username}
+        setInputs={setInputs}
         error={errors.username}
       />
       <TextInput
-        id="password"
         name="password"
         type={showPassword ? "text" : "password"}
-        placeholder="Password"
-        value={credentials.password}
-        onChange={handleChange}
+        value={inputs.password}
+        setInputs={setInputs}
         error={errors.password}
       />
-      <Checkbox
-        id="showPassword"
-        label="Show Password"
-        checked={showPassword}
-        onChange={() => setShowPassword((prev) => !prev)}
-      />
+      <Checkbox checked={showPassword} setShowPassword={setShowPassword} />
       <Button />
     </form>
   );

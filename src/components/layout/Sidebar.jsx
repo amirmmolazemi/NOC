@@ -1,5 +1,5 @@
-import { FiX } from "react-icons/fi";
 import { useSelector } from "react-redux";
+import { FiX } from "react-icons/fi";
 import Logo from "./Logo";
 import NavMenu from "./NavMenu";
 import ThemeToggle from "./ThemeToggle";
@@ -23,7 +23,7 @@ function Sidebar({ isSidebarOpen, setIsSidebarOpen }) {
         </div>
       </aside>
       <div
-        className={`fixed inset-0 z-10 transition-opacity duration-300 ${
+        className={`fixed z-10 transition-opacity duration-300 ${
           isSidebarOpen
             ? "opacity-50 bg-black"
             : "opacity-0 pointer-events-none"

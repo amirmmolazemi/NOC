@@ -12,7 +12,7 @@ function AddUserModal({ darkMode, closeModal, addUserHandler }) {
 
   const validateFields = () => {
     const newErrors = {};
-    if (formData.password && formData.password.length < 8)
+    if (formData.password.length < 8)
       newErrors.password = "Password must be at least 8 characters.";
     if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email))
       newErrors.email = "Invalid email address.";
@@ -44,8 +44,8 @@ function AddUserModal({ darkMode, closeModal, addUserHandler }) {
             <h3 className="text-3xl font-semibold">Add User</h3>
           </div>
           <div className="relative flex-auto p-6">
-            {["username", "password", "email", "role"].map((field) => (
-              <div className="mb-4" key={field}>
+            {["username", "password", "email", "role"].map((field, index) => (
+              <div className="mb-4" key={index}>
                 <label className="block mb-1 text-sm font-medium capitalize">
                   {field}
                 </label>
@@ -59,11 +59,11 @@ function AddUserModal({ darkMode, closeModal, addUserHandler }) {
                       darkMode
                         ? "bg-gray-700 text-white"
                         : "bg-white text-black border"
-                    } ${errors[field] ? "border-red-500" : ""}`}
+                    }`}
                   >
                     <option value="">Select a role</option>
-                    {roles.map((role) => (
-                      <option key={role} value={role}>
+                    {roles.map((role, index) => (
+                      <option key={index} value={role}>
                         {role}
                       </option>
                     ))}
@@ -82,7 +82,7 @@ function AddUserModal({ darkMode, closeModal, addUserHandler }) {
                       darkMode
                         ? "bg-gray-700 text-white"
                         : "bg-white text-black border"
-                    } ${errors[field] ? "border-red-500" : ""}`}
+                    }`}
                   />
                 )}
                 {errors[field] && (

@@ -4,10 +4,10 @@ import api from "configs/api";
 const fetcher = async (url) => {
   try {
     const token = Cookies.get("token");
-    const res = await api.get(url, {
+    const { data } = await api.get(url, {
       headers: { Authorization: `Bearer ${token}` },
     });
-    return res.data;
+    return data;
   } catch (error) {
     return {};
   }

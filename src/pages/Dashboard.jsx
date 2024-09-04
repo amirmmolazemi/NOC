@@ -1,14 +1,14 @@
 import { useEffect, useMemo } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Bar, Line, Doughnut, Radar } from "react-chartjs-2";
-import enLocale from "assets/locales/en.json";
-import faLocale from "assets/locales/fa.json";
+import { setRole } from "Redux/slices/userSlice";
 import useCheckCookie from "hooks/useCheckCookie";
 import useRegisterChart from "hooks/useRegisterChart";
 import Loader from "components/loader/Loader";
 import DashboardCard from "components/dashboard/DashboardCard";
 import getChartData from "helpers/getChartData";
-import { setRole } from "Redux/slices/userSlice";
+import enLocale from "assets/locales/en.json";
+import faLocale from "assets/locales/fa.json";
 
 function Dashboard() {
   useRegisterChart();

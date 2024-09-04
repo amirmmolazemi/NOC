@@ -1,6 +1,6 @@
-import api from "configs/api";
-import Cookies from "js-cookie";
 import { toast } from "react-toastify";
+import Cookies from "js-cookie";
+import api from "configs/api";
 
 const PrioritySelector = ({ darkMode, incident, setPriority, priority }) => {
   const changeHandler = async (e) => {
@@ -16,7 +16,7 @@ const PrioritySelector = ({ darkMode, incident, setPriority, priority }) => {
       );
       toast.success("Priority saved successfully", { autoClose: 1500 });
     } catch (error) {
-      toast.error("Failed to save priority");
+      toast.error("Failed to save priority", { autoClose: 1500 });
     }
   };
 

@@ -4,7 +4,7 @@ import { ClipLoader } from "react-spinners";
 function Loader() {
   const darkMode = useSelector((state) => state.theme.darkMode);
   return (
-    <div className="flex justify-center items-center mt-[37vh]">
+    <div className="flex justify-center items-center h-[calc(100vh-7vh)]">
       <ClipLoader
         loading
         speedMultiplier={1}

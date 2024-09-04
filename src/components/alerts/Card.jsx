@@ -11,17 +11,15 @@ function Card({ incident, isOpen, onCardClick, showModal, setShowModal }) {
   const darkMode = useSelector((state) => state.theme.darkMode);
   const [priority, setPriority] = useState(incident.priority || "");
 
-  const {
-    data: incidentDetails,
-    error,
-    isLoading,
-  } = useSWR(isOpen ? `/pack/${incident.id}` : null, fetcher, {
-    revalidateOnFocus: true,
-    refreshInterval: 10000,
-    refreshWhenHidden: true,
-  });
-
-  if (error) return <div>Error: {error.message}</div>;
+  const { data: incidentDetails, isLoading } = useSWR(
+    isOpen ? `/pack/${incident.id}` : null,
+    fetcher,
+    {
+      revalidateOnFocus: true,
+      refreshInterval: 10000,
+      refreshWhenHidden: true,
+    }
+  );
 
   return (
     <div
@@ -69,12 +67,13 @@ function Card({ incident, isOpen, onCardClick, showModal, setShowModal }) {
         </div>
         <div className="overflow-y-auto h-[400px] scrollbar-thin scrollbar-thumb-gray-500 mt-3 scrollbar-track-gray-200">
           {isLoading ? (
-            <p className={`${darkMode ? "text-white" : ""}`}>Loading...</p>
+            <p className={`${darkMode ? "text-white" : "text-black"}`}>
+              Loading...
+            </p>
           ) : (
             <NotificationDetails
               darkMode={darkMode}
               incidentDetails={incidentDetails}
-              showModal={showModal}
             />
           )}
         </div>
