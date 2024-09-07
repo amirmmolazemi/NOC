@@ -5,17 +5,21 @@ import api from "configs/api";
 import { mutate } from "swr";
 import TeamActions from "./TeamActions";
 import EditTeamModal from "./EditTeamModal";
+import { FiEye } from "react-icons/fi";
+import MemberModal from "./MemberModal";
 
 function TeamTable({ teams, darkMode, page }) {
-  const [showModal, setShowModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showMembersModal, setShowMembersModal] = useState(false);
   const [selectedTeamId, setSelectedTeamId] = useState(null);
   const [prevEditTeamData, setPrevEditTeamData] = useState({});
+  const [team, setTeam] = useState("");
   const [editTeamData, setEditTeamData] = useState({ name: "", headId: "" });
 
   const deleteHandler = async (id) => {
     try {
       const token = Cookies.get("token");
-      await api.delete(`/Team/${id}`, {
+      await api.delete(`/team/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       mutate(`/team?size=10&page=${page}`);
@@ -29,7 +33,7 @@ function TeamTable({ teams, darkMode, page }) {
     setSelectedTeamId(team.id);
     setEditTeamData({ name: team.name, headId: team.head.id });
     setPrevEditTeamData({ name: team.name, headId: team.head.id });
-    setShowModal(true);
+    setShowEditModal(true);
   };
 
   const editHandler = async () => {
@@ -45,7 +49,7 @@ function TeamTable({ teams, darkMode, page }) {
       });
       mutate(`/team?size=10&page=${page}`);
       toast.success("Team data saved successfully!");
-      setShowModal(false);
+      setShowEditModal(false);
     } catch (error) {
       toast.error("Error saving Team data");
     }
@@ -85,7 +89,18 @@ function TeamTable({ teams, darkMode, page }) {
                 <td className="p-3 text-center">{team.id}</td>
                 <td className="p-3 text-center">{team.name}</td>
                 <td className="p-3 text-center">{team.head.username}</td>
-                <td className="p-3 text-center"></td>
+                <td className="p-3 text-center">
+                  <button
+                    className="text-green-500 hover:text-green-700"
+                    title="View Members"
+                    onClick={() => {
+                      setShowMembersModal(true);
+                      setTeam(team.name);
+                    }}
+                  >
+                    <FiEye size={20} />
+                  </button>
+                </td>
                 <td className="p-3 text-center flex justify-center items-center gap-4">
                   <TeamActions
                     deleteHandler={() => deleteHandler(team.id)}
@@ -102,19 +117,35 @@ function TeamTable({ teams, darkMode, page }) {
                   darkMode ? "text-gray-300" : "text-gray-600"
                 }`}
               >
-                Users not found
+                Team not found
               </td>
             </tr>
           )}
         </tbody>
       </table>
-      {showModal && (
+      {showEditModal && (
         <EditTeamModal
           darkMode={darkMode}
           editTeamData={editTeamData}
           setEditTeamData={setEditTeamData}
-          closeModal={() => setShowModal(false)}
+          closeModal={() => setShowEditModal(false)}
           saveHandler={editHandler}
+        />
+      )}
+      {showEditModal && (
+        <EditTeamModal
+          darkMode={darkMode}
+          editTeamData={editTeamData}
+          setEditTeamData={setEditTeamData}
+          closeModal={() => setShowEditModal(false)}
+          saveHandler={editHandler}
+        />
+      )}
+      {showMembersModal && (
+        <MemberModal
+          darkMode={darkMode}
+          closeModal={() => setShowMembersModal(false)}
+          team={team}
         />
       )}
     </>

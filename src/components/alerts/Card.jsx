@@ -14,7 +14,7 @@ function Card({ incident, isOpen, onCardClick, showModal, setShowModal }) {
   const { data: incidentDetails, isLoading } = useSWR(
     isOpen && `/pack/${incident.id}`,
     fetcher,
-    { refreshInterval: 5000, refreshWhenHidden: true }
+    { refreshInterval: 10 * 1000, refreshWhenHidden: true }
   );
 
   return (

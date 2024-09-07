@@ -12,7 +12,7 @@ function useUserRole(isOnlyAdmin, role, apiEndpoint) {
     initialData && apiEndpoint,
     (url) => fetcher(url),
     {
-      refreshInterval: 5000,
+      refreshInterval: 10 * 1000,
       revalidateWhenHidden: true,
     }
   );
