@@ -1,9 +1,9 @@
-const getChartData = (locale, darkMode) => {
+const getChartData = (activeTorrents, darkMode) => {
   const chartData = {
     labels: ["January", "February", "March", "April", "May", "June", "July"],
     datasets: [
       {
-        label: locale.activeTorrents,
+        label: activeTorrents,
         data: [65, 65, 65, 65, 65, 65, 65],
         backgroundColor: darkMode
           ? "rgba(75,192,192,0.6)"

@@ -1,7 +1,6 @@
 import utcChanger from "utils/utcToTehran";
-import NotificationLabels from "./NotificationLabels";
 
-const NotificationDetails = ({ darkMode, incidentDetails }) => (
+const NotificationDetails = ({ darkMode, incidentDetails, children }) => (
   <>
     {incidentDetails?.notifications?.map((item) => (
       <div
@@ -28,7 +27,7 @@ const NotificationDetails = ({ darkMode, incidentDetails }) => (
             Receive Time: {utcChanger(item.receive_time)}
           </p>
         </div>
-        <NotificationLabels />
+        {children}
       </div>
     ))}
   </>

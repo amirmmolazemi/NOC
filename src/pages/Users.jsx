@@ -2,13 +2,13 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import { mutate } from "swr";
 import useUserRole from "hooks/useUserRole";
 import Loader from "components/loader/Loader";
 import UserTable from "components/users/UserTable";
-import Pagination from "components/alerts/Pagination";
+import Pagination from "components/pagination/Pagination";
 import AddUserModal from "components/users/AddUserModal";
 import api from "configs/api";
+import { mutate } from "swr";
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -16,7 +16,11 @@ function Users() {
   const [totalPages, setTotalPages] = useState(1);
   const [showModal, setShowModal] = useState(false);
   const darkMode = useSelector((state) => state.theme.darkMode);
-  // const { data, isLoading } = useUserRole(false, "Admin", "/user?size=10");
+  const { data, isLoading } = useUserRole(
+    false,
+    "Admin",
+    `/user?size=10&page=${page}`
+  );
 
   const addUserHandler = async (newUser) => {
     try {
@@ -24,24 +28,23 @@ function Users() {
       await api.post("/user", newUser, {
         headers: { Authorization: `Bearer ${token}` },
       });
+      mutate(`/user?size=10&page=${page}`);
       toast.success("User added successfully!");
-      mutate("/user?size=10");
     } catch (error) {
-      console.log(error);
       toast.error("Error adding user");
     }
   };
 
-  // useEffect(() => {
-  //   if (data?.otherData) {
-  //     const { users, page, totalPages } = data.otherData;
-  //     setUsers(users || []);
-  //     setPage(page || 1);
-  //     setTotalPages(totalPages || 1);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data?.otherData && !showModal) {
+      const { users, page, totalPages } = data.otherData;
+      setUsers(users || []);
+      setPage(page || 1);
+      setTotalPages(totalPages || 1);
+    }
+  }, [data, showModal]);
 
-  // if (isLoading) return <Loader />;
+  if (isLoading) return <Loader />;
 
   return (
     <div className={`container mx-auto mt-8 p-4`}>
@@ -58,8 +61,8 @@ function Users() {
       >
         Add User
       </button>
-      <UserTable users={users} darkMode={darkMode} />
-      {users.length > 0 && (
+      <UserTable users={users} darkMode={darkMode} page={page} />
+      {users.length && (
         <Pagination page={page} totalPages={totalPages} setPage={setPage} />
       )}
       {showModal && (

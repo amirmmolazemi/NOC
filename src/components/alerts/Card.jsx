@@ -12,13 +12,9 @@ function Card({ incident, isOpen, onCardClick, showModal, setShowModal }) {
   const [priority, setPriority] = useState(incident.priority || "");
 
   const { data: incidentDetails, isLoading } = useSWR(
-    isOpen ? `/pack/${incident.id}` : null,
+    isOpen && `/pack/${incident.id}`,
     fetcher,
-    {
-      revalidateOnFocus: true,
-      refreshInterval: 10000,
-      refreshWhenHidden: true,
-    }
+    { refreshInterval: 5000, refreshWhenHidden: true }
   );
 
   return (

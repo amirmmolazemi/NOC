@@ -1,7 +1,5 @@
-import { useEffect, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import { Bar, Line, Doughnut, Radar } from "react-chartjs-2";
-import { setRole } from "Redux/slices/userSlice";
 import useCheckCookie from "hooks/useCheckCookie";
 import useRegisterChart from "hooks/useRegisterChart";
 import Loader from "components/loader/Loader";
@@ -14,20 +12,9 @@ function Dashboard() {
   useRegisterChart();
   const darkMode = useSelector((state) => state.theme.darkMode);
   const language = useSelector((state) => state.language.language);
-  const locale = language === "en" ? enLocale : faLocale;
-  const chartData = useMemo(
-    () => getChartData(locale, darkMode),
-    [locale, darkMode]
-  );
-  const { data, loading } = useCheckCookie();
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (data && data.user && data.user.role && data.user.role.name) {
-      dispatch(setRole(data.user.role.name));
-    }
-  }, [data, dispatch]);
-
+  const { activeTorrents } = language === "en" ? enLocale : faLocale;
+  const chartData = getChartData(activeTorrents, darkMode);
+  const { loading } = useCheckCookie();
   if (loading) return <Loader />;
 
   return (
@@ -37,22 +24,22 @@ function Dashboard() {
       }`}
     >
       <DashboardCard
-        locale={locale}
+        activeTorrents={activeTorrents}
         darkMode={darkMode}
         chart={<Bar data={chartData} />}
       />
       <DashboardCard
-        locale={locale}
+        activeTorrents={activeTorrents}
         darkMode={darkMode}
         chart={<Line data={chartData} />}
       />
       <DashboardCard
-        locale={locale}
+        activeTorrents={activeTorrents}
         darkMode={darkMode}
         chart={<Doughnut data={chartData} />}
       />
       <DashboardCard
-        locale={locale}
+        activeTorrents={activeTorrents}
         darkMode={darkMode}
         chart={<Radar data={chartData} />}
       />

@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import Card from "components/alerts/Card";
 import Loader from "components/loader/Loader";
 import useUserRole from "hooks/useUserRole";
-import Pagination from "components/alerts/Pagination";
+import Pagination from "components/pagination/Pagination";
 import { useSelector } from "react-redux";
 
 function Incidents() {

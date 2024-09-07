@@ -9,7 +9,7 @@ function Pagination({ page, setPage, totalPages }) {
   const renderPageNumber = (num) => (
     <p
       key={num}
-      className={`inline-block border font-semibold border-blue-500 w-10 text-center rounded-md ${
+      className={`inline-block border font-semibold cursor-pointer border-blue-500 w-10 text-center rounded-md ${
         !darkMode ? "text-black" : "text-white"
       } ${page === num ? "bg-blue-500 text-white" : ""}`}
       onClick={() => setPage(num)}
@@ -23,8 +23,8 @@ function Pagination({ page, setPage, totalPages }) {
       <div className="flex gap-1 text-2xl">
         <button
           onClick={previousHandler}
-          className={`bg-blue-500 text-white px-2 rounded-md text-sm sm:text-lg cursor-pointer ${
-            page === 1 ? "opacity-30 cursor-not-allowed" : ""
+          className={`bg-blue-500 text-white px-2 rounded-md text-sm sm:text-lg ${
+            page === 1 ? "opacity-30 cursor-not-allowed" : "cursor-pointer"
           }`}
           disabled={page === 1}
         >
@@ -53,8 +53,10 @@ function Pagination({ page, setPage, totalPages }) {
         )}
         <button
           onClick={nextHandler}
-          className={`bg-blue-500 text-white px-2 rounded-md text-sm sm:text-lg cursor-pointer ${
-            page === totalPages ? "opacity-30 cursor-not-allowed" : ""
+          className={`bg-blue-500 text-white px-2 rounded-md text-sm sm:text-lg ${
+            page === totalPages
+              ? "opacity-30 cursor-not-allowed"
+              : "cursor-pointer"
           }`}
           disabled={page === totalPages}
         >

@@ -3,7 +3,7 @@ import { useSelector } from "react-redux";
 import useUserRole from "hooks/useUserRole";
 import Loader from "components/loader/Loader";
 import Card from "components/alerts/Card";
-import Pagination from "components/alerts/Pagination";
+import Pagination from "components/pagination/Pagination";
 
 function Alerts() {
   const [incidents, setIncidents] = useState([]);

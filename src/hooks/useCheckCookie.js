@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
+import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import api from "configs/api";
+import { setRole } from "Redux/slices/userSlice";
 const useCheckCookie = () => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [loading, setLoading] = useState(true);
   const [data, setData] = useState({});
 
@@ -23,6 +26,7 @@ const useCheckCookie = () => {
         );
         const decoded = jwtDecode(token);
         setData({ user: decoded });
+        if (decoded?.role?.name) dispatch(setRole(decoded.role.name));
         setLoading(false);
       } catch (error) {
         Cookies.remove("token");

@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import Cookies from "js-cookie";
 import useSWR from "swr";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -8,20 +7,15 @@ import useCheckCookie from "./useCheckCookie";
 import fetcher from "utils/fetcher";
 
 function useUserRole(isOnlyAdmin, role, apiEndpoint) {
-  const token = Cookies.get("token");
   const { data: initialData, loading: initialLoading } = useCheckCookie();
   const { data: fetchedData, error } = useSWR(
-    initialData ? [apiEndpoint, token] : null,
-    ([url]) => fetcher(url),
+    initialData && apiEndpoint,
+    (url) => fetcher(url),
     {
-      revalidateOnFocus: true,
-      refreshInterval: 10000,
+      refreshInterval: 5000,
       revalidateWhenHidden: true,
-      revalidateIfStale: true,
-      revalidateOnReconnect: true,
     }
   );
-
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
