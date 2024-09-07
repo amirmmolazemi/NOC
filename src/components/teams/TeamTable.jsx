@@ -9,6 +9,7 @@ import EditTeamModal from "./EditTeamModal";
 function TeamTable({ teams, darkMode, page }) {
   const [showModal, setShowModal] = useState(false);
   const [selectedTeamId, setSelectedTeamId] = useState(null);
+  const [prevEditTeamData, setPrevEditTeamData] = useState({});
   const [editTeamData, setEditTeamData] = useState({ name: "", headId: "" });
 
   const deleteHandler = async (id) => {
@@ -27,20 +28,25 @@ function TeamTable({ teams, darkMode, page }) {
   const openEditModal = (team) => {
     setSelectedTeamId(team.id);
     setEditTeamData({ name: team.name, headId: team.head.id });
+    setPrevEditTeamData({ name: team.name, headId: team.head.id });
     setShowModal(true);
   };
 
   const editHandler = async () => {
     try {
       const token = Cookies.get("token");
-      await api.put(`/team/${selectedTeamId}`, editTeamData, {
+      let data = {
+        name: editTeamData.name,
+      };
+      if (prevEditTeamData.headId !== editTeamData.headId)
+        data.headId = editTeamData.headId;
+      await api.put(`/team/${selectedTeamId}`, data, {
         headers: { Authorization: `Bearer ${token}` },
       });
       mutate(`/team?size=10&page=${page}`);
       toast.success("Team data saved successfully!");
       setShowModal(false);
     } catch (error) {
-      console.log(error);
       toast.error("Error saving Team data");
     }
   };

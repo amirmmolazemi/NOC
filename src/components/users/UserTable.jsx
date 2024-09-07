@@ -31,7 +31,6 @@ function UserTable({ users, darkMode, page }) {
 
   const openEditModal = (user) => {
     setSelectedUserId(user.id);
-    console.log(user);
     setEditUserData({
       username: user.username,
       password: "",

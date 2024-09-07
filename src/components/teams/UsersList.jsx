@@ -1,7 +1,17 @@
+import { useState } from "react";
+
 function UsersList({ darkMode, users, setEditTeamData, editTeamData }) {
-  const clickHandler = (headId) => {
+  const [isSelect, setIsSelect] = useState(false);
+
+  const selectHandler = (headId) => {
     setEditTeamData({ ...editTeamData, headId });
+    setIsSelect(true);
   };
+  const removeHandler = () => {
+    setEditTeamData({ ...editTeamData, headId: "" });
+    setIsSelect(false);
+  };
+  
   return (
     <table
       className={`shadow-lg rounded-lg overflow-hidden min-w-full mt-6 mb-6 ${
@@ -37,12 +47,21 @@ function UsersList({ darkMode, users, setEditTeamData, editTeamData }) {
                   <td className="p-3 text-center">{user?.username}</td>
                   <td className="p-3 text-center">{user?.email}</td>
                   <td className="p-3 text-center">
-                    <button
-                      className="font-semibold px-4 py-2 rounded transition duration-200 bg-green-600 text-gray-100 hover:bg-green-500"
-                      onClick={() => clickHandler(user.id)}
-                    >
-                      select
-                    </button>
+                    {isSelect ? (
+                      <button
+                        className="font-semibold px-4 py-2 rounded transition duration-200 bg-red-600 text-gray-100 hover:bg-red-500"
+                        onClick={() => removeHandler()}
+                      >
+                        remove
+                      </button>
+                    ) : (
+                      <button
+                        className="font-semibold px-4 py-2 rounded transition duration-200 bg-green-600 text-gray-100 hover:bg-green-500"
+                        onClick={() => selectHandler(user.id)}
+                      >
+                        select
+                      </button>
+                    )}
                   </td>
                 </tr>
               )

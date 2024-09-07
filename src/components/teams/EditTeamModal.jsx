@@ -15,7 +15,7 @@ function EditTeamModal({
   const [users, setUsers] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
-  const { data: fetchedUsers } = useSWR(
+  const { data: fetchedUsers, isValidating } = useSWR(
     `/user?size=5&role=Head&page=${page}`,
     fetcher
   );
@@ -80,17 +80,33 @@ function EditTeamModal({
                   />
                 ) : (
                   <>
-                    <UsersList
-                      darkMode={darkMode}
-                      users={users}
-                      setEditTeamData={setEditTeamData}
-                      editTeamData={editTeamData}
-                    />
-                    <Pagination
-                      page={page}
-                      totalPages={totalPages}
-                      setPage={setPage}
-                    />
+                    {!isValidating ? (
+                      <>
+                        {users.filter((user) => !user.team).length ? (
+                          <>
+                            <UsersList
+                              darkMode={darkMode}
+                              users={users}
+                              editTeamData={editTeamData}
+                              setEditTeamData={setEditTeamData}
+                            />
+                            <Pagination
+                              page={page}
+                              totalPages={totalPages}
+                              setPage={setPage}
+                            />
+                          </>
+                        ) : (
+                          <h1 className="text-3xl font-semibold text-center mt-10">
+                            We don't have any Head user
+                          </h1>
+                        )}
+                      </>
+                    ) : (
+                      <h1 className="text-3xl font-semibold text-center mt-10">
+                        Loading ...
+                      </h1>
+                    )}
                   </>
                 )}
                 {errors[field] && (
