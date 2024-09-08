@@ -19,7 +19,7 @@ function Pagination({ page, setPage, totalPages }) {
   );
 
   return (
-    <div className="flex flex-wrap justify-center items-center mx-auto mb-2 w-full max-w-lg px-4 select-none mt-2">
+    <div className="flex flex-wrap justify-center items-center mx-auto mb-2 w-full max-w-lg px-4 select-none mt-9">
       <div className="flex gap-1 text-2xl">
         <button
           onClick={previousHandler}

@@ -1,47 +1,34 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import useSWR from "swr";
 import utcChanger from "utils/utcToTehran";
 import fetcher from "utils/fetcher";
-import Button from "./Button";
-import PrioritySelector from "./PrioritySelector";
+import PrioritySelector from "../alerts/PrioritySelector";
+import Button from "../alerts/Button";
 import NotificationDetails from "./NotificationDetails";
-import Modal from "./Modal";
-import Pagination from "../pagination/Pagination";
 
-function Card(props) {
-  const {
-    incident,
-    isOpen,
-    onCardClick,
-    showModal,
-    setShowModal,
-    createIncident,
-    isIncident,
-  } = props;
+function Card({
+  incident,
+  isOpen,
+  onCardClick,
+  showModal,
+  setShowModal,
+  isIncident,
+}) {
   const darkMode = useSelector((state) => state.theme.darkMode);
   const [priority, setPriority] = useState(incident.priority || "");
-  const [totalPages, setTotalPages] = useState(1);
-  const [page, setPage] = useState(1);
 
   const { data: incidentDetails, isLoading } = useSWR(
-    isOpen && `/pack/${incident.id}?page=${page}&size=10`,
+    isOpen && `/pack/${incident.id}`,
     fetcher,
     { refreshInterval: 10 * 1000, refreshWhenHidden: true }
   );
-
-  useEffect(() => {
-    if (incidentDetails) {
-      setPage(incidentDetails.page || 1);
-      setTotalPages(incidentDetails.totalPages || 1);
-    }
-  }, [incidentDetails]);
 
   return (
     <div
       className={`shadow-md rounded-lg p-3 transition-all duration-200 ease-in-out overflow-hidden ${
         darkMode ? "text-white bg-gray-700" : "bg-white text-gray-700"
-      } ${isOpen ? "max-h-[735px]" : "sm:max-h-[70px] max-h-[98px]"}`}
+      } ${isOpen ? "max-h-[706px]" : "sm:max-h-[70px] max-h-[98px]"}`}
     >
       <div onClick={onCardClick} className="cursor-pointer">
         <div className="flex flex-wrap justify-between">
@@ -55,9 +42,10 @@ function Card(props) {
         <div className="mt-1 font-semibold text-[14px] text-gray-400">
           <h3>{incident.notifications[0]?.service}</h3>
         </div>
-        {/* <div className="mt-1 font-semibold text-[14px] text-gray-400">
+
+        <div className="mt-1 font-semibold text-[14px] text-gray-400">
           <h3>{incident.fingerprint}</h3>
-        </div> */}
+        </div>
       </div>
       <div
         className={`${
@@ -73,16 +61,12 @@ function Card(props) {
               priority={priority}
             />
             <div className="flex items-center mt-8 w-full">
-              <Button isButtonActive={priority} setShowModal={setShowModal} />
-              <Modal
+              <Button
+                isButtonActive={priority}
+                setShowModal={setShowModal}
+                showModal={showModal}
                 darkMode={darkMode}
                 incidentDetails={incidentDetails}
-                showModal={showModal}
-                setShowModal={setShowModal}
-                createIncident={createIncident}
-                page={page}
-                setPage={setPage}
-                totalPages={totalPages}
               />
             </div>
           </div>
@@ -93,17 +77,10 @@ function Card(props) {
               Loading...
             </p>
           ) : (
-            <>
-              <NotificationDetails
-                darkMode={darkMode}
-                incidentDetails={incidentDetails}
-              />
-              <Pagination
-                page={page}
-                totalPages={totalPages}
-                setPage={setPage}
-              />
-            </>
+            <NotificationDetails
+              darkMode={darkMode}
+              incidentDetails={incidentDetails}
+            />
           )}
         </div>
       </div>

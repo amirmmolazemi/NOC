@@ -14,6 +14,7 @@ function TeamTable({ teams, darkMode, page }) {
   const [selectedTeamId, setSelectedTeamId] = useState(null);
   const [prevEditTeamData, setPrevEditTeamData] = useState({});
   const [team, setTeam] = useState("");
+  const [teamId, setTeamId] = useState("");
   const [editTeamData, setEditTeamData] = useState({ name: "", headId: "" });
 
   const deleteHandler = async (id) => {
@@ -96,6 +97,7 @@ function TeamTable({ teams, darkMode, page }) {
                     onClick={() => {
                       setShowMembersModal(true);
                       setTeam(team.name);
+                      setTeamId(team.id);
                     }}
                   >
                     <FiEye size={20} />
@@ -146,6 +148,7 @@ function TeamTable({ teams, darkMode, page }) {
           darkMode={darkMode}
           closeModal={() => setShowMembersModal(false)}
           team={team}
+          teamId={teamId}
         />
       )}
     </>

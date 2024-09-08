@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Card from "components/alerts/Card";
+import Card from "components/incidents/Card";
 import Loader from "components/loader/Loader";
 import useUserRole from "hooks/useUserRole";
 import Pagination from "components/pagination/Pagination";
@@ -10,42 +10,55 @@ function Incidents() {
   const { data, isLoading } = useUserRole(
     true,
     "",
-    `notifications?page=${page}`
+    `pack/incidents?size=10&page=${page}`
   );
   const [incidents, setIncidents] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
+  const [openIncidentId, setOpenIncidentId] = useState(null);
   const darkMode = useSelector((state) => state.theme.darkMode);
 
-  // useEffect(() => {
-  //   if (data?.otherData) {
-  //     setIncidents(
-  //       data.otherData.packs.filter((pack) => pack.type === "Incident") || []
-  //     );
-  //     setPage(data.otherData.page || 1);
-  //     setTotalPages(data.otherData.totalPages || 1);
-  //   }
-  // }, [data]);
+  useEffect(() => {
+    if (data?.otherData) {
+      setIncidents(data.otherData.incidents) || [];
+      setPage(data.otherData.page || 1);
+      setTotalPages(data.otherData.totalPages || 1);
+    }
+  }, [data]);
 
   if (isLoading) return <Loader />;
 
+  const handleCardClick = (id) => {
+    setOpenIncidentId(id === openIncidentId ? null : id);
+  };
+
   return (
-    <div className="flex flex-col h-full p-4">
+    <div
+      className={`flex flex-col h-full justify-between p-5 overflow-y-auto scrollbar-none ${
+        darkMode ? "dark:bg-gray-900" : ""
+      }`}
+    >
       {incidents.length ? (
-        <>
+        <div className="flex flex-col justify-between gap-[5px]">
           {incidents.map((incident) => (
-            <Card key={incident.id} incident={incident} />
+            <Card
+              key={incident.id}
+              incident={incident}
+              isOpen={incident.id === openIncidentId}
+              onCardClick={() => handleCardClick(incident.id)}
+              isIncident={incident.type === "Incident"}
+            />
           ))}
-          <Pagination page={page} setPage={setPage} totalPages={totalPages} />
-        </>
+          <Pagination page={page} totalPages={totalPages} setPage={setPage} />
+        </div>
       ) : (
-        <div className="flex flex-col justify-center items-center h-full">
-          <h1
-            className={`text-3xl text-center ${
-              darkMode ? "text-white" : "text-black"
+        <div className="flex items-center justify-center h-[calc(93vh-8vh)]">
+          <p
+            className={`text-3xl font-semibold ${
+              !darkMode ? "text-black" : "text-white"
             }`}
           >
-            No incidents found.
-          </h1>
+            No Incidents found.
+          </p>
         </div>
       )}
     </div>
