@@ -1,9 +1,15 @@
 import { useSelector } from "react-redux";
 import { FaLongArrowAltRight, FaLongArrowAltLeft } from "react-icons/fa";
 
-function Pagination({ page, setPage, totalPages }) {
-  const previousHandler = () => page > 1 && setPage((prev) => prev - 1);
-  const nextHandler = () => page < totalPages && setPage((prev) => prev + 1);
+function Pagination({ page, setPage, totalPages, openIncidentId }) {
+  const previousHandler = () => {
+    if (openIncidentId) return;
+    page > 1 && setPage((prev) => prev - 1);
+  };
+  const nextHandler = () => {
+    if (openIncidentId) return;
+    page < totalPages && setPage((prev) => prev + 1);
+  };
   const darkMode = useSelector((state) => state.theme.darkMode);
 
   const renderPageNumber = (num) => (

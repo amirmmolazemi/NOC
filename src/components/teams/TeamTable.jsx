@@ -134,15 +134,6 @@ function TeamTable({ teams, darkMode, page }) {
           saveHandler={editHandler}
         />
       )}
-      {showEditModal && (
-        <EditTeamModal
-          darkMode={darkMode}
-          editTeamData={editTeamData}
-          setEditTeamData={setEditTeamData}
-          closeModal={() => setShowEditModal(false)}
-          saveHandler={editHandler}
-        />
-      )}
       {showMembersModal && (
         <MemberModal
           darkMode={darkMode}

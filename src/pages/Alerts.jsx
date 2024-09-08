@@ -49,7 +49,6 @@ function Alerts() {
       toast.success("incident created successfully");
       mutate(`/pack?size=10&page=${page}`);
     } catch (error) {
-      console.log(error);
       toast.error("error in creating incident");
     }
   };
@@ -73,7 +72,12 @@ function Alerts() {
               createIncident={createIncident}
             />
           ))}
-          <Pagination page={page} totalPages={totalPages} setPage={setPage} />
+          <Pagination
+            page={page}
+            openIncidentId={openIncidentId}
+            totalPages={totalPages}
+            setPage={setPage}
+          />
         </div>
       ) : (
         <div className="flex items-center justify-center h-[calc(93vh-8vh)]">

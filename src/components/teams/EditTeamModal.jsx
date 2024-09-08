@@ -33,6 +33,7 @@ function EditTeamModal({
       setUsers(fetchedUsers.users);
       setPage(fetchedUsers.page || 1);
       setTotalPages(fetchedUsers.totalPages || 1);
+      console.log(fetchedUsers);
     }
   }, [fetchedUsers]);
 
@@ -81,27 +82,25 @@ function EditTeamModal({
                 ) : (
                   <>
                     {!isValidating ? (
-                      <>
-                        {users.filter((user) => !user.team).length ? (
-                          <>
-                            <UsersList
-                              darkMode={darkMode}
-                              users={users}
-                              editTeamData={editTeamData}
-                              setEditTeamData={setEditTeamData}
-                            />
-                            <Pagination
-                              page={page}
-                              totalPages={totalPages}
-                              setPage={setPage}
-                            />
-                          </>
-                        ) : (
-                          <h1 className="text-3xl font-semibold text-center mt-10">
-                            We don't have any Head user
-                          </h1>
-                        )}
-                      </>
+                      users.filter((user) => !user.team).length ? (
+                        <>
+                          <UsersList
+                            darkMode={darkMode}
+                            users={users}
+                            editTeamData={editTeamData}
+                            setEditTeamData={setEditTeamData}
+                          />
+                          <Pagination
+                            page={page}
+                            totalPages={totalPages}
+                            setPage={setPage}
+                          />
+                        </>
+                      ) : (
+                        <h1 className="text-3xl font-semibold text-center mt-10">
+                          We don't have any Head user
+                        </h1>
+                      )
                     ) : (
                       <h1 className="text-3xl font-semibold text-center mt-10">
                         Loading ...

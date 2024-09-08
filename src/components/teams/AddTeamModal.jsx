@@ -28,6 +28,7 @@ function AddTeamModal({ darkMode, closeModal, addUserHandler }) {
       setUsers(fetchedUsers.users);
       setPage(fetchedUsers.page || 1);
       setTotalPages(fetchedUsers.totalPages || 1);
+      console.log(fetchedUsers);
     }
   }, [fetchedUsers]);
 

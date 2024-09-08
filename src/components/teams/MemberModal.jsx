@@ -53,8 +53,8 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
         data: { userId },
         headers: { Authorization: `Bearer ${token}` },
       });
-      mutate(`/user?size=10&page=${page}&team=${team}`);
-      mutate(`/user?size=10&page=off`);
+      mutate(`/user?size=5&page=${page}&team=${team}`);
+      mutate(`/user?size=5&page=off`);
       toast.success("Team deleted successfully!");
     } catch (error) {
       toast.error("Error deleting Team");
@@ -76,8 +76,8 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
       setFilteredUsers((prevUsers) =>
         prevUsers.filter((user) => user.id !== selectedUserId)
       );
-      mutate(`/user?size=10&page=${page}&team=${team}`);
-      mutate(`/user?size=10&page=off`);
+      mutate(`/user?size=5&page=${page}&team=${team}`);
+      mutate(`/user?size=5&page=off`);
       setSelectedUser("");
       toast.success("Member added successfully!");
     } catch (error) {
@@ -126,7 +126,7 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
                 <select
                   value={selectedUser}
                   onChange={(e) => setSelectedUser(e.target.value)}
-                  className={`mb-2 border p-2 rounded transition duration-200 ${
+                  className={`mb-2 border p-2 rounded transition duration-200 overflow-auto max-h-40 ${
                     darkMode
                       ? "bg-gray-700 text-gray-300 border-gray-600"
                       : "bg-white text-gray-800 border-gray-300"
@@ -141,6 +141,7 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
                 </select>
               </div>
             )}
+
             {selectedUser && showDropDown && (
               <button
                 className="font-semibold px-4 py-2 rounded transition duration-200 bg-green-600 hover:bg-green-500 text-gray-100"
@@ -215,12 +216,7 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
                 )}
               </tbody>
             </table>
-            <Pagination
-              darkMode={darkMode}
-              totalPages={totalPages}
-              currentPage={page}
-              setPage={setPage}
-            />
+            <Pagination totalPages={totalPages} page={page} setPage={setPage} />
           </div>
           <div className="flex items-center justify-end p-6">
             <button
