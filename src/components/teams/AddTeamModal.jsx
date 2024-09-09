@@ -10,10 +10,11 @@ function AddTeamModal({ darkMode, closeModal, addUserHandler }) {
   const [users, setUsers] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
-  const { data: fetchedUsers, isValidating } = useSWR(
-    `/user?size=5&role=Head&page=${page}&team=null`,
-    fetcher
-  );
+  const {
+    data: fetchedUsers,
+    error,
+    isValidating,
+  } = useSWR(`/user?size=5&role=Head&page=${page}&team=null`, fetcher);
 
   const validateFields = () => {
     const newErrors = {};
@@ -31,10 +32,17 @@ function AddTeamModal({ darkMode, closeModal, addUserHandler }) {
     }
   }, [fetchedUsers]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (validateFields()) {
-      addUserHandler(formData);
-      closeModal();
+      try {
+        await addUserHandler(formData);
+        closeModal();
+      } catch (err) {
+        setErrors((prev) => ({
+          ...prev,
+          saveError: "Failed to save the team. Please try again later.",
+        }));
+      }
     }
   };
 
@@ -114,6 +122,16 @@ function AddTeamModal({ darkMode, closeModal, addUserHandler }) {
                 )}
               </div>
             ))}
+            {error && (
+              <p className="text-red-500 text-sm font-semibold mt-1">
+                Error loading users. Please try again later.
+              </p>
+            )}
+            {errors.saveError && (
+              <p className="text-red-500 text-sm font-semibold mt-1">
+                {errors.saveError}
+              </p>
+            )}
           </div>
           <div className="flex items-center justify-end p-6 rounded-b">
             <button

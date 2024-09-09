@@ -39,21 +39,22 @@ function Card({
     }
   }, [incidentDetails]);
 
-  if (error) return <div>Error loading incident details</div>;
-
   const shouldShow =
-    currentUser.role.name === "Team_724" ||
-    currentUser.username === incident.assigned_team?.head?.username ||
-    incident.user.map((user) => {
-      if (user.id === currentUser.id) return true;
-    });
+    currentUser?.role?.name === "Team_724" ||
+    currentUser?.username === incident?.assigned_team?.head?.username ||
+    incident.user.some((user) => user.id === currentUser.id);
 
   const saveHandler = async () => {
-    let membersList = [];
-    if (members.includes(master))
-      membersList = members.filter((member) => member !== master);
-    else membersList = members;
-    assignToMember(incident.id, master, membersList);
+    try {
+      let membersList = [];
+      if (members.includes(master))
+        membersList = members.filter((member) => member !== master);
+      else membersList = members;
+      await assignToMember(incident.id, master, membersList);
+    } catch (error) {
+      console.error("Error saving members:", error);
+      alert("Failed to save members. Please try again.");
+    }
   };
 
   const getPriorityColor = (priority) => {
@@ -113,87 +114,93 @@ function Card({
               </div>
             </div>
 
-            <div
-              className={`${
-                isOpen ? "opacity-100" : "opacity-0"
-              } transition-opacity duration-100 ease-in-out`}
-            >
-              {currentUser.role.name === "Head" &&
-                !incident.master_memberId && (
-                  <div className="flex gap-3">
-                    <div className="flex flex-col">
-                      <button
-                        className="font-semibold px-4 py-2 mt-7 rounded transition duration-200 bg-green-600 text-gray-100 hover:bg-green-500"
-                        onClick={() => setMasterShowModal(true)}
-                      >
-                        Add Master Member
-                      </button>
-                    </div>
-                    <button
-                      className="font-semibold px-4 py-2 mt-7 rounded transition duration-200 bg-orange-600 text-gray-100 hover:bg-orange-500"
-                      onClick={() => setMemberShowModal(true)}
-                    >
-                      Add Members
-                    </button>
-                    <button
-                      className="font-semibold disabled:bg-[#892828] disabled:text-gray-400 disabled:cursor-not-allowed px-4 py-2 mt-7 rounded transition duration-200 bg-red-600 text-gray-100 hover:bg-red-500"
-                      onClick={saveHandler}
-                      disabled={!master}
-                    >
-                      Save
-                    </button>
-                    {masterShowModal && (
-                      <AssignMasterModal
-                        darkMode={darkMode}
-                        closeModal={() => setMasterShowModal(false)}
-                        team={currentUser?.team?.name}
-                        setMaster={setMaster}
-                        master={master}
-                      />
-                    )}
-                    {memberShowModal && (
-                      <AssignMemberModal
-                        darkMode={darkMode}
-                        closeModal={() => setMemberShowModal(false)}
-                        team={currentUser?.team?.name}
-                        setMembers={setMembers}
-                        members={members}
-                        master={master}
-                      />
-                    )}
-                  </div>
-                )}
-              {currentUser.role.name === "Member" &&
-                incident.master_memberId === currentUser.id && (
-                  <button
-                    className="font-semibold px-4 py-2 mt-7 rounded transition duration-200 bg-green-600 text-gray-100 hover:bg-green-500"
-                    onClick={() => doneHandler(incident.id)}
-                  >
-                    Done
-                  </button>
-                )}
-              <div className="overflow-y-auto h-[400px] scrollbar-thin scrollbar-thumb-gray-500 mt-3 scrollbar-track-gray-200">
-                {!incidentDetails ? (
-                  <p className={darkMode ? "text-white" : "text-black"}>
-                    Loading...
-                  </p>
-                ) : (
-                  <>
-                    <NotificationDetails
-                      darkMode={darkMode}
-                      incidentDetails={incidentDetails}
-                    />
-                    {totalPages > 1 && (
-                      <Pagination
-                        page={page}
-                        totalPages={totalPages}
-                        setPage={setPage}
-                      />
-                    )}
-                  </>
-                )}
+            {error ? (
+              <div className="text-red-500 mt-2">
+                Error loading incident details. Please try again later.
               </div>
-            </div>
+            ) : (
+              <div
+                className={`${
+                  isOpen ? "opacity-100" : "opacity-0"
+                } transition-opacity duration-100 ease-in-out`}
+              >
+                {currentUser.role.name === "Head" &&
+                  !incident.master_memberId && (
+                    <div className="flex gap-3">
+                      <div className="flex flex-col">
+                        <button
+                          className="font-semibold px-4 py-2 mt-7 rounded transition duration-200 bg-green-600 text-gray-100 hover:bg-green-500"
+                          onClick={() => setMasterShowModal(true)}
+                        >
+                          Add Master Member
+                        </button>
+                      </div>
+                      <button
+                        className="font-semibold px-4 py-2 mt-7 rounded transition duration-200 bg-orange-600 text-gray-100 hover:bg-orange-500"
+                        onClick={() => setMemberShowModal(true)}
+                      >
+                        Add Members
+                      </button>
+                      <button
+                        className="font-semibold disabled:bg-[#892828] disabled:text-gray-400 disabled:cursor-not-allowed px-4 py-2 mt-7 rounded transition duration-200 bg-red-600 text-gray-100 hover:bg-red-500"
+                        onClick={saveHandler}
+                        disabled={!master}
+                      >
+                        Save
+                      </button>
+                      {masterShowModal && (
+                        <AssignMasterModal
+                          darkMode={darkMode}
+                          closeModal={() => setMasterShowModal(false)}
+                          team={currentUser?.team?.name}
+                          setMaster={setMaster}
+                          master={master}
+                        />
+                      )}
+                      {memberShowModal && (
+                        <AssignMemberModal
+                          darkMode={darkMode}
+                          closeModal={() => setMemberShowModal(false)}
+                          team={currentUser?.team?.name}
+                          setMembers={setMembers}
+                          members={members}
+                          master={master}
+                        />
+                      )}
+                    </div>
+                  )}
+                {currentUser.role.name === "Member" &&
+                  incident.master_memberId === currentUser.id && (
+                    <button
+                      className="font-semibold px-4 py-2 mt-7 rounded transition duration-200 bg-green-600 text-gray-100 hover:bg-green-500"
+                      onClick={() => doneHandler(incident.id)}
+                    >
+                      Done
+                    </button>
+                  )}
+                <div className="overflow-y-auto h-[400px] scrollbar-thin scrollbar-thumb-gray-500 mt-3 scrollbar-track-gray-200">
+                  {!incidentDetails ? (
+                    <p className={darkMode ? "text-white" : "text-black"}>
+                      Loading...
+                    </p>
+                  ) : (
+                    <>
+                      <NotificationDetails
+                        darkMode={darkMode}
+                        incidentDetails={incidentDetails}
+                      />
+                      {totalPages > 1 && (
+                        <Pagination
+                          page={page}
+                          totalPages={totalPages}
+                          setPage={setPage}
+                        />
+                      )}
+                    </>
+                  )}
+                </div>
+              </div>
+            )}
           </>
         )}
       </div>

@@ -24,10 +24,17 @@ function Card(props) {
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
 
-  const { data: incidentDetails, isLoading } = useSWR(
-    isOpen && `/pack/${incident.id}?page=${page}&size=10`,
+  const {
+    data: incidentDetails,
+    isLoading,
+    error,
+  } = useSWR(
+    isOpen ? `/pack/${incident.id}?page=${page}&size=10` : null,
     fetcher,
-    { refreshInterval: 10 * 1000, refreshWhenHidden: true }
+    {
+      refreshInterval: 10 * 1000,
+      refreshWhenHidden: true,
+    }
   );
 
   useEffect(() => {
@@ -53,9 +60,7 @@ function Card(props) {
   return (
     <div className="relative">
       <div
-        className={`absolute h-full w-3 rounded ${getPriorityColor(
-          priority
-        )}`}
+        className={`absolute h-full w-3 rounded ${getPriorityColor(priority)}`}
       ></div>
 
       <div
@@ -66,14 +71,14 @@ function Card(props) {
         <div onClick={onCardClick} className="cursor-pointer">
           <div className="flex flex-wrap justify-between">
             <h3 className="text-[15px] font-semibold">
-              {incident.notifications[0]?.text}
+              {incident.notifications[0]?.text || "No Notification Text"}
             </h3>
             <h3 className="text-[15px] font-semibold">
-              {utcChanger(incident.notifications[0]?.receive_time)}
+              {utcChanger(incident.notifications[0]?.receive_time || "")}
             </h3>
           </div>
           <div className="mt-1 font-semibold text-[14px] text-gray-400">
-            <h3>{incident.notifications[0]?.service}</h3>
+            <h3>{incident.notifications[0]?.service || "No Service Info"}</h3>
           </div>
         </div>
         <div
@@ -109,13 +114,17 @@ function Card(props) {
               <p className={`${darkMode ? "text-white" : "text-black"}`}>
                 Loading...
               </p>
-            ) : (
+            ) : error ? (
+              <p className="text-red-500">
+                Failed to load incident details. Please try again.
+              </p>
+            ) : incidentDetails ? (
               <>
                 <NotificationDetails
                   darkMode={darkMode}
                   incidentDetails={incidentDetails}
                 />
-                {totalPages > 1 && incidentDetails && (
+                {totalPages > 1 && (
                   <Pagination
                     page={page}
                     totalPages={totalPages}
@@ -123,6 +132,8 @@ function Card(props) {
                   />
                 )}
               </>
+            ) : (
+              <p className="text-gray-500">No details available</p>
             )}
           </div>
         </div>

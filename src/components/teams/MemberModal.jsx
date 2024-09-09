@@ -16,6 +16,7 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
   const [showDropDown, setShowDropDown] = useState(false);
   const [selectedUser, setSelectedUser] = useState("");
   const [searchTerm, setSearchTerm] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const { data: fetchedUsers, isValidating } = useSWR(
     `/user?size=5&page=${page}&team=${team}`,
@@ -47,6 +48,7 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
   }, [searchTerm, allUsers]);
 
   const deleteMemberHandler = async (teamId, userId) => {
+    setIsLoading(true);
     try {
       const token = Cookies.get("token");
       await api.delete(`/team/${teamId}/member`, {
@@ -55,13 +57,22 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
       });
       mutate(`/user?size=5&page=${page}&team=${team}`);
       mutate(`/user?size=5&page=off`);
-      toast.success("Team deleted successfully!");
+      toast.success("Member deleted successfully!");
     } catch (error) {
-      toast.error("Error deleting Team");
+      if (error.response) {
+        toast.error(`Error: ${error.response.data.message}`);
+      } else if (error.request) {
+        toast.error("Network error, please try again later.");
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   const addHandler = async () => {
+    setIsLoading(true);
     try {
       const token = Cookies.get("token");
       const selectedUserId = parseInt(selectedUser, 10);
@@ -81,7 +92,15 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
       setSelectedUser("");
       toast.success("Member added successfully!");
     } catch (error) {
-      toast.error("Error adding member");
+      if (error.response) {
+        toast.error(`Error: ${error.response.data.message}`);
+      } else if (error.request) {
+        toast.error("Network error, please try again later.");
+      } else {
+        toast.error("An unexpected error occurred.");
+      }
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -107,6 +126,7 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
                   : "bg-green-600 hover:bg-green-500"
               } text-gray-100`}
               onClick={() => setShowDropDown((prev) => !prev)}
+              disabled={isLoading}
             >
               {showDropDown ? "Cancel" : "Add Member"}
             </button>
@@ -146,6 +166,7 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
               <button
                 className="font-semibold px-4 py-2 rounded transition duration-200 bg-green-600 hover:bg-green-500 text-gray-100"
                 onClick={addHandler}
+                disabled={isLoading}
               >
                 Submit
               </button>
@@ -189,7 +210,7 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
                         {user?.role?.name !== "Head" ? (
                           <button
                             className="text-red-500 hover:text-red-700"
-                            title="View Members"
+                            title="Delete Member"
                             onClick={() =>
                               deleteMemberHandler(user.team.id, user.id)
                             }
@@ -228,6 +249,7 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
             <button
               className="text-red-500 hover:text-red-700 transition duration-200 font-semibold px-6 py-2 rounded"
               onClick={closeModal}
+              disabled={isLoading}
             >
               Close
             </button>

@@ -3,12 +3,10 @@ import { FaLongArrowAltRight, FaLongArrowAltLeft } from "react-icons/fa";
 
 function Pagination({ page, setPage, totalPages, openIncidentId }) {
   const previousHandler = () => {
-    if (openIncidentId) return;
-    page > 1 && setPage((prev) => prev - 1);
+    if (!openIncidentId) page > 1 && setPage((prev) => prev - 1);
   };
   const nextHandler = () => {
-    if (openIncidentId) return;
-    page < totalPages && setPage((prev) => prev + 1);
+    if (!openIncidentId) page < totalPages && setPage((prev) => prev + 1);
   };
   const darkMode = useSelector((state) => state.theme.darkMode);
 
@@ -18,7 +16,7 @@ function Pagination({ page, setPage, totalPages, openIncidentId }) {
       className={`inline-block border font-semibold cursor-pointer border-blue-500 w-10 text-center rounded-md ${
         !darkMode ? "text-black" : "text-white"
       } ${page === num ? "bg-blue-500 text-white" : ""}`}
-      onClick={() => setPage(num)}
+      onClick={() => (!openIncidentId ? setPage(num) : null)}
     >
       {num}
     </p>

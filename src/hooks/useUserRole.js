@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { setRole } from "Redux/slices/userSlice";
 import useCheckCookie from "./useCheckCookie";
 import fetcher from "utils/fetcher";
+import { toast } from "react-toastify";
 
 function useUserRole(isOnlyAdmin, role, apiEndpoint) {
   const { data: initialData, loading: initialLoading } = useCheckCookie();
@@ -20,7 +21,12 @@ function useUserRole(isOnlyAdmin, role, apiEndpoint) {
   const navigate = useNavigate();
 
   useEffect(() => {
+    if (error) {
+      toast.error("Failed to fetch role data. Please try again later.");
+      return;
+    }
     if (!fetchedData) return;
+
     const mergedData = { ...initialData, otherData: fetchedData };
     if (mergedData.user?.role?.name) {
       dispatch(setRole(mergedData.user.role.name));
@@ -30,13 +36,14 @@ function useUserRole(isOnlyAdmin, role, apiEndpoint) {
         navigate("/dashboard");
       }
     }
-  }, [fetchedData, dispatch, navigate, isOnlyAdmin, role, initialData]);
+  }, [fetchedData, error, dispatch, navigate, isOnlyAdmin, role, initialData]);
 
   return {
     data: fetchedData
       ? { ...initialData, otherData: fetchedData }
       : initialData,
     isLoading: initialLoading || (!fetchedData && !error),
+    error,
   };
 }
 

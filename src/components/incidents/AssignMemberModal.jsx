@@ -15,19 +15,25 @@ function AssignMemberModal({
   const [users, setUsers] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
+  const [error, setError] = useState(null);
 
-  const { data: fetchedUsers, isValidating } = useSWR(
-    `/user?size=5&page=${page}&team=${team}&role=Member`,
-    fetcher
-  );
+  const {
+    data: fetchedUsers,
+    error: fetchError,
+    isValidating,
+  } = useSWR(`/user?size=5&page=${page}&team=${team}&role=Member`, fetcher, {
+    onError: (err) => setError(err.message),
+  });
 
   useEffect(() => {
-    if (fetchedUsers?.users) {
+    if (fetchError) {
+      setError(fetchError?.message);
+    } else if (fetchedUsers?.users) {
       setUsers(fetchedUsers.users);
       setPage(fetchedUsers.page || 1);
       setTotalPages(fetchedUsers.totalPages || 1);
     }
-  }, [fetchedUsers]);
+  }, [fetchedUsers, fetchError]);
 
   const handleUserToggle = (userId) => {
     setMembers((prevMembers) => {
@@ -53,87 +59,97 @@ function AssignMemberModal({
           </div>
           <div className="flex items-start gap-4 p-5 rounded-t"></div>
           <div className="relative flex-auto p-6">
-            <table
-              className={`shadow-lg rounded-lg overflow-hidden min-w-full mb-6 ${
-                darkMode ? "bg-gray-800" : "bg-white"
-              }`}
-            >
-              <thead
-                className={`border-b ${
-                  darkMode
-                    ? "bg-gray-700 text-gray-300"
-                    : "bg-gray-100 text-gray-800"
+            {error ? (
+              <div
+                className={`text-center text-red-500 font-semibold p-4 ${
+                  darkMode ? "bg-gray-800" : "bg-white"
                 }`}
               >
-                <tr>
-                  <th className="p-3 text-center">ID</th>
-                  <th className="p-3 text-center">Name</th>
-                  <th className="p-3 text-center">Email</th>
-                  <th className="p-3 text-center">Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {!isValidating ? (
-                  users.map((user) => (
-                    <tr
-                      key={user.id}
-                      className={`font-semibold transition duration-200 hover:bg-opacity-80 ${
-                        darkMode
-                          ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
-                          : "bg-gray-100 text-gray-800 hover:bg-gray-200"
-                      }`}
-                    >
-                      <td className="p-3 text-center">{user?.id}</td>
-                      <td className="p-3 text-center">{user?.username}</td>
-                      <td className="p-3 text-center">{user?.email}</td>
-                      <td className="p-3 text-center">
-                        {!user.pack_id ? (
-                          user.id == master ? (
-                            <>
-                              <span className="text-red-500 font-bold">
-                                This is your Master Member
-                              </span>
-                            </>
-                          ) : members.includes(user.id) ? (
-                            <>
+                Error: {error}
+              </div>
+            ) : (
+              <table
+                className={`shadow-lg rounded-lg overflow-hidden min-w-full mb-6 ${
+                  darkMode ? "bg-gray-800" : "bg-white"
+                }`}
+              >
+                <thead
+                  className={`border-b ${
+                    darkMode
+                      ? "bg-gray-700 text-gray-300"
+                      : "bg-gray-100 text-gray-800"
+                  }`}
+                >
+                  <tr>
+                    <th className="p-3 text-center">ID</th>
+                    <th className="p-3 text-center">Name</th>
+                    <th className="p-3 text-center">Email</th>
+                    <th className="p-3 text-center">Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {!isValidating ? (
+                    users.map((user) => (
+                      <tr
+                        key={user.id}
+                        className={`font-semibold transition duration-200 hover:bg-opacity-80 ${
+                          darkMode
+                            ? "bg-gray-800 text-gray-200 hover:bg-gray-700"
+                            : "bg-gray-100 text-gray-800 hover:bg-gray-200"
+                        }`}
+                      >
+                        <td className="p-3 text-center">{user?.id}</td>
+                        <td className="p-3 text-center">{user?.username}</td>
+                        <td className="p-3 text-center">{user?.email}</td>
+                        <td className="p-3 text-center">
+                          {!user.pack_id ? (
+                            user.id == master ? (
+                              <>
+                                <span className="text-red-500 font-bold">
+                                  This is your Master Member
+                                </span>
+                              </>
+                            ) : members.includes(user.id) ? (
+                              <>
+                                <button
+                                  title="Remove Member"
+                                  onClick={() => handleUserToggle(user.id)}
+                                >
+                                  <FiMinusCircle size={20} color="red" />
+                                </button>
+                              </>
+                            ) : (
                               <button
-                                title="Remove Member"
+                                title="Assign Member"
                                 onClick={() => handleUserToggle(user.id)}
                               >
-                                <FiMinusCircle size={20} color="red" />
+                                <FiSend size={20} color="green" />
                               </button>
-                            </>
+                            )
                           ) : (
-                            <button
-                              title="Assign Member"
-                              onClick={() => handleUserToggle(user.id)}
-                            >
-                              <FiSend size={20} color="green" />
-                            </button>
-                          )
-                        ) : (
-                          <p className="text-red-500 font-bold">
-                            Already in Action
-                          </p>
-                        )}
+                            <p className="text-red-500 font-bold">
+                              Already in Action
+                            </p>
+                          )}
+                        </td>
+                      </tr>
+                    ))
+                  ) : (
+                    <tr>
+                      <td
+                        colSpan={4}
+                        className={`p-3 text-center text-lg font-semibold ${
+                          darkMode ? "text-gray-200" : "text-gray-800"
+                        }`}
+                      >
+                        Loading...
                       </td>
                     </tr>
-                  ))
-                ) : (
-                  <tr>
-                    <td
-                      colSpan={4}
-                      className={`p-3 text-center text-lg font-semibold ${
-                        darkMode ? "text-gray-200" : "text-gray-800"
-                      }`}
-                    >
-                      Loading...
-                    </td>
-                  </tr>
-                )}
-              </tbody>
-            </table>
-            {totalPages > 1 && users.length > 0 && (
+                  )}
+                </tbody>
+              </table>
+            )}
+            {totalPages > 1 && users.length > 0 && !error && (
               <Pagination
                 page={page}
                 totalPages={totalPages}

@@ -42,6 +42,19 @@ function EditTeamModal({
     }
   };
 
+  const handleChange = (field, value) => {
+    setEditTeamData((prev) => ({
+      ...prev,
+      [field]: value,
+    }));
+    if (errors[field]) {
+      setErrors((prevErrors) => {
+        const { [field]: removedError, ...rest } = prevErrors;
+        return rest;
+      });
+    }
+  };
+
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
       <div className="fixed inset-0 bg-black opacity-50 z-40"></div>
@@ -66,12 +79,7 @@ function EditTeamModal({
                   <input
                     type="text"
                     value={editTeamData[field]}
-                    onChange={(e) =>
-                      setEditTeamData((prev) => ({
-                        ...prev,
-                        [field]: e.target.value,
-                      }))
-                    }
+                    onChange={(e) => handleChange(field, e.target.value)}
                     className={`w-full p-2 rounded ${
                       darkMode
                         ? "bg-gray-700 text-white"

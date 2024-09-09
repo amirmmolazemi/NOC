@@ -13,7 +13,7 @@ import { toast } from "react-toastify";
 function Incidents() {
   const [page, setPage] = useState(1);
   const { data: currentUser } = useSWR(`/user/me`, fetcher);
-  const { data, isLoading } = useUserRole(
+  const { data, isLoading, error } = useUserRole(
     true,
     "",
     `pack/incidents?size=6&page=${page}`
@@ -32,9 +32,30 @@ function Incidents() {
       setPage(data.otherData.page || 1);
       setTotalPages(data.otherData.totalPages || 1);
     }
-  }, [data]);
+  }, [data, openIncidentId, assignMemberShowModal]);
 
   if (isLoading) return <Loader />;
+
+  if (error) {
+    toast.error("Error fetching incidents");
+    return (
+      <div
+        className={`flex flex-col h-full justify-between p-5 overflow-y-auto scrollbar-none ${
+          darkMode ? "dark:bg-gray-900" : ""
+        }`}
+      >
+        <div className="flex items-center justify-center h-[calc(93vh-8vh)]">
+          <p
+            className={`text-3xl font-semibold ${
+              !darkMode ? "text-black" : "text-white"
+            }`}
+          >
+            Error loading incidents. Please try again later.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   const handleCardClick = (id) => {
     setOpenIncidentId(id === openIncidentId ? null : id);
@@ -50,9 +71,9 @@ function Incidents() {
       );
       setOpenIncidentId(null);
       mutate(`pack/incidents?size=6&page=${page}`);
-      toast.success("pack Assigned successfully");
+      toast.success("Pack Assigned successfully");
     } catch (error) {
-      toast.error("error assigning the incident");
+      toast.error("Error assigning the incident");
     }
   };
 
@@ -78,7 +99,7 @@ function Incidents() {
         darkMode ? "dark:bg-gray-900" : ""
       }`}
     >
-      {incidents.length > 0 ? (
+      {incidents && !error ? (
         <div className="flex flex-col justify-between gap-[5px]">
           {incidents.map((incident) => (
             <Card

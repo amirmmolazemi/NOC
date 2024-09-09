@@ -10,13 +10,13 @@ function AssignMasterModal({ darkMode, closeModal, team, setMaster, master }) {
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
 
-  const { data: fetchedUsers, isValidating } = useSWR(
+  const { data: fetchedUsers, error, isValidating } = useSWR(
     `/user?size=5&page=${page}&team=${team}&role=Member`,
     fetcher
   );
 
   useEffect(() => {
-    if (fetchedUsers?.users) {
+    if (fetchedUsers && fetchedUsers.users) {
       setUsers(fetchedUsers.users);
       setPage(fetchedUsers.page || 1);
       setTotalPages(fetchedUsers.totalPages || 1);
@@ -42,7 +42,6 @@ function AssignMasterModal({ darkMode, closeModal, team, setMaster, master }) {
           <div className="flex items-start justify-between p-5 rounded-t">
             <h3 className="text-3xl font-semibold">Your Master Member ...</h3>
           </div>
-          <div className="flex items-start gap-4 p-5 rounded-t"></div>
           <div className="relative flex-auto p-6">
             <table
               className={`shadow-lg rounded-lg overflow-hidden min-w-full mb-6 ${
@@ -64,7 +63,27 @@ function AssignMasterModal({ darkMode, closeModal, team, setMaster, master }) {
                 </tr>
               </thead>
               <tbody>
-                {!isValidating ? (
+                {isValidating ? (
+                  <tr>
+                    <td
+                      colSpan={4}
+                      className={`p-3 text-center text-lg font-semibold ${
+                        darkMode ? "text-gray-200" : "text-gray-800"
+                      }`}
+                    >
+                      Loading...
+                    </td>
+                  </tr>
+                ) : error ? (
+                  <tr>
+                    <td
+                      colSpan={4}
+                      className={`p-3 text-center text-lg font-semibold text-red-500`}
+                    >
+                      Failed to load users. Please try again later.
+                    </td>
+                  </tr>
+                ) : users.length > 0 ? (
                   users.map((user) => (
                     <tr
                       key={user.id}
@@ -79,18 +98,16 @@ function AssignMasterModal({ darkMode, closeModal, team, setMaster, master }) {
                       <td className="p-3 text-center">{user?.email}</td>
                       <td className="p-3 text-center">
                         {!user.pack_id ? (
-                          <>
-                            <button
-                              title="Assign Master"
-                              onClick={() => handleMasterToggle(user.id)}
-                            >
-                              {master === user.id ? (
-                                <FiMinusCircle size={20} color="red" />
-                              ) : (
-                                <TfiCrown size={20} color="orange" />
-                              )}
-                            </button>
-                          </>
+                          <button
+                            title="Assign Master"
+                            onClick={() => handleMasterToggle(user.id)}
+                          >
+                            {master === user.id ? (
+                              <FiMinusCircle size={20} color="red" />
+                            ) : (
+                              <TfiCrown size={20} color="orange" />
+                            )}
+                          </button>
                         ) : (
                           <p className="text-red-500 font-bold">
                             Already in Action
@@ -107,7 +124,7 @@ function AssignMasterModal({ darkMode, closeModal, team, setMaster, master }) {
                         darkMode ? "text-gray-200" : "text-gray-800"
                       }`}
                     >
-                      Loading...
+                      No users found.
                     </td>
                   </tr>
                 )}

@@ -7,7 +7,9 @@ const AssignedTeamSelector = ({ darkMode, assignedTeam, setAssignedTeam }) => {
     data: fetchedTeams,
     isLoading,
     error,
-  } = useSWR(`/team?page=off`, fetcher);
+  } = useSWR(`/team?page=off`, fetcher, {
+    shouldRetryOnError: false,
+  });
   const [teams, setTeams] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -20,8 +22,6 @@ const AssignedTeamSelector = ({ darkMode, assignedTeam, setAssignedTeam }) => {
   const filteredTeams = teams.filter((team) =>
     team.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
-
-  if (error) console.log(error);
 
   return (
     <div className="flex flex-col">
@@ -37,28 +37,37 @@ const AssignedTeamSelector = ({ darkMode, assignedTeam, setAssignedTeam }) => {
             : "bg-white text-gray-800 border-gray-300"
         }`}
       />
-      <select
-        value={assignedTeam}
-        onChange={(e) => setAssignedTeam(e.target.value)}
-        className={`p-3 border w-full cursor-pointer ${
-          darkMode ? "bg-gray-800 border-gray-700" : "bg-white border-gray-300"
-        }`}
-      >
-        <option value="">Select Assigned Team</option>
-        {isLoading ? (
-          <option value="">Loading...</option>
-        ) : filteredTeams.length > 0 ? (
-          filteredTeams.map((team) => (
-            <option key={team.id} value={team.id}>
-              {team.name}
+      {error ? (
+        <div className="text-red-500 mb-2">
+          Failed to load teams. Please try again.
+        </div>
+      ) : (
+        <select
+          value={assignedTeam}
+          onChange={(e) => setAssignedTeam(e.target.value)}
+          className={`p-3 border w-full cursor-pointer ${
+            darkMode
+              ? "bg-gray-800 border-gray-700"
+              : "bg-white border-gray-300"
+          }`}
+          disabled={isLoading || !!error}
+        >
+          <option value="">Select Assigned Team</option>
+          {isLoading ? (
+            <option value="">Loading...</option>
+          ) : filteredTeams.length > 0 ? (
+            filteredTeams.map((team) => (
+              <option key={team.id} value={team.id}>
+                {team.name}
+              </option>
+            ))
+          ) : (
+            <option value="" disabled>
+              No teams available
             </option>
-          ))
-        ) : (
-          <option value="" disabled>
-            No teams available
-          </option>
-        )}
-      </select>
+          )}
+        </select>
+      )}
     </div>
   );
 };
