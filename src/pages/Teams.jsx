@@ -62,7 +62,7 @@ function Teams() {
         Add Team
       </button>
       <TeamTable teams={teams} darkMode={darkMode} page={page} />
-      {teams.length > 0 && (
+      {totalPages > 1 && teams.length > 0 && (
         <Pagination page={page} totalPages={totalPages} setPage={setPage} />
       )}
       {showModal && (

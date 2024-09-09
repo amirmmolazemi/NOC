@@ -62,7 +62,7 @@ function Users() {
         Add User
       </button>
       <UserTable users={users} darkMode={darkMode} page={page} />
-      {users.length && (
+      {totalPages > 1 && users.length > 0 && (
         <Pagination page={page} totalPages={totalPages} setPage={setPage} />
       )}
       {showModal && (

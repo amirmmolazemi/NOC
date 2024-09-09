@@ -3,7 +3,11 @@ import fetcher from "src/utils/fetcher";
 import useSWR from "swr";
 
 const AssignedTeamSelector = ({ darkMode, assignedTeam, setAssignedTeam }) => {
-  const { data: fetchedTeams, isLoading } = useSWR(`/team?page=off`, fetcher);
+  const {
+    data: fetchedTeams,
+    isLoading,
+    error,
+  } = useSWR(`/team?page=off`, fetcher);
   const [teams, setTeams] = useState([]);
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -16,6 +20,8 @@ const AssignedTeamSelector = ({ darkMode, assignedTeam, setAssignedTeam }) => {
   const filteredTeams = teams.filter((team) =>
     team.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
+
+  if (error) console.log(error);
 
   return (
     <div className="flex flex-col">

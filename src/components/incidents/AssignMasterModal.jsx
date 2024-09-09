@@ -87,7 +87,7 @@ function AssignMasterModal({ darkMode, closeModal, team, setMaster, master }) {
                               {master === user.id ? (
                                 <FiMinusCircle size={20} color="red" />
                               ) : (
-                                <TfiCrown size={20} color="yellow" />
+                                <TfiCrown size={20} color="orange" />
                               )}
                             </button>
                           </>
@@ -113,7 +113,13 @@ function AssignMasterModal({ darkMode, closeModal, team, setMaster, master }) {
                 )}
               </tbody>
             </table>
-            <Pagination totalPages={totalPages} page={page} setPage={setPage} />
+            {totalPages > 1 && users.length > 0 && (
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                setPage={setPage}
+              />
+            )}
           </div>
           <div className="flex items-center justify-end p-6">
             <button

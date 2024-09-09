@@ -49,7 +49,7 @@ function AssignMemberModal({
           }`}
         >
           <div className="flex items-start justify-between p-5 rounded-t">
-            <h3 className="text-3xl font-semibold">Assign To ...</h3>
+            <h3 className="text-3xl font-semibold">Your Members are ...</h3>
           </div>
           <div className="flex items-start gap-4 p-5 rounded-t"></div>
           <div className="relative flex-auto p-6">
@@ -133,7 +133,13 @@ function AssignMemberModal({
                 )}
               </tbody>
             </table>
-            <Pagination totalPages={totalPages} page={page} setPage={setPage} />
+            {totalPages > 1 && users.length > 0 && (
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                setPage={setPage}
+              />
+            )}
           </div>
           <div className="flex items-center justify-end p-6">
             <button

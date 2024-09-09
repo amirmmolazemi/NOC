@@ -37,74 +37,94 @@ function Card(props) {
     }
   }, [incidentDetails]);
 
+  const getPriorityColor = (priority) => {
+    switch (priority) {
+      case "High":
+        return "bg-red-500";
+      case "Medium":
+        return "bg-yellow-500";
+      case "Low":
+        return "bg-green-500";
+      default:
+        return "bg-gray-500";
+    }
+  };
+
   return (
-    <div
-      className={`shadow-md rounded-lg p-3 transition-all duration-200 ease-in-out overflow-hidden ${
-        darkMode ? "text-white bg-gray-700" : "bg-white text-gray-700"
-      } ${isOpen ? "max-h-[735px]" : "sm:max-h-[70px] max-h-[98px]"}`}
-    >
-      <div onClick={onCardClick} className="cursor-pointer">
-        <div className="flex flex-wrap justify-between">
-          <h3 className="text-[15px] font-semibold">
-            {incident.notifications[0]?.text}
-          </h3>
-          <h3 className="text-[15px] font-semibold">
-            {utcChanger(incident.notifications[0]?.receive_time)}
-          </h3>
-        </div>
-        <div className="mt-1 font-semibold text-[14px] text-gray-400">
-          <h3>{incident.notifications[0]?.service}</h3>
-        </div>
-        {/* <div className="mt-1 font-semibold text-[14px] text-gray-400">
-          <h3>{incident.fingerprint}</h3>
-        </div> */}
-      </div>
+    <div className="relative">
       <div
-        className={`${
-          isOpen ? "opacity-100" : "opacity-0"
-        } transition-opacity duration-100 ease-in-out`}
+        className={`absolute h-full w-3 rounded ${getPriorityColor(
+          priority
+        )}`}
+      ></div>
+
+      <div
+        className={`shadow-md rounded-lg p-3 transition-all duration-200 ease-in-out overflow-hidden ml-1 relative ${
+          darkMode ? "text-white bg-gray-700" : "bg-white text-gray-700"
+        } ${isOpen ? "max-h-[735px]" : "sm:max-h-[70px] max-h-[98px]"}`}
       >
-        {!isIncident && (
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
-            <PrioritySelector
-              darkMode={darkMode}
-              incident={incident}
-              setPriority={setPriority}
-              priority={priority}
-            />
-            <div className="flex items-center mt-8 w-full">
-              <Button isButtonActive={priority} setShowModal={setShowModal} />
-              <Modal
-                darkMode={darkMode}
-                incidentDetails={incidentDetails}
-                showModal={showModal}
-                setShowModal={setShowModal}
-                createIncident={createIncident}
-                page={page}
-                setPage={setPage}
-                totalPages={totalPages}
-              />
-            </div>
+        <div onClick={onCardClick} className="cursor-pointer">
+          <div className="flex flex-wrap justify-between">
+            <h3 className="text-[15px] font-semibold">
+              {incident.notifications[0]?.text}
+            </h3>
+            <h3 className="text-[15px] font-semibold">
+              {utcChanger(incident.notifications[0]?.receive_time)}
+            </h3>
           </div>
-        )}
-        <div className="overflow-y-auto h-[400px] scrollbar-thin scrollbar-thumb-gray-500 mt-3 scrollbar-track-gray-200">
-          {isLoading ? (
-            <p className={`${darkMode ? "text-white" : "text-black"}`}>
-              Loading...
-            </p>
-          ) : (
-            <>
-              <NotificationDetails
+          <div className="mt-1 font-semibold text-[14px] text-gray-400">
+            <h3>{incident.notifications[0]?.service}</h3>
+          </div>
+        </div>
+        <div
+          className={`${
+            isOpen ? "opacity-100" : "opacity-0"
+          } transition-opacity duration-100 ease-in-out`}
+        >
+          {!isIncident && (
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
+              <PrioritySelector
                 darkMode={darkMode}
-                incidentDetails={incidentDetails}
+                incident={incident}
+                setPriority={setPriority}
+                priority={priority}
               />
-              <Pagination
-                page={page}
-                totalPages={totalPages}
-                setPage={setPage}
-              />
-            </>
+              <div className="flex items-center mt-8 w-full">
+                <Button isButtonActive={priority} setShowModal={setShowModal} />
+                <Modal
+                  darkMode={darkMode}
+                  incidentDetails={incidentDetails}
+                  showModal={showModal}
+                  setShowModal={setShowModal}
+                  createIncident={createIncident}
+                  page={page}
+                  setPage={setPage}
+                  totalPages={totalPages}
+                />
+              </div>
+            </div>
           )}
+          <div className="overflow-y-auto h-[400px] scrollbar-thin scrollbar-thumb-gray-500 mt-3 scrollbar-track-gray-200">
+            {isLoading ? (
+              <p className={`${darkMode ? "text-white" : "text-black"}`}>
+                Loading...
+              </p>
+            ) : (
+              <>
+                <NotificationDetails
+                  darkMode={darkMode}
+                  incidentDetails={incidentDetails}
+                />
+                {totalPages > 1 && incidentDetails && (
+                  <Pagination
+                    page={page}
+                    totalPages={totalPages}
+                    setPage={setPage}
+                  />
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

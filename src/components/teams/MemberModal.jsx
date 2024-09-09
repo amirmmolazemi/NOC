@@ -216,7 +216,13 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
                 )}
               </tbody>
             </table>
-            <Pagination totalPages={totalPages} page={page} setPage={setPage} />
+            {totalPages > 1 && users.length > 0 && (
+              <Pagination
+                page={page}
+                totalPages={totalPages}
+                setPage={setPage}
+              />
+            )}
           </div>
           <div className="flex items-center justify-end p-6">
             <button

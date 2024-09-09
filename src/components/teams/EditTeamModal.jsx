@@ -60,7 +60,7 @@ function EditTeamModal({
             {["name", "headId"].map((field, index) => (
               <div className="mb-4" key={index}>
                 <label className="block mb-1 text-sm font-medium capitalize">
-                  {field === "headId" ? "Head" : field}
+                  {field === "headId" ? "New Head" : field}
                 </label>
                 {field !== "headId" ? (
                   <input
@@ -89,11 +89,13 @@ function EditTeamModal({
                             editTeamData={editTeamData}
                             setEditTeamData={setEditTeamData}
                           />
-                          <Pagination
-                            page={page}
-                            totalPages={totalPages}
-                            setPage={setPage}
-                          />
+                          {totalPages > 1 && users.length > 0 && (
+                            <Pagination
+                              page={page}
+                              totalPages={totalPages}
+                              setPage={setPage}
+                            />
+                          )}
                         </>
                       ) : (
                         <h1 className="text-3xl font-semibold text-center mt-10">

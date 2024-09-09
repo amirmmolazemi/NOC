@@ -16,7 +16,7 @@ function Incidents() {
   const { data, isLoading } = useUserRole(
     true,
     "",
-    `pack/incidents?size=10&page=${page}`
+    `pack/incidents?size=6&page=${page}`
   );
   const [incidents, setIncidents] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
@@ -49,10 +49,26 @@ function Incidents() {
         { headers: { Authorization: `Bearer ${token}` } }
       );
       setOpenIncidentId(null);
-      mutate(`pack/incidents?size=10&page=${page}`);
+      mutate(`pack/incidents?size=6&page=${page}`);
       toast.success("pack Assigned successfully");
     } catch (error) {
       toast.error("error assigning the incident");
+    }
+  };
+
+  const doneHandler = async (incidentId) => {
+    try {
+      const token = Cookies.get("token");
+      await api.post(
+        `incident/resolve/${incidentId}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setOpenIncidentId(null);
+      mutate(`pack/incidents?size=6&page=${page}`);
+      toast.success("Pack Assigned Successfully");
+    } catch (error) {
+      toast.error("Error Assigning The Incident");
     }
   };
 
@@ -76,9 +92,10 @@ function Incidents() {
               setMasterShowModal={setAssignMasterShowModal}
               currentUser={currentUser}
               assignToMember={assignToMember}
+              doneHandler={doneHandler}
             />
           ))}
-          {totalPages !== 1 && (
+          {totalPages > 1 && incidents.length > 0 && (
             <Pagination page={page} totalPages={totalPages} setPage={setPage} />
           )}
         </div>

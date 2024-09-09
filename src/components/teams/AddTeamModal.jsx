@@ -86,11 +86,13 @@ function AddTeamModal({ darkMode, closeModal, addUserHandler }) {
                               editTeamData={formData}
                               setEditTeamData={setFormData}
                             />
-                            <Pagination
-                              page={page}
-                              totalPages={totalPages}
-                              setPage={setPage}
-                            />
+                            {totalPages > 1 && users.length > 0 && (
+                              <Pagination
+                                page={page}
+                                totalPages={totalPages}
+                                setPage={setPage}
+                              />
+                            )}
                           </>
                         ) : (
                           <h1 className="text-3xl font-semibold text-center mt-10">

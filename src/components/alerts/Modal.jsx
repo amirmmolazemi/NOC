@@ -63,11 +63,13 @@ function Modal({
                       setSelectedNotification={setSelectedNotification}
                       showModal={showModal}
                     />
-                    <Pagination
-                      page={page}
-                      totalPages={totalPages}
-                      setPage={setPage}
-                    />
+                    {totalPages > 1 && incidentDetails && (
+                      <Pagination
+                        page={page}
+                        totalPages={totalPages}
+                        setPage={setPage}
+                      />
+                    )}
                   </div>
                 </div>
                 <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">

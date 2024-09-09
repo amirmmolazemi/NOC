@@ -72,12 +72,9 @@ function Alerts() {
               createIncident={createIncident}
             />
           ))}
-          <Pagination
-            page={page}
-            openIncidentId={openIncidentId}
-            totalPages={totalPages}
-            setPage={setPage}
-          />
+          {totalPages > 1 && incidents.length > 0 && (
+            <Pagination page={page} totalPages={totalPages} setPage={setPage} />
+          )}
         </div>
       ) : (
         <div className="flex items-center justify-center h-[calc(93vh-8vh)]">
