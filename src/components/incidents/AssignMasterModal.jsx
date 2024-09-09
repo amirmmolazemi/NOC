@@ -1,17 +1,11 @@
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import fetcher from "src/utils/fetcher";
-import { FiSend, FiMinusCircle } from "react-icons/fi";
+import { TfiCrown } from "react-icons/tfi";
 import Pagination from "../pagination/Pagination";
+import { FiMinusCircle } from "react-icons/fi";
 
-function AssignMemberModal({
-  darkMode,
-  closeModal,
-  team,
-  members,
-  setMembers,
-  master,
-}) {
+function AssignMasterModal({ darkMode, closeModal, team, setMaster, master }) {
   const [users, setUsers] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
@@ -29,12 +23,9 @@ function AssignMemberModal({
     }
   }, [fetchedUsers]);
 
-  const handleUserToggle = (userId) => {
-    setMembers((prevMembers) => {
-      if (prevMembers.includes(userId))
-        return prevMembers.filter((id) => id !== userId);
-      else return [...prevMembers, userId];
-    });
+  const handleMasterToggle = (userId) => {
+    if (master === userId) setMaster("");
+    else setMaster(userId);
   };
 
   return (
@@ -49,7 +40,7 @@ function AssignMemberModal({
           }`}
         >
           <div className="flex items-start justify-between p-5 rounded-t">
-            <h3 className="text-3xl font-semibold">Assign To ...</h3>
+            <h3 className="text-3xl font-semibold">Your Master Member ...</h3>
           </div>
           <div className="flex items-start gap-4 p-5 rounded-t"></div>
           <div className="relative flex-auto p-6">
@@ -88,29 +79,18 @@ function AssignMemberModal({
                       <td className="p-3 text-center">{user?.email}</td>
                       <td className="p-3 text-center">
                         {!user.pack_id ? (
-                          user.id == master ? (
-                            <>
-                              <span className="text-red-500 font-bold">
-                                This is your Master Member
-                              </span>
-                            </>
-                          ) : members.includes(user.id) ? (
-                            <>
-                              <button
-                                title="Remove Member"
-                                onClick={() => handleUserToggle(user.id)}
-                              >
-                                <FiMinusCircle size={20} color="red" />
-                              </button>
-                            </>
-                          ) : (
+                          <>
                             <button
-                              title="Assign Member"
-                              onClick={() => handleUserToggle(user.id)}
+                              title="Assign Master"
+                              onClick={() => handleMasterToggle(user.id)}
                             >
-                              <FiSend size={20} color="green" />
+                              {master === user.id ? (
+                                <FiMinusCircle size={20} color="red" />
+                              ) : (
+                                <TfiCrown size={20} color="yellow" />
+                              )}
                             </button>
-                          )
+                          </>
                         ) : (
                           <p className="text-red-500 font-bold">
                             Already in Action
@@ -149,4 +129,4 @@ function AssignMemberModal({
   );
 }
 
-export default AssignMemberModal;
+export default AssignMasterModal;

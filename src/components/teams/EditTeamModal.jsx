@@ -16,7 +16,7 @@ function EditTeamModal({
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
   const { data: fetchedUsers, isValidating } = useSWR(
-    `/user?size=5&role=Head&page=${page}`,
+    `/user?size=5&role=Head&page=${page}&team=null`,
     fetcher
   );
 
@@ -33,7 +33,6 @@ function EditTeamModal({
       setUsers(fetchedUsers.users);
       setPage(fetchedUsers.page || 1);
       setTotalPages(fetchedUsers.totalPages || 1);
-      console.log(fetchedUsers);
     }
   }, [fetchedUsers]);
 

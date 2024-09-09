@@ -43,8 +43,9 @@ function TeamTable({ teams, darkMode, page }) {
       let data = {
         name: editTeamData.name,
       };
-      if (prevEditTeamData.headId !== editTeamData.headId)
+      if (prevEditTeamData.headId !== editTeamData.headId) {
         data.headId = editTeamData.headId;
+      }
       await api.put(`/team/${selectedTeamId}`, data, {
         headers: { Authorization: `Bearer ${token}` },
       });

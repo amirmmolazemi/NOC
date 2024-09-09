@@ -1,17 +1,18 @@
 import { useState } from "react";
 
 function UsersList({ darkMode, users, setEditTeamData, editTeamData }) {
-  const [isSelect, setIsSelect] = useState(false);
+  const [selectedUserId, setSelectedUserId] = useState(null);
 
-  const selectHandler = (headId) => {
-    setEditTeamData({ ...editTeamData, headId });
-    setIsSelect(true);
+  const selectHandler = (userId) => {
+    setEditTeamData({ ...editTeamData, headId: userId });
+    setSelectedUserId(userId);
   };
+
   const removeHandler = () => {
     setEditTeamData({ ...editTeamData, headId: "" });
-    setIsSelect(false);
+    setSelectedUserId(null);
   };
-  
+
   return (
     <table
       className={`shadow-lg rounded-lg overflow-hidden min-w-full mt-6 mb-6 ${
@@ -43,11 +44,11 @@ function UsersList({ darkMode, users, setEditTeamData, editTeamData }) {
                       : "bg-gray-100 text-gray-800 hover:bg-gray-200"
                   }`}
                 >
-                  <td className="p-3 text-center">{user?.id}</td>
-                  <td className="p-3 text-center">{user?.username}</td>
-                  <td className="p-3 text-center">{user?.email}</td>
+                  <td className="p-3 text-center">{user.id}</td>
+                  <td className="p-3 text-center">{user.username}</td>
+                  <td className="p-3 text-center">{user.email}</td>
                   <td className="p-3 text-center">
-                    {isSelect ? (
+                    {selectedUserId === user.id ? (
                       <button
                         className="font-semibold px-4 py-2 rounded transition duration-200 bg-red-600 text-gray-100 hover:bg-red-500"
                         onClick={() => removeHandler()}
@@ -70,7 +71,7 @@ function UsersList({ darkMode, users, setEditTeamData, editTeamData }) {
         ) : (
           <tr>
             <td
-              colSpan={5}
+              colSpan={4}
               className={`p-3 text-center ${
                 darkMode ? "text-gray-300" : "text-gray-600"
               }`}

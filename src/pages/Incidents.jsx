@@ -4,8 +4,11 @@ import Loader from "components/loader/Loader";
 import useUserRole from "hooks/useUserRole";
 import Pagination from "components/pagination/Pagination";
 import { useSelector } from "react-redux";
-import useSWR from "swr";
+import useSWR, { mutate } from "swr";
 import fetcher from "utils/fetcher";
+import api from "src/configs/api";
+import Cookies from "js-cookie";
+import { toast } from "react-toastify";
 
 function Incidents() {
   const [page, setPage] = useState(1);
@@ -18,13 +21,14 @@ function Incidents() {
   const [incidents, setIncidents] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [openIncidentId, setOpenIncidentId] = useState(null);
-  const [showModal, setShowModal] = useState(false);
+  const [assignMemberShowModal, setAssignMemberShowModal] = useState(false);
+  const [assignMasterShowModal, setAssignMasterShowModal] = useState(false);
 
   const darkMode = useSelector((state) => state.theme.darkMode);
 
   useEffect(() => {
-    if (data?.otherData && !openIncidentId && !showModal) {
-      setIncidents(data.otherData.incidents || []);
+    if (data?.otherData && !openIncidentId && !assignMemberShowModal) {
+      setIncidents(data.otherData.incidents);
       setPage(data.otherData.page || 1);
       setTotalPages(data.otherData.totalPages || 1);
     }
@@ -36,13 +40,29 @@ function Incidents() {
     setOpenIncidentId(id === openIncidentId ? null : id);
   };
 
+  const assignToMember = async (packId, masterMember, members) => {
+    try {
+      const token = Cookies.get("token");
+      await api.post(
+        "incident/assign",
+        { packId, masterMember, members },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setOpenIncidentId(null);
+      mutate(`pack/incidents?size=10&page=${page}`);
+      toast.success("pack Assigned successfully");
+    } catch (error) {
+      toast.error("error assigning the incident");
+    }
+  };
+
   return (
     <div
       className={`flex flex-col h-full justify-between p-5 overflow-y-auto scrollbar-none ${
         darkMode ? "dark:bg-gray-900" : ""
       }`}
     >
-      {incidents.length ? (
+      {incidents.length > 0 ? (
         <div className="flex flex-col justify-between gap-[5px]">
           {incidents.map((incident) => (
             <Card
@@ -50,14 +70,17 @@ function Incidents() {
               incident={incident}
               isOpen={incident.id === openIncidentId}
               onCardClick={() => handleCardClick(incident.id)}
-              showModal={showModal}
-              setShowModal={setShowModal}
-              userRole={currentUser?.role?.name}
+              memberShowModal={assignMemberShowModal}
+              setMemberShowModal={setAssignMemberShowModal}
+              masterShowModal={assignMasterShowModal}
+              setMasterShowModal={setAssignMasterShowModal}
               currentUser={currentUser}
+              assignToMember={assignToMember}
             />
           ))}
-          {console.log(currentUser)}
-          <Pagination page={page} totalPages={totalPages} setPage={setPage} />
+          {totalPages !== 1 && (
+            <Pagination page={page} totalPages={totalPages} setPage={setPage} />
+          )}
         </div>
       ) : (
         <div className="flex items-center justify-center h-[calc(93vh-8vh)]">

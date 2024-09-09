@@ -6,23 +6,27 @@ import fetcher from "utils/fetcher";
 import NotificationDetails from "./NotificationDetails";
 import Pagination from "../pagination/Pagination";
 import AssignMemberModal from "./AssignMemberModal";
+import AssignMasterModal from "./AssignMasterModal";
 
 function Card({
   incident,
   isOpen,
   onCardClick,
-  showModal,
-  setShowModal,
-  userRole,
+  memberShowModal,
+  setMemberShowModal,
+  masterShowModal,
+  setMasterShowModal,
   currentUser,
+  assignToMember,
 }) {
   const darkMode = useSelector((state) => state.theme.darkMode);
-  const [priority, setPriority] = useState(incident.priority || "");
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
+  const [master, setMaster] = useState("");
+  const [members, setMembers] = useState([]);
 
-  const { data: incidentDetails, isLoading } = useSWR(
-    isOpen && `/pack/${incident.id}?page=${page}&size=10`,
+  const { data: incidentDetails, error } = useSWR(
+    isOpen ? `/pack/${incident.id}?size=10&page=${page}` : null,
     fetcher,
     { refreshInterval: 10 * 1000, refreshWhenHidden: true }
   );
@@ -34,10 +38,21 @@ function Card({
     }
   }, [incidentDetails]);
 
+  if (error) return <div>Error loading incident details</div>;
   const shouldShow =
-    userRole === "Team_724" ||
-    currentUser.username === incident.assigned_team?.head?.username;
+    currentUser.role.name === "Team_724" ||
+    currentUser.username === incident.assigned_team?.head?.username ||
+    incident.user.map((user) => {
+      if (user.id === currentUser.id) return true;
+    });
 
+  const saveHandler = async () => {
+    let membersList = [];
+    if (members.includes(master))
+      membersList = members.filter((member) => member !== master);
+    else membersList = members;
+    assignToMember(incident.id, master, membersList);
+  };
   return (
     <div
       className={`shadow-md rounded-lg p-3 transition-all duration-200 ease-in-out overflow-hidden ${
@@ -69,7 +84,7 @@ function Card({
                 <span className="text-red-500 font-bold">
                   {!incident.master_member
                     ? " Not Declare"
-                    : incident.master_member.username}
+                    : " " + incident.master_member.username}
                 </span>
               </h3>
             </div>
@@ -80,31 +95,56 @@ function Card({
               isOpen ? "opacity-100" : "opacity-0"
             } transition-opacity duration-100 ease-in-out`}
           >
-            {currentUser.role.name === "Head" && (
-              <>
+            {currentUser.role.name === "Head" && !incident.master_memberId && (
+              <div className="flex gap-3">
                 <button
                   className="font-semibold px-4 py-2 mt-7 rounded transition duration-200 bg-green-600 text-gray-100 hover:bg-green-500"
-                  onClick={() => setShowModal(true)}
+                  onClick={() => setMasterShowModal(true)}
                 >
-                  Assign to Member
+                  Add Master Member
                 </button>
-                {showModal && (
-                  <AssignMemberModal
+                <button
+                  className="font-semibold px-4 py-2 mt-7 rounded transition duration-200 bg-orange-600 text-gray-100 hover:bg-orange-500"
+                  onClick={() => setMemberShowModal(true)}
+                >
+                  Add Members
+                </button>
+                <button
+                  className="font-semibold px-4 py-2 mt-7 rounded transition duration-200 bg-red-600 text-gray-100 hover:bg-red-500"
+                  onClick={saveHandler}
+                >
+                  Save
+                </button>
+                {masterShowModal && (
+                  <AssignMasterModal
                     darkMode={darkMode}
-                    closeModal={() => setShowModal(false)}
+                    closeModal={() => setMasterShowModal(false)}
                     team={currentUser?.team?.name}
+                    setMaster={setMaster}
+                    master={master}
                   />
                 )}
-              </>
+                {memberShowModal && (
+                  <AssignMemberModal
+                    darkMode={darkMode}
+                    closeModal={() => setMemberShowModal(false)}
+                    team={currentUser?.team?.name}
+                    setMembers={setMembers}
+                    members={members}
+                    master={master}
+                  />
+                )}
+              </div>
             )}
-            {currentUser.role.name === "Member" && (
-              <button className="font-semibold px-4 py-2 mt-7 rounded transition duration-200 bg-green-600 text-gray-100 hover:bg-green-500">
-                Done
-              </button>
-            )}
+            {currentUser.role.name === "Member" &&
+              incident.master_memberId === currentUser.id && (
+                <button className="font-semibold px-4 py-2 mt-7 rounded transition duration-200 bg-green-600 text-gray-100 hover:bg-green-500">
+                  Done
+                </button>
+              )}
             <div className="overflow-y-auto h-[400px] scrollbar-thin scrollbar-thumb-gray-500 mt-3 scrollbar-track-gray-200">
-              {isLoading ? (
-                <p className={`${darkMode ? "text-white" : "text-black"}`}>
+              {!incidentDetails ? (
+                <p className={darkMode ? "text-white" : "text-black"}>
                   Loading...
                 </p>
               ) : (

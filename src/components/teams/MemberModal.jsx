@@ -172,8 +172,8 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
                 </tr>
               </thead>
               <tbody>
-                {!isValidating ? (
-                  users.map((user) => (
+                {!isValidating && users.length > 0 ? (
+                  users?.map((user) => (
                     <tr
                       key={user.id}
                       className={`font-semibold transition duration-200 hover:bg-opacity-80 ${
