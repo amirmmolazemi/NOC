@@ -7,14 +7,14 @@
       "components/*": ["src/components/*"],
       "layout/*": ["src/layout/*"],
       "hooks/*": ["src/hooks/*"],
-      "Redux/*": ["src/Redux/*"],
-      "configs/*": ["src/configs/*"],
+      "feature/*": ["src/feature/*"],
+      "App/*": ["src/App/*"],
+      "api/*": ["src/api/*"],
       "constants/*": ["src/constants/*"],
-      "router/*": ["src/router/*"],
+      "routes/*": ["src/routes/*"],
       "pages/*": ["src/pages/*"],
       "styles/*": ["src/styles/*"],
       "utils/*": ["src/utils/*"],
-      "helpers/*": ["src/helpers/*"]
     }
   }
 }

@@ -2,17 +2,20 @@ import { useEffect, useState } from "react";
 import AssignedTeamSelector from "./AssignedTeamSelector";
 import NotificationDetails from "./NotificationDetails";
 import Pagination from "../pagination/Pagination";
+import { createIncident } from "api";
 
-function Modal({
-  setShowModal,
-  showModal,
-  incidentDetails,
-  darkMode,
-  createIncident,
-  page,
-  setPage,
-  totalPages,
-}) {
+function Modal(props) {
+  const {
+    setShowModal,
+    showModal,
+    incidentDetails,
+    darkMode,
+    page,
+    setPage,
+    totalPages,
+    alertsPage,
+    setOpenIncidentId,
+  } = props;
   const [assignedTeam, setAssignedTeam] = useState("");
   const [selectedNotification, setSelectedNotification] = useState([]);
 
@@ -29,7 +32,13 @@ function Modal({
   const saveHandler = async () => {
     const packId = incidentDetails.notifications[0].pack_id;
     const teamId = parseInt(assignedTeam, 10);
-    createIncident(teamId, packId, selectedNotification);
+    createIncident(
+      setOpenIncidentId,
+      teamId,
+      packId,
+      selectedNotification,
+      alertsPage
+    );
     setShowModal(false);
   };
 
@@ -55,7 +64,7 @@ function Modal({
                     assignedTeam={assignedTeam}
                     setAssignedTeam={setAssignedTeam}
                   />
-                  <div className="overflow-y-auto h-[400px] scrollbar-thin scrollbar-thumb-gray-500 mt-7 scrollbar-track-gray-200">
+                  <div className="overflow-y-auto h-[280px] scrollbar-thin scrollbar-thumb-gray-500 mt-7 scrollbar-track-gray-200">
                     <NotificationDetails
                       darkMode={darkMode}
                       incidentDetails={incidentDetails}
@@ -72,7 +81,7 @@ function Modal({
                     )}
                   </div>
                 </div>
-                <div className="flex items-center justify-end p-6 border-t border-solid border-blueGray-200 rounded-b">
+                <div className="flex items-center justify-end p-6 rounded-b">
                   <button
                     className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
                     onClick={() => setShowModal(false)}

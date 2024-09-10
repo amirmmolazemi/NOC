@@ -1,25 +1,6 @@
-import { toast } from "react-toastify";
-import Cookies from "js-cookie";
-import api from "configs/api";
+import { changePackPriority } from "src/api";
 
 const PrioritySelector = ({ darkMode, incident, setPriority, priority }) => {
-  const changeHandler = async (e) => {
-    const { value } = e.target;
-    const token = Cookies.get("token");
-    setPriority(value);
-    try {
-      if (!value) return;
-      await api.post(
-        "/pack/priority",
-        { id: incident.id, priority: value },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      toast.success("Priority saved successfully", { autoClose: 1500 });
-    } catch (error) {
-      toast.error("Failed to save priority", { autoClose: 1500 });
-    }
-  };
-
   return (
     <div className="flex flex-col">
       <label
@@ -29,7 +10,9 @@ const PrioritySelector = ({ darkMode, incident, setPriority, priority }) => {
       </label>
       <select
         value={priority}
-        onChange={changeHandler}
+        onChange={(e) =>
+          changePackPriority(e.target.value, setPriority, incident.id)
+        }
         className={`p-3 border rounded-lg w-full ${
           darkMode
             ? "bg-gray-800 border-gray-700 text-white"

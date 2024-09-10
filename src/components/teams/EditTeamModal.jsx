@@ -1,32 +1,28 @@
 import { useEffect, useState } from "react";
-import UsersList from "./UsersList";
 import useSWR from "swr";
-import fetcher from "src/utils/fetcher";
-import Pagination from "../pagination/Pagination";
+import fetcher from "utils/fetcher";
+import { editTeamValidateFields } from "src/utils/helpers";
+import EditTeamModalInputs from "./EditTeamModalInputs";
+import { editTeamHandler } from "src/api";
 
 function EditTeamModal({
   darkMode,
   setEditTeamData,
   editTeamData,
   closeModal,
-  saveHandler,
+  teamsPage,
+  prevEditTeamData,
+  teamId,
+  setShowEditModal,
 }) {
   const [errors, setErrors] = useState({});
   const [users, setUsers] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
-  const { data: fetchedUsers, isValidating } = useSWR(
-    `/user?size=5&role=Head&page=${page}&team=null`,
+  const { data: fetchedUsers, isLoading } = useSWR(
+    `/user?size=3&role=Head&page=${page}&team=null`,
     fetcher
   );
-
-  const validateFields = () => {
-    const newErrors = {};
-    if (!editTeamData.name) newErrors.name = "Name is required.";
-    if (!editTeamData.headId) newErrors.headId = "Head is required.";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   useEffect(() => {
     if (fetchedUsers) {
@@ -37,22 +33,14 @@ function EditTeamModal({
   }, [fetchedUsers]);
 
   const handleSave = () => {
-    if (validateFields()) {
-      saveHandler();
-    }
-  };
-
-  const handleChange = (field, value) => {
-    setEditTeamData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
-    if (errors[field]) {
-      setErrors((prevErrors) => {
-        const { [field]: removedError, ...rest } = prevErrors;
-        return rest;
-      });
-    }
+    if (editTeamValidateFields(editTeamData, setErrors))
+      editTeamHandler(
+        teamId,
+        editTeamData,
+        prevEditTeamData,
+        setShowEditModal,
+        teamsPage
+      );
   };
 
   return (
@@ -70,60 +58,18 @@ function EditTeamModal({
             <h3 className="text-3xl font-semibold">Edit Team</h3>
           </div>
           <div className="relative flex-auto p-6">
-            {["name", "headId"].map((field, index) => (
-              <div className="mb-4" key={index}>
-                <label className="block mb-1 text-sm font-medium capitalize">
-                  {field === "headId" ? "New Head" : field}
-                </label>
-                {field !== "headId" ? (
-                  <input
-                    type="text"
-                    value={editTeamData[field]}
-                    onChange={(e) => handleChange(field, e.target.value)}
-                    className={`w-full p-2 rounded ${
-                      darkMode
-                        ? "bg-gray-700 text-white"
-                        : "bg-white text-black border"
-                    }`}
-                  />
-                ) : (
-                  <>
-                    {!isValidating ? (
-                      users.filter((user) => !user.team).length ? (
-                        <>
-                          <UsersList
-                            darkMode={darkMode}
-                            users={users}
-                            editTeamData={editTeamData}
-                            setEditTeamData={setEditTeamData}
-                          />
-                          {totalPages > 1 && users.length > 0 && (
-                            <Pagination
-                              page={page}
-                              totalPages={totalPages}
-                              setPage={setPage}
-                            />
-                          )}
-                        </>
-                      ) : (
-                        <h1 className="text-3xl font-semibold text-center mt-10">
-                          We don't have any Head user
-                        </h1>
-                      )
-                    ) : (
-                      <h1 className="text-3xl font-semibold text-center mt-10">
-                        Loading ...
-                      </h1>
-                    )}
-                  </>
-                )}
-                {errors[field] && (
-                  <p className="text-red-500 text-sm font-semibold mt-1">
-                    {errors[field]}
-                  </p>
-                )}
-              </div>
-            ))}
+            <EditTeamModalInputs
+              darkMode={darkMode}
+              editTeamData={editTeamData}
+              errors={errors}
+              isLoading={isLoading}
+              page={page}
+              setEditTeamData={setEditTeamData}
+              setPage={setPage}
+              totalPages={totalPages}
+              users={users}
+              setErrors={setErrors}
+            />
           </div>
           <div className="flex items-center justify-end p-6 rounded-b">
             <button

@@ -1,30 +1,19 @@
 import { useState } from "react";
+import { editValidateFields } from "utils/helpers";
+import EditUserModalInputs from "./EditUserModalInputs";
 
 function EditUserModal({
   darkMode,
   userData,
   setUserData,
   closeModal,
-  saveHandler,
+  editHandler,
   isHead,
 }) {
   const [errors, setErrors] = useState({});
-  const roles = ["Head", "Team_724", "Member"];
-
-  const validateFields = () => {
-    const newErrors = {};
-    if (userData.password && userData.password.length < 8)
-      newErrors.password = "Password must be at least 8 characters.";
-    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(userData.email))
-      newErrors.email = "Invalid email address.";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
 
   const handleSave = () => {
-    if (validateFields()) {
-      saveHandler();
-    }
+    if (editValidateFields(userData, setErrors)) editHandler();
   };
 
   return (
@@ -42,54 +31,13 @@ function EditUserModal({
             <h3 className="text-3xl font-semibold">Edit User</h3>
           </div>
           <div className="relative flex-auto p-6">
-            {["username", "password", "email", "role"].map((field) => (
-              <div className="mb-4" key={field}>
-                <label className="block mb-1 text-sm font-medium capitalize">
-                  {field}
-                </label>
-                {field === "role" ? (
-                  <select
-                    value={userData.role}
-                    onChange={(e) =>
-                      setUserData((prev) => ({ ...prev, role: e.target.value }))
-                    }
-                    className={`w-full p-2 rounded ${
-                      darkMode
-                        ? "bg-gray-700 text-white"
-                        : "bg-white text-black border"
-                    } ${isHead ? "cursor-not-allowed" : "cursor-pointer"}`}
-                    disabled={isHead}
-                  >
-                    {roles.map((role) => (
-                      <option key={role} value={role}>
-                        {role}
-                      </option>
-                    ))}
-                  </select>
-                ) : (
-                  <input
-                    type={field === "password" ? "password" : "text"}
-                    value={userData[field]}
-                    onChange={(e) =>
-                      setUserData((prev) => ({
-                        ...prev,
-                        [field]: e.target.value,
-                      }))
-                    }
-                    className={`w-full p-2 rounded ${
-                      darkMode
-                        ? "bg-gray-700 text-white"
-                        : "bg-white text-black border"
-                    } ${errors[field] ? "border-red-500" : ""}`}
-                  />
-                )}
-                {errors[field] && (
-                  <p className="text-red-500 text-sm font-semibold mt-1">
-                    {errors[field]}
-                  </p>
-                )}
-              </div>
-            ))}
+            <EditUserModalInputs
+              darkMode={darkMode}
+              errors={errors}
+              isHead={isHead}
+              setUserData={setUserData}
+              userData={userData}
+            />
           </div>
           <div className="flex items-center justify-end p-6 rounded-b">
             <button

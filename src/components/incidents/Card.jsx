@@ -7,6 +7,7 @@ import NotificationDetails from "./NotificationDetails";
 import Pagination from "../pagination/Pagination";
 import AssignMemberModal from "./AssignMemberModal";
 import AssignMasterModal from "./AssignMasterModal";
+import { toast } from "react-toastify";
 
 function Card({
   incident,
@@ -42,7 +43,7 @@ function Card({
   const shouldShow =
     currentUser?.role?.name === "Team_724" ||
     currentUser?.username === incident?.assigned_team?.head?.username ||
-    incident.user.some((user) => user.id === currentUser.id);
+    incident.user.some((user) => user?.id === currentUser.id);
 
   const saveHandler = async () => {
     try {
@@ -52,8 +53,7 @@ function Card({
       else membersList = members;
       await assignToMember(incident.id, master, membersList);
     } catch (error) {
-      console.error("Error saving members:", error);
-      alert("Failed to save members. Please try again.");
+      toast.error("Failed to save members. Please try again.");
     }
   };
 
@@ -124,7 +124,7 @@ function Card({
                   isOpen ? "opacity-100" : "opacity-0"
                 } transition-opacity duration-100 ease-in-out`}
               >
-                {currentUser.role.name === "Head" &&
+                {currentUser?.role?.name === "Head" &&
                   !incident.master_memberId && (
                     <div className="flex gap-3">
                       <div className="flex flex-col">
@@ -169,7 +169,7 @@ function Card({
                       )}
                     </div>
                   )}
-                {currentUser.role.name === "Member" &&
+                {currentUser?.role?.name === "Member" &&
                   incident.master_memberId === currentUser.id && (
                     <button
                       className="font-semibold px-4 py-2 mt-7 rounded transition duration-200 bg-green-600 text-gray-100 hover:bg-green-500"

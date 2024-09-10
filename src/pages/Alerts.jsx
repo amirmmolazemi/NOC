@@ -4,10 +4,6 @@ import useUserRole from "hooks/useUserRole";
 import Loader from "components/loader/Loader";
 import Card from "components/alerts/Card";
 import Pagination from "components/pagination/Pagination";
-import { toast } from "react-toastify";
-import Cookies from "js-cookie";
-import api from "src/configs/api";
-import { mutate } from "swr";
 
 function Alerts() {
   const [incidents, setIncidents] = useState([]);
@@ -24,8 +20,8 @@ function Alerts() {
 
   useEffect(() => {
     if (data?.otherData && !openIncidentId && !showModal) {
-      const { packs, page, totalPages } = data.otherData;
-      setIncidents(packs || []);
+      const { packs, page, totalPages } = data?.otherData;
+      setIncidents(packs);
       setPage(page || 1);
       setTotalPages(totalPages || 1);
     }
@@ -33,47 +29,33 @@ function Alerts() {
 
   if (isLoading) return <Loader />;
 
-  const handleCardClick = (id) => {
-    setOpenIncidentId(id === openIncidentId ? null : id);
-  };
-
-  const createIncident = async (teamId, packId, notifications) => {
-    setOpenIncidentId(null);
-    try {
-      const token = Cookies.get("token");
-      await api.post(
-        "/incident",
-        { packId, teamId, notifications },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      toast.success("incident created successfully");
-      mutate(`/pack?size=10&page=${page}`);
-    } catch (error) {
-      toast.error("error in creating incident");
-    }
-  };
-
   return (
-    <div
-      className={`flex flex-col h-full justify-between p-5 overflow-y-auto scrollbar-none ${
-        darkMode ? "dark:bg-gray-900" : ""
-      }`}
-    >
-      {incidents.length ? (
+    <div className="flex flex-col h-full justify-between p-5 overflow-y-auto scrollbar-none">
+      {incidents ? (
         <div className="flex flex-col justify-between gap-[5px]">
           {incidents.map((incident) => (
             <Card
               key={incident.id}
               incident={incident}
               isOpen={incident.id === openIncidentId}
-              onCardClick={() => handleCardClick(incident.id)}
+              onCardClick={() =>
+                setOpenIncidentId(
+                  incident.id === openIncidentId ? null : incident.id
+                )
+              }
+              setOpenIncidentId={setOpenIncidentId}
               showModal={showModal}
               setShowModal={setShowModal}
-              createIncident={createIncident}
+              alertsPage={page}
             />
           ))}
-          {totalPages > 1 && incidents.length > 0 && (
-            <Pagination page={page} totalPages={totalPages} setPage={setPage} />
+          {totalPages > 1 && incidents && (
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              setPage={setPage}
+              openIncidentId={openIncidentId}
+            />
           )}
         </div>
       ) : (

@@ -6,7 +6,7 @@ function NavMenu({ onClick }) {
 
   return (
     <nav className="flex">
-      <ul className="space-y-8">
+      <ul className="space-y-5">
         {menuItems.map((item, index) => (
           <li
             key={index}

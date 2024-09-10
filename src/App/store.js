@@ -1,7 +1,7 @@
 import { configureStore } from "@reduxjs/toolkit";
-import themeReducer from "../slices/darkmodeSlice";
-import languageReducer from "../slices/languageSlice";
-import userReducer from "../slices/userSlice";
+import themeReducer from "feature/darkmode/darkmodeSlice";
+import languageReducer from "feature/language/languageSlice";
+import userReducer from "feature/userRole/userSlice";
 
 const store = configureStore({
   reducer: {

@@ -1,14 +1,14 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import Cookies from "js-cookie";
-import useUserRole from "hooks/useUserRole";
+
+// components
 import Loader from "components/loader/Loader";
 import UserTable from "components/users/UserTable";
 import Pagination from "components/pagination/Pagination";
 import AddUserModal from "components/users/AddUserModal";
-import api from "configs/api";
-import { mutate } from "swr";
+
+// hooks
+import useUserRole from "hooks/useUserRole";
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -22,23 +22,10 @@ function Users() {
     `/user?size=10&page=${page}`
   );
 
-  const addUserHandler = async (newUser) => {
-    try {
-      const token = Cookies.get("token");
-      await api.post("/user", newUser, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      mutate(`/user?size=10&page=${page}`);
-      toast.success("User added successfully!");
-    } catch (error) {
-      toast.error("Error adding user");
-    }
-  };
-
   useEffect(() => {
     if (data?.otherData && !showModal) {
-      const { users, page, totalPages } = data.otherData;
-      setUsers(users || []);
+      const { users, page, totalPages } = data?.otherData;
+      setUsers(users);
       setPage(page || 1);
       setTotalPages(totalPages || 1);
     }
@@ -47,29 +34,29 @@ function Users() {
   if (isLoading) return <Loader />;
 
   return (
-    <div className={`container mx-auto mt-8 p-4`}>
+    <div className="container mx-auto p-4">
       <h1
-        className={`text-3xl font-bold mb-12 text-center text-gray-${
+        className={`text-3xl font-bold text-center text-gray-${
           darkMode ? "200" : "800"
         }`}
       >
         Users
       </h1>
       <button
-        className={`font-semibold px-4 py-2 rounded transition duration-200 bg-green-600 text-gray-100 hover:bg-green-500`}
+        className="font-semibold px-4 py-2 rounded transition duration-200 bg-green-600 text-gray-100 hover:bg-green-500"
         onClick={() => setShowModal(true)}
       >
         Add User
       </button>
       <UserTable users={users} darkMode={darkMode} page={page} />
-      {totalPages > 1 && users.length > 0 && (
+      {totalPages > 1 && users && (
         <Pagination page={page} totalPages={totalPages} setPage={setPage} />
       )}
       {showModal && (
         <AddUserModal
           darkMode={darkMode}
           closeModal={() => setShowModal(false)}
-          addUserHandler={addUserHandler}
+          page={page}
         />
       )}
     </div>

@@ -1,11 +1,9 @@
 import { useEffect, useState } from "react";
-import useSWR, { mutate } from "swr";
-import fetcher from "src/utils/fetcher";
+import useSWR from "swr";
+import fetcher from "utils/fetcher";
 import { FiMinusCircle } from "react-icons/fi";
-import Cookies from "js-cookie";
 import Pagination from "../pagination/Pagination";
-import { toast } from "react-toastify";
-import api from "src/configs/api";
+import { addMemberHandler, deleteMemberHandler } from "api/index";
 
 function MemberModal({ darkMode, closeModal, team, teamId }) {
   const [users, setUsers] = useState([]);
@@ -18,19 +16,23 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { data: fetchedUsers, isValidating } = useSWR(
-    `/user?size=5&page=${page}&team=${team}`,
+  const {
+    data: fetchedUsers,
+    isValidating,
+    error: usersError,
+  } = useSWR(`/user?size=5&page=${page}&team=${team}`, fetcher);
+  const { data: fetchedAllUsers, error: allUsersError } = useSWR(
+    `/user?size=5&page=off`,
     fetcher
   );
-  const { data: fetchedAllUsers } = useSWR(`/user?size=5&page=off`, fetcher);
 
   useEffect(() => {
-    if (fetchedUsers) {
-      setUsers(fetchedUsers.users);
-      setPage(fetchedUsers.page || 1);
+    if (fetchedUsers && !usersError) {
+      setUsers(fetchedUsers?.users);
+      setPage(fetchedUsers?.page || 1);
       setTotalPages(fetchedUsers.totalPages || 1);
     }
-    if (fetchedAllUsers) {
+    if (fetchedAllUsers && !allUsersError) {
       const usersWithoutTeam = fetchedAllUsers.filter((user) => !user.team);
       setAllUsers(usersWithoutTeam);
       setFilteredUsers(usersWithoutTeam);
@@ -46,63 +48,6 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
         )
     );
   }, [searchTerm, allUsers]);
-
-  const deleteMemberHandler = async (teamId, userId) => {
-    setIsLoading(true);
-    try {
-      const token = Cookies.get("token");
-      await api.delete(`/team/${teamId}/member`, {
-        data: { userId },
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      mutate(`/user?size=5&page=${page}&team=${team}`);
-      mutate(`/user?size=5&page=off`);
-      toast.success("Member deleted successfully!");
-    } catch (error) {
-      if (error.response) {
-        toast.error(`Error: ${error.response.data.message}`);
-      } else if (error.request) {
-        toast.error("Network error, please try again later.");
-      } else {
-        toast.error("An unexpected error occurred.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const addHandler = async () => {
-    setIsLoading(true);
-    try {
-      const token = Cookies.get("token");
-      const selectedUserId = parseInt(selectedUser, 10);
-      await api.post(
-        `/team/${teamId}/member`,
-        { userId: selectedUserId },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setAllUsers((prevUsers) =>
-        prevUsers.filter((user) => user.id !== selectedUserId)
-      );
-      setFilteredUsers((prevUsers) =>
-        prevUsers.filter((user) => user.id !== selectedUserId)
-      );
-      mutate(`/user?size=5&page=${page}&team=${team}`);
-      mutate(`/user?size=5&page=off`);
-      setSelectedUser("");
-      toast.success("Member added successfully!");
-    } catch (error) {
-      if (error.response) {
-        toast.error(`Error: ${error.response.data.message}`);
-      } else if (error.request) {
-        toast.error("Network error, please try again later.");
-      } else {
-        toast.error("An unexpected error occurred.");
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 overflow-x-hidden overflow-y-auto outline-none focus:outline-none">
@@ -165,7 +110,18 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
             {selectedUser && showDropDown && (
               <button
                 className="font-semibold px-4 py-2 rounded transition duration-200 bg-green-600 hover:bg-green-500 text-gray-100"
-                onClick={addHandler}
+                onClick={() =>
+                  addMemberHandler(
+                    setIsLoading,
+                    selectedUser,
+                    teamId,
+                    setAllUsers,
+                    setFilteredUsers,
+                    setSelectedUser,
+                    page,
+                    team
+                  )
+                }
                 disabled={isLoading}
               >
                 Submit
@@ -193,7 +149,7 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
                 </tr>
               </thead>
               <tbody>
-                {!isValidating && users.length > 0 ? (
+                {!isValidating && users ? (
                   users?.map((user) => (
                     <tr
                       key={user.id}
@@ -212,7 +168,13 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
                             className="text-red-500 hover:text-red-700"
                             title="Delete Member"
                             onClick={() =>
-                              deleteMemberHandler(user.team.id, user.id)
+                              deleteMemberHandler(
+                                user.team.id,
+                                user.id,
+                                setIsLoading,
+                                page,
+                                team
+                              )
                             }
                           >
                             <FiMinusCircle size={20} />
@@ -237,7 +199,7 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
                 )}
               </tbody>
             </table>
-            {totalPages > 1 && users.length > 0 && (
+            {totalPages > 1 && users && (
               <Pagination
                 page={page}
                 totalPages={totalPages}

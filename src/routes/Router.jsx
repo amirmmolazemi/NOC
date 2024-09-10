@@ -7,7 +7,7 @@ import NotFound from "pages/404";
 import Alerts from "pages/Alerts";
 import Incidents from "pages/Incidents";
 import Users from "pages/Users";
-import Teams from "src/pages/Teams";
+import Teams from "pages/Teams";
 
 const routes = [
   { path: "/", element: <Dashboard /> },

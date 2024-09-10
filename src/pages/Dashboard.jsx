@@ -4,9 +4,9 @@ import useCheckCookie from "hooks/useCheckCookie";
 import useRegisterChart from "hooks/useRegisterChart";
 import Loader from "components/loader/Loader";
 import DashboardCard from "components/dashboard/DashboardCard";
-import getChartData from "helpers/getChartData";
 import enLocale from "assets/locales/en.json";
 import faLocale from "assets/locales/fa.json";
+import { getChartData } from "utils/helpers";
 
 function Dashboard() {
   useRegisterChart();
@@ -19,7 +19,7 @@ function Dashboard() {
 
   return (
     <section
-      className={`grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 mx-8 my-8 ${
+      className={`grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mx-3 my-3 ${
         language === "fa" && "rtl"
       }`}
     >

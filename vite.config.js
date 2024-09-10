@@ -5,16 +5,16 @@ const paths = [
   "src",
   "assets",
   "components",
-  "Redux",
+  "App",
+  "feature",
   "hooks",
   "layout",
-  "configs",
+  "api",
   "constants",
-  "router",
+  "routes",
   "pages",
   "styles",
   "utils",
-  "helpers",
 ];
 
 export default defineConfig({

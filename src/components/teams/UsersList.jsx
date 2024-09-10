@@ -32,7 +32,7 @@ function UsersList({ darkMode, users, setEditTeamData, editTeamData }) {
         </tr>
       </thead>
       <tbody>
-        {users.length ? (
+        {users ? (
           users.map((user) => {
             return (
               !user.team && (

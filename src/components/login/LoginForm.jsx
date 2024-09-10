@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import loginHandler from "utils/loginHandler";
 import TextInput from "./TextInput";
 import Checkbox from "./Checkbox";
 import Button from "./Button";
+import { loginHandler } from "api";
+import { LoginValidateInputs } from "src/utils/helpers";
 
 function LoginForm() {
   const [inputs, setInputs] = useState({
@@ -14,23 +15,15 @@ function LoginForm() {
   const [errors, setErrors] = useState({});
   const navigate = useNavigate();
 
-  const validateInputs = () => {
-    const newErrors = {};
-    if (!inputs.username) newErrors.username = "Username is required";
-    if (!inputs.password) newErrors.password = "Password is required";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = async (e) => {
+  const login = async (e) => {
     e.preventDefault();
-    if (!validateInputs()) return;
-    const res = await loginHandler(inputs.username, inputs.password);
-    if (res) navigate("/dashboard");
+    if (LoginValidateInputs(inputs, setErrors)) {
+      await loginHandler(inputs.username, inputs.password, navigate);
+    }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={login}>
       <TextInput
         name="username"
         value={inputs.username}

@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
-import api from "configs/api";
-import { setRole } from "Redux/slices/userSlice";
+import { setRole } from "feature/userRole/userSlice";
+import api from "api/index";
 const useCheckCookie = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -35,7 +35,7 @@ const useCheckCookie = () => {
     };
 
     checkToken();
-  }, [navigate]);
+  }, [navigate, dispatch]);
 
   return { data, loading };
 };
