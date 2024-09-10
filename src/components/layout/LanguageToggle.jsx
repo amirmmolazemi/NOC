@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { toggleLanguage } from "Redux/slices/languageSlice";
+import { toggleLanguage } from "feature/language/languageSlice";
 import flagUk from "assets/flag-uk.png";
 import flagIr from "assets/flag-ir.png";
 

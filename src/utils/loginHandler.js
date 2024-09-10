@@ -1,6 +1,6 @@
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import api from "configs/api";
+import api from "services/api";
 
 const loginHandler = async (username, password) => {
   try {

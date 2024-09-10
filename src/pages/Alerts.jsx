@@ -6,7 +6,7 @@ import Card from "components/alerts/Card";
 import Pagination from "components/pagination/Pagination";
 import { toast } from "react-toastify";
 import Cookies from "js-cookie";
-import api from "src/configs/api";
+import api from "services/api";
 import { mutate } from "swr";
 
 function Alerts() {
@@ -24,8 +24,8 @@ function Alerts() {
 
   useEffect(() => {
     if (data?.otherData && !openIncidentId && !showModal) {
-      const { packs, page, totalPages } = data.otherData;
-      setIncidents(packs || []);
+      const { packs, page, totalPages } = data?.otherData;
+      setIncidents(packs);
       setPage(page || 1);
       setTotalPages(totalPages || 1);
     }
@@ -54,12 +54,8 @@ function Alerts() {
   };
 
   return (
-    <div
-      className={`flex flex-col h-full justify-between p-5 overflow-y-auto scrollbar-none ${
-        darkMode ? "dark:bg-gray-900" : ""
-      }`}
-    >
-      {incidents.length ? (
+    <div className="flex flex-col h-full justify-between p-5 overflow-y-auto scrollbar-none">
+      {incidents ? (
         <div className="flex flex-col justify-between gap-[5px]">
           {incidents.map((incident) => (
             <Card
@@ -73,7 +69,12 @@ function Alerts() {
             />
           ))}
           {totalPages > 1 && incidents.length > 0 && (
-            <Pagination page={page} totalPages={totalPages} setPage={setPage} />
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              setPage={setPage}
+              openIncidentId={openIncidentId}
+            />
           )}
         </div>
       ) : (

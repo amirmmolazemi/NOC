@@ -7,8 +7,8 @@ import useUserRole from "hooks/useUserRole";
 import Loader from "components/loader/Loader";
 import TeamTable from "components/teams/TeamTable";
 import Pagination from "components/pagination/Pagination";
-import api from "configs/api";
-import AddTeamModal from "src/components/teams/AddTeamModal";
+import api from "services/api";
+import AddTeamModal from "components/teams/AddTeamModal";
 
 function Teams() {
   const [teams, setTeams] = useState([]);
@@ -37,8 +37,8 @@ function Teams() {
 
   useEffect(() => {
     if (data?.otherData && !showModal) {
-      const { teams, page, totalPages } = data.otherData;
-      setTeams(teams || []);
+      const { teams, page, totalPages } = data?.otherData;
+      setTeams(teams);
       setPage(page || 1);
       setTotalPages(totalPages || 1);
     }

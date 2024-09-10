@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import fetcher from "src/utils/fetcher";
+import fetcher from "utils/fetcher";
 import { TfiCrown } from "react-icons/tfi";
 import Pagination from "../pagination/Pagination";
 import { FiMinusCircle } from "react-icons/fi";

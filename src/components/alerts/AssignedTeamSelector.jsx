@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import fetcher from "src/utils/fetcher";
+import fetcher from "utils/fetcher";
 import useSWR from "swr";
 
 const AssignedTeamSelector = ({ darkMode, assignedTeam, setAssignedTeam }) => {

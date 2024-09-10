@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import useSWR from "swr";
-import fetcher from "src/utils/fetcher";
+import fetcher from "utils/fetcher";
 import { FiSend, FiMinusCircle } from "react-icons/fi";
 import Pagination from "../pagination/Pagination";
 

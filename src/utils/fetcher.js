@@ -1,5 +1,5 @@
 import Cookies from "js-cookie";
-import api from "configs/api";
+import api from "services/api";
 
 const fetcher = async (url) => {
   try {

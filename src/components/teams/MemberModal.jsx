@@ -1,11 +1,11 @@
 import { useEffect, useState } from "react";
 import useSWR, { mutate } from "swr";
-import fetcher from "src/utils/fetcher";
+import fetcher from "utils/fetcher";
 import { FiMinusCircle } from "react-icons/fi";
 import Cookies from "js-cookie";
 import Pagination from "../pagination/Pagination";
 import { toast } from "react-toastify";
-import api from "src/configs/api";
+import api from "services/api";
 
 function MemberModal({ darkMode, closeModal, team, teamId }) {
   const [users, setUsers] = useState([]);
@@ -18,19 +18,23 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  const { data: fetchedUsers, isValidating } = useSWR(
-    `/user?size=5&page=${page}&team=${team}`,
+  const {
+    data: fetchedUsers,
+    isValidating,
+    error: usersError,
+  } = useSWR(`/user?size=5&page=${page}&team=${team}`, fetcher);
+  const { data: fetchedAllUsers, error: allUsersError } = useSWR(
+    `/user?size=5&page=off`,
     fetcher
   );
-  const { data: fetchedAllUsers } = useSWR(`/user?size=5&page=off`, fetcher);
 
   useEffect(() => {
-    if (fetchedUsers) {
-      setUsers(fetchedUsers.users);
-      setPage(fetchedUsers.page || 1);
+    if (fetchedUsers && !usersError) {
+      setUsers(fetchedUsers?.users);
+      setPage(fetchedUsers?.page || 1);
       setTotalPages(fetchedUsers.totalPages || 1);
     }
-    if (fetchedAllUsers) {
+    if (fetchedAllUsers && !allUsersError) {
       const usersWithoutTeam = fetchedAllUsers.filter((user) => !user.team);
       setAllUsers(usersWithoutTeam);
       setFilteredUsers(usersWithoutTeam);
@@ -193,7 +197,7 @@ function MemberModal({ darkMode, closeModal, team, teamId }) {
                 </tr>
               </thead>
               <tbody>
-                {!isValidating && users.length > 0 ? (
+                {!isValidating && users ? (
                   users?.map((user) => (
                     <tr
                       key={user.id}

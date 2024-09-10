@@ -6,7 +6,7 @@ import Pagination from "components/pagination/Pagination";
 import { useSelector } from "react-redux";
 import useSWR, { mutate } from "swr";
 import fetcher from "utils/fetcher";
-import api from "src/configs/api";
+import api from "services/api";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 
@@ -28,9 +28,10 @@ function Incidents() {
 
   useEffect(() => {
     if (data?.otherData && !openIncidentId && !assignMemberShowModal) {
-      setIncidents(data.otherData.incidents);
-      setPage(data.otherData.page || 1);
-      setTotalPages(data.otherData.totalPages || 1);
+      const { incidents, page, totalPages } = data?.otherData;
+      setIncidents(incidents);
+      setPage(page || 1);
+      setTotalPages(totalPages || 1);
     }
   }, [data, openIncidentId, assignMemberShowModal]);
 
@@ -39,11 +40,7 @@ function Incidents() {
   if (error) {
     toast.error("Error fetching incidents");
     return (
-      <div
-        className={`flex flex-col h-full justify-between p-5 overflow-y-auto scrollbar-none ${
-          darkMode ? "dark:bg-gray-900" : ""
-        }`}
-      >
+      <div className="flex flex-col h-full justify-between p-5 overflow-y-auto scrollbar-none">
         <div className="flex items-center justify-center h-[calc(93vh-8vh)]">
           <p
             className={`text-3xl font-semibold ${
@@ -87,18 +84,14 @@ function Incidents() {
       );
       setOpenIncidentId(null);
       mutate(`pack/incidents?size=6&page=${page}`);
-      toast.success("Pack Assigned Successfully");
+      toast.success("Pack Closed Successfully");
     } catch (error) {
-      toast.error("Error Assigning The Incident");
+      toast.error("Error Closing The Incident");
     }
   };
 
   return (
-    <div
-      className={`flex flex-col h-full justify-between p-5 overflow-y-auto scrollbar-none ${
-        darkMode ? "dark:bg-gray-900" : ""
-      }`}
-    >
+    <div className="flex flex-col h-full justify-between p-5 overflow-y-auto scrollbar-none">
       {incidents && !error ? (
         <div className="flex flex-col justify-between gap-[5px]">
           {incidents.map((incident) => (
@@ -117,7 +110,12 @@ function Incidents() {
             />
           ))}
           {totalPages > 1 && incidents.length > 0 && (
-            <Pagination page={page} totalPages={totalPages} setPage={setPage} />
+            <Pagination
+              page={page}
+              totalPages={totalPages}
+              setPage={setPage}
+              openIncidentId={openIncidentId}
+            />
           )}
         </div>
       ) : (

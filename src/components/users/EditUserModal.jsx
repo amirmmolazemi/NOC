@@ -22,9 +22,7 @@ function EditUserModal({
   };
 
   const handleSave = () => {
-    if (validateFields()) {
-      saveHandler();
-    }
+    if (validateFields()) saveHandler();
   };
 
   return (
@@ -80,7 +78,7 @@ function EditUserModal({
                       darkMode
                         ? "bg-gray-700 text-white"
                         : "bg-white text-black border"
-                    } ${errors[field] ? "border-red-500" : ""}`}
+                    } ${errors[field] && "border-red-500"}`}
                   />
                 )}
                 {errors[field] && (

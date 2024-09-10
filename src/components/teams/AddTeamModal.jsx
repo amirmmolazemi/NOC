@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import fetcher from "src/utils/fetcher";
+import fetcher from "utils/fetcher";
 import useSWR from "swr";
 import UsersList from "./UsersList";
 import Pagination from "../pagination/Pagination";
@@ -13,8 +13,8 @@ function AddTeamModal({ darkMode, closeModal, addUserHandler }) {
   const {
     data: fetchedUsers,
     error,
-    isValidating,
-  } = useSWR(`/user?size=5&role=Head&page=${page}&team=null`, fetcher);
+    isLoading,
+  } = useSWR(`/user?size=3&role=Head&page=${page}&team=null`, fetcher);
 
   const validateFields = () => {
     const newErrors = {};
@@ -84,9 +84,9 @@ function AddTeamModal({ darkMode, closeModal, addUserHandler }) {
                   />
                 ) : (
                   <>
-                    {!isValidating ? (
+                    {!isLoading ? (
                       <>
-                        {users.filter((user) => !user.team).length ? (
+                        {users?.filter((user) => !user.team) ? (
                           <>
                             <UsersList
                               darkMode={darkMode}

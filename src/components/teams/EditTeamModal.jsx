@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import UsersList from "./UsersList";
 import useSWR from "swr";
-import fetcher from "src/utils/fetcher";
+import fetcher from "utils/fetcher";
 import Pagination from "../pagination/Pagination";
 
 function EditTeamModal({
@@ -16,7 +16,7 @@ function EditTeamModal({
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
   const { data: fetchedUsers, isValidating } = useSWR(
-    `/user?size=5&role=Head&page=${page}&team=null`,
+    `/user?size=3&role=Head&page=${page}&team=null`,
     fetcher
   );
 
@@ -88,7 +88,7 @@ function EditTeamModal({
                   />
                 ) : (
                   <>
-                    {!isValidating ? (
+                    {!isValidating && users ? (
                       users.filter((user) => !user.team).length ? (
                         <>
                           <UsersList

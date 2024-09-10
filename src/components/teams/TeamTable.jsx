@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
-import api from "configs/api";
+import api from "services/api";
 import { mutate } from "swr";
 import TeamActions from "./TeamActions";
 import EditTeamModal from "./EditTeamModal";
@@ -78,7 +78,7 @@ function TeamTable({ teams, darkMode, page }) {
           </tr>
         </thead>
         <tbody>
-          {teams.length ? (
+          {teams ? (
             teams.map((team) => (
               <tr
                 key={team.id}

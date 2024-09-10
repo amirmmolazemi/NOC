@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
-import api from "configs/api";
+import api from "services/api";
 import UserActions from "./UserActions";
 import EditUserModal from "./EditUserModal";
 import { mutate } from "swr";
@@ -57,7 +57,7 @@ function UserTable({ users, darkMode, page }) {
   return (
     <>
       <table
-        className={`shadow-lg rounded-lg overflow-hidden min-w-full mt-6 mb-6 ${
+        className={`shadow-lg rounded-lg overflow-hidden min-w-full mt-3 mb-6 ${
           darkMode ? "bg-gray-800" : "bg-white"
         }`}
       >
@@ -75,7 +75,7 @@ function UserTable({ users, darkMode, page }) {
           </tr>
         </thead>
         <tbody>
-          {users.length ? (
+          {users ? (
             users.map((user) => (
               <tr
                 key={user.id}

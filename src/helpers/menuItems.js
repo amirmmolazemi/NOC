@@ -11,6 +11,8 @@ import { RiTeamLine } from "react-icons/ri";
 import enLocale from "assets/locales/en.json";
 import faLocale from "assets/locales/fa.json";
 
+const logOut = () => Cookies.remove("token");
+
 const menuItems = (language) => {
   const locales = language === "en" ? enLocale : faLocale;
   return [
@@ -54,9 +56,7 @@ const menuItems = (language) => {
       title: locales.menu.logout,
       icon: FiLogOut,
       link: "/login",
-      click: () => {
-        Cookies.remove("token");
-      },
+      click: logOut,
       roles: ["Admin", "Member", "Head", "Team_724"],
     },
   ];
