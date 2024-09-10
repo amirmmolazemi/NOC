@@ -6,7 +6,7 @@ import Pagination from "components/pagination/Pagination";
 import { useSelector } from "react-redux";
 import useSWR, { mutate } from "swr";
 import fetcher from "utils/fetcher";
-import api from "services/api";
+import api from "api/index";
 import Cookies from "js-cookie";
 import { toast } from "react-toastify";
 
@@ -109,7 +109,7 @@ function Incidents() {
               doneHandler={doneHandler}
             />
           ))}
-          {totalPages > 1 && incidents.length > 0 && (
+          {totalPages > 1 && incidents && (
             <Pagination
               page={page}
               totalPages={totalPages}

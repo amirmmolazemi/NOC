@@ -1,8 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import Cookies from "js-cookie";
-import { mutate } from "swr";
 
 // components
 import Loader from "components/loader/Loader";
@@ -12,9 +9,6 @@ import AddUserModal from "components/users/AddUserModal";
 
 // hooks
 import useUserRole from "hooks/useUserRole";
-
-// api service
-import api from "services/api";
 
 function Users() {
   const [users, setUsers] = useState([]);
@@ -27,19 +21,6 @@ function Users() {
     "Admin",
     `/user?size=10&page=${page}`
   );
-
-  const addUserHandler = async (newUser) => {
-    try {
-      const token = Cookies.get("token");
-      await api.post("/user", newUser, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      mutate(`/user?size=10&page=${page}`);
-      toast.success("User added successfully!");
-    } catch (error) {
-      toast.error("Error adding user");
-    }
-  };
 
   useEffect(() => {
     if (data?.otherData && !showModal) {
@@ -68,14 +49,14 @@ function Users() {
         Add User
       </button>
       <UserTable users={users} darkMode={darkMode} page={page} />
-      {totalPages > 1 && users.length > 0 && (
+      {totalPages > 1 && users && (
         <Pagination page={page} totalPages={totalPages} setPage={setPage} />
       )}
       {showModal && (
         <AddUserModal
           darkMode={darkMode}
           closeModal={() => setShowModal(false)}
-          addUserHandler={addUserHandler}
+          page={page}
         />
       )}
     </div>

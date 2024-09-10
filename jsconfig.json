@@ -9,13 +9,12 @@
       "hooks/*": ["src/hooks/*"],
       "feature/*": ["src/feature/*"],
       "App/*": ["src/App/*"],
-      "services/*": ["src/services/*"],
+      "api/*": ["src/api/*"],
       "constants/*": ["src/constants/*"],
-      "router/*": ["src/router/*"],
+      "routes/*": ["src/routes/*"],
       "pages/*": ["src/pages/*"],
       "styles/*": ["src/styles/*"],
       "utils/*": ["src/utils/*"],
-      "helpers/*": ["src/helpers/*"]
     }
   }
 }

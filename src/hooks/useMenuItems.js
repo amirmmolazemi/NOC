@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import menuItems from "helpers/menuItems";
+import { menuItems } from "utils/helpers";
 
 const useMenuItems = () => {
   const language = useSelector((state) => state.language.language);

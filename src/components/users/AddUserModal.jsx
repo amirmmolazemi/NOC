@@ -1,6 +1,8 @@
 import { useState } from "react";
+import { addUserHandler } from "api/index";
+import { addValidateFields } from "utils/helpers";
 
-function AddUserModal({ darkMode, closeModal, addUserHandler }) {
+function AddUserModal({ darkMode, closeModal, page }) {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
@@ -10,21 +12,9 @@ function AddUserModal({ darkMode, closeModal, addUserHandler }) {
   const [errors, setErrors] = useState({});
   const roles = ["Head", "Team_724", "Member"];
 
-  const validateFields = () => {
-    const newErrors = {};
-    if (formData.password.length < 8)
-      newErrors.password = "Password must be at least 8 characters.";
-    if (!/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(formData.email))
-      newErrors.email = "Invalid email address.";
-    if (!formData.username) newErrors.username = "Username is required.";
-    if (!formData.role) newErrors.role = "Role is required.";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   const handleSave = () => {
-    if (validateFields()) {
-      addUserHandler(formData);
+    if (addValidateFields(formData, setErrors)) {
+      addUserHandler(formData, page);
       closeModal();
     }
   };

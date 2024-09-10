@@ -4,7 +4,7 @@ import { jwtDecode } from "jwt-decode";
 import { useDispatch } from "react-redux";
 import Cookies from "js-cookie";
 import { setRole } from "feature/userRole/userSlice";
-import api from "services/api";
+import api from "api/index";
 const useCheckCookie = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();

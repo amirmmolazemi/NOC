@@ -10,10 +10,11 @@ function AssignMasterModal({ darkMode, closeModal, team, setMaster, master }) {
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
 
-  const { data: fetchedUsers, error, isValidating } = useSWR(
-    `/user?size=5&page=${page}&team=${team}&role=Member`,
-    fetcher
-  );
+  const {
+    data: fetchedUsers,
+    error,
+    isValidating,
+  } = useSWR(`/user?size=5&page=${page}&team=${team}&role=Member`, fetcher);
 
   useEffect(() => {
     if (fetchedUsers && fetchedUsers.users) {
@@ -83,7 +84,7 @@ function AssignMasterModal({ darkMode, closeModal, team, setMaster, master }) {
                       Failed to load users. Please try again later.
                     </td>
                   </tr>
-                ) : users.length > 0 ? (
+                ) : users ? (
                   users.map((user) => (
                     <tr
                       key={user.id}
@@ -130,7 +131,7 @@ function AssignMasterModal({ darkMode, closeModal, team, setMaster, master }) {
                 )}
               </tbody>
             </table>
-            {totalPages > 1 && users.length > 0 && (
+            {totalPages > 1 && users && (
               <Pagination
                 page={page}
                 totalPages={totalPages}

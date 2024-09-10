@@ -55,7 +55,7 @@ const AssignedTeamSelector = ({ darkMode, assignedTeam, setAssignedTeam }) => {
           <option value="">Select Assigned Team</option>
           {isLoading ? (
             <option value="">Loading...</option>
-          ) : filteredTeams.length > 0 ? (
+          ) : filteredTeams ? (
             filteredTeams.map((team) => (
               <option key={team.id} value={team.id}>
                 {team.name}

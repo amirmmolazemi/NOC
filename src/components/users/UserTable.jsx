@@ -1,10 +1,8 @@
 import { useState } from "react";
-import Cookies from "js-cookie";
-import { toast } from "react-toastify";
-import api from "services/api";
+import { deleteHandler, editHandler } from "api/index";
 import UserActions from "./UserActions";
 import EditUserModal from "./EditUserModal";
-import { mutate } from "swr";
+import { openEditModal } from "utils/helpers";
 
 function UserTable({ users, darkMode, page }) {
   const [showModal, setShowModal] = useState(false);
@@ -15,44 +13,6 @@ function UserTable({ users, darkMode, page }) {
     email: "",
     role: "",
   });
-
-  const deleteHandler = async (id) => {
-    try {
-      const token = Cookies.get("token");
-      await api.delete(`/user/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      mutate(`/user?size=10&page=${page}`);
-      toast.success("User deleted successfully!");
-    } catch (error) {
-      toast.error("Error deleting user");
-    }
-  };
-
-  const openEditModal = (user) => {
-    setSelectedUserId(user.id);
-    setEditUserData({
-      username: user.username,
-      password: "",
-      email: user.email,
-      role: user.id !== user?.team?.[0]?.head?.id && user.role.name,
-    });
-    setShowModal(true);
-  };
-
-  const editHandler = async () => {
-    try {
-      const token = Cookies.get("token");
-      await api.put(`/user/${selectedUserId}`, editUserData, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      mutate(`/user?size=10&page=${page}`);
-      toast.success("User data saved successfully!");
-      setShowModal(false);
-    } catch (error) {
-      toast.error("Error saving user data");
-    }
-  };
 
   return (
     <>
@@ -91,8 +51,15 @@ function UserTable({ users, darkMode, page }) {
                 <td className="p-3 text-center">{user?.team?.name}</td>
                 <td className="p-3 text-center flex justify-center items-center gap-4">
                   <UserActions
-                    deleteHandler={() => deleteHandler(user?.id)}
-                    editHandler={() => openEditModal(user)}
+                    deleteHandler={() => deleteHandler(user?.id, page)}
+                    editHandler={() =>
+                      openEditModal(
+                        setEditUserData,
+                        setShowModal,
+                        setSelectedUserId,
+                        user
+                      )
+                    }
                   />
                 </td>
               </tr>
@@ -117,7 +84,9 @@ function UserTable({ users, darkMode, page }) {
           userData={editUserData}
           setUserData={setEditUserData}
           closeModal={() => setShowModal(false)}
-          saveHandler={editHandler}
+          editHandler={() =>
+            editHandler(selectedUserId, editUserData, setShowModal, page)
+          }
           isHead={
             selectedUserId &&
             users.find((user) => user.id === selectedUserId)?.team?.[0]?.head

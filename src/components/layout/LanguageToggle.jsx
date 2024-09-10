@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from "react-redux";
 import { toggleLanguage } from "feature/language/languageSlice";
-import flagUk from "assets/flag-uk.png";
-import flagIr from "assets/flag-ir.png";
+import flagUk from "assets/images/flag-uk.png";
+import flagIr from "assets/images/flag-ir.png";
 
 function LanguageToggle() {
   const language = useSelector((state) => state.language.language);

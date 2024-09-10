@@ -149,7 +149,7 @@ function AssignMemberModal({
                 </tbody>
               </table>
             )}
-            {totalPages > 1 && users.length > 0 && !error && (
+            {totalPages > 1 && users && !error && (
               <Pagination
                 page={page}
                 totalPages={totalPages}

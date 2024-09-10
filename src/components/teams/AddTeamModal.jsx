@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
 import fetcher from "utils/fetcher";
 import useSWR from "swr";
-import UsersList from "./UsersList";
-import Pagination from "../pagination/Pagination";
+import AddTeamModalInputs from "./AddTeamModalInputs";
+import { addTeamHandler } from "api/index";
+import { addTeamValidateFields } from "utils/helpers";
 
-function AddTeamModal({ darkMode, closeModal, addUserHandler }) {
+function AddTeamModal({ darkMode, closeModal, teamsPage }) {
   const [formData, setFormData] = useState({ name: "", headId: "" });
   const [errors, setErrors] = useState({});
   const [users, setUsers] = useState([]);
@@ -16,14 +17,6 @@ function AddTeamModal({ darkMode, closeModal, addUserHandler }) {
     isLoading,
   } = useSWR(`/user?size=3&role=Head&page=${page}&team=null`, fetcher);
 
-  const validateFields = () => {
-    const newErrors = {};
-    if (!formData.name) newErrors.name = "Name is required.";
-    if (!formData.headId) newErrors.headId = "Head is required.";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
   useEffect(() => {
     if (fetchedUsers) {
       setUsers(fetchedUsers.users);
@@ -33,9 +26,9 @@ function AddTeamModal({ darkMode, closeModal, addUserHandler }) {
   }, [fetchedUsers]);
 
   const handleSave = async () => {
-    if (validateFields()) {
+    if (addTeamValidateFields(formData, setErrors)) {
       try {
-        await addUserHandler(formData);
+        await addTeamHandler(formData, teamsPage);
         closeModal();
       } catch (err) {
         setErrors((prev) => ({
@@ -61,67 +54,18 @@ function AddTeamModal({ darkMode, closeModal, addUserHandler }) {
             <h3 className="text-3xl font-semibold">Add Team</h3>
           </div>
           <div className="relative flex-auto p-6">
-            {["name", "headId"].map((field, index) => (
-              <div className="mb-4" key={index}>
-                <label className="block mb-1 text-sm font-medium capitalize">
-                  {field === "headId" ? "Head" : field}
-                </label>
-                {field !== "headId" ? (
-                  <input
-                    type="text"
-                    value={formData[field]}
-                    onChange={(e) =>
-                      setFormData((prev) => ({
-                        ...prev,
-                        [field]: e.target.value,
-                      }))
-                    }
-                    className={`w-full p-2 rounded ${
-                      darkMode
-                        ? "bg-gray-700 text-white"
-                        : "bg-white text-black border"
-                    }`}
-                  />
-                ) : (
-                  <>
-                    {!isLoading ? (
-                      <>
-                        {users?.filter((user) => !user.team) ? (
-                          <>
-                            <UsersList
-                              darkMode={darkMode}
-                              users={users}
-                              editTeamData={formData}
-                              setEditTeamData={setFormData}
-                            />
-                            {totalPages > 1 && users.length > 0 && (
-                              <Pagination
-                                page={page}
-                                totalPages={totalPages}
-                                setPage={setPage}
-                              />
-                            )}
-                          </>
-                        ) : (
-                          <h1 className="text-3xl font-semibold text-center mt-10">
-                            We don't have any Head user
-                          </h1>
-                        )}
-                      </>
-                    ) : (
-                      <h1 className="text-3xl font-semibold text-center mt-10">
-                        Loading ...
-                      </h1>
-                    )}
-                  </>
-                )}
-                {errors[field] && (
-                  <p className="text-red-500 text-sm font-semibold mt-1">
-                    {errors[field]}
-                  </p>
-                )}
-              </div>
-            ))}
+            <AddTeamModalInputs
+              darkMode={darkMode}
+              errors={errors}
+              formData={formData}
+              isLoading={isLoading}
+              setFormData={setFormData}
+              totalPages={totalPages}
+              users={users}
+              isError={error}
+              page={page}
+              setPage={setPage}
+            />
             {error && (
               <p className="text-red-500 text-sm font-semibold mt-1">
                 Error loading users. Please try again later.

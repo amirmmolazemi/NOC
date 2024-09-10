@@ -8,11 +8,14 @@ const NotificationDetails = ({ darkMode, incidentDetails }) => {
           key={item.id}
           className={`p-4 border rounded-md shadow-sm mb-2 mt-4 ${
             darkMode
-              ? `bg-gray-800 ${item.type === "Incident" ? "border-red-500" : "border-gray-500"}`
+              ? `bg-gray-800 ${
+                  item.type === "Incident"
+                    ? "border-red-500"
+                    : "border-gray-500"
+                }`
               : "bg-white "
           }`}
         >
-          {console.log(incidentDetails)}
           <div className="flex justify-between">
             <p
               className={`font-semibold ${

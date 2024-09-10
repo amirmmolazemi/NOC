@@ -1,13 +1,9 @@
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
-import { toast } from "react-toastify";
-import { mutate } from "swr";
-import Cookies from "js-cookie";
 import useUserRole from "hooks/useUserRole";
 import Loader from "components/loader/Loader";
 import TeamTable from "components/teams/TeamTable";
 import Pagination from "components/pagination/Pagination";
-import api from "services/api";
 import AddTeamModal from "components/teams/AddTeamModal";
 
 function Teams() {
@@ -21,19 +17,6 @@ function Teams() {
     "Admin",
     `/team?size=10&page=${page}`
   );
-
-  const addUserHandler = async (newTeam) => {
-    try {
-      const token = Cookies.get("token");
-      await api.post("/team", newTeam, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      mutate(`/team?size=10&page=${page}`);
-      toast.success("Team added successfully!");
-    } catch (error) {
-      toast.error("Error adding team");
-    }
-  };
 
   useEffect(() => {
     if (data?.otherData && !showModal) {
@@ -62,14 +45,14 @@ function Teams() {
         Add Team
       </button>
       <TeamTable teams={teams} darkMode={darkMode} page={page} />
-      {totalPages > 1 && teams.length > 0 && (
+      {totalPages > 1 && teams && (
         <Pagination page={page} totalPages={totalPages} setPage={setPage} />
       )}
       {showModal && (
         <AddTeamModal
           darkMode={darkMode}
           closeModal={() => setShowModal(false)}
-          addUserHandler={addUserHandler}
+          teamsPage={page}
         />
       )}
     </div>

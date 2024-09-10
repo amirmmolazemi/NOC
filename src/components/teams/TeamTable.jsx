@@ -1,12 +1,10 @@
 import { useState } from "react";
-import Cookies from "js-cookie";
-import { toast } from "react-toastify";
-import api from "services/api";
-import { mutate } from "swr";
+import { deleteTeamHandler } from "api/index";
 import TeamActions from "./TeamActions";
 import EditTeamModal from "./EditTeamModal";
 import { FiEye } from "react-icons/fi";
 import MemberModal from "./MemberModal";
+import { openTeamEditModal } from "utils/helpers";
 
 function TeamTable({ teams, darkMode, page }) {
   const [showEditModal, setShowEditModal] = useState(false);
@@ -16,46 +14,6 @@ function TeamTable({ teams, darkMode, page }) {
   const [team, setTeam] = useState("");
   const [teamId, setTeamId] = useState("");
   const [editTeamData, setEditTeamData] = useState({ name: "", headId: "" });
-
-  const deleteHandler = async (id) => {
-    try {
-      const token = Cookies.get("token");
-      await api.delete(`/team/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      mutate(`/team?size=10&page=${page}`);
-      toast.success("Team deleted successfully!");
-    } catch (error) {
-      toast.error("Error deleting Team");
-    }
-  };
-
-  const openEditModal = (team) => {
-    setSelectedTeamId(team.id);
-    setEditTeamData({ name: team.name, headId: team.head.id });
-    setPrevEditTeamData({ name: team.name, headId: team.head.id });
-    setShowEditModal(true);
-  };
-
-  const editHandler = async () => {
-    try {
-      const token = Cookies.get("token");
-      let data = {
-        name: editTeamData.name,
-      };
-      if (prevEditTeamData.headId !== editTeamData.headId) {
-        data.headId = editTeamData.headId;
-      }
-      await api.put(`/team/${selectedTeamId}`, data, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      mutate(`/team?size=10&page=${page}`);
-      toast.success("Team data saved successfully!");
-      setShowEditModal(false);
-    } catch (error) {
-      toast.error("Error saving Team data");
-    }
-  };
 
   return (
     <>
@@ -106,8 +64,16 @@ function TeamTable({ teams, darkMode, page }) {
                 </td>
                 <td className="p-3 text-center flex justify-center items-center gap-4">
                   <TeamActions
-                    deleteHandler={() => deleteHandler(team.id)}
-                    editHandler={() => openEditModal(team)}
+                    deleteHandler={() => deleteTeamHandler(team.id, page)}
+                    editHandler={() =>
+                      openTeamEditModal(
+                        team,
+                        setSelectedTeamId,
+                        setEditTeamData,
+                        setPrevEditTeamData,
+                        setShowEditModal
+                      )
+                    }
                   />
                 </td>
               </tr>
@@ -132,7 +98,10 @@ function TeamTable({ teams, darkMode, page }) {
           editTeamData={editTeamData}
           setEditTeamData={setEditTeamData}
           closeModal={() => setShowEditModal(false)}
-          saveHandler={editHandler}
+          prevEditTeamData={prevEditTeamData}
+          teamsPage={page}
+          setShowEditModal={setShowEditModal}
+          teamId={selectedTeamId}
         />
       )}
       {showMembersModal && (

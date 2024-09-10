@@ -1,4 +1,4 @@
-import partLogo from "assets/partLogo.png";
+import partLogo from "assets/images/partLogo.png";
 
 function Logo() {
   return (

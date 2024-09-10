@@ -4,10 +4,6 @@ import useUserRole from "hooks/useUserRole";
 import Loader from "components/loader/Loader";
 import Card from "components/alerts/Card";
 import Pagination from "components/pagination/Pagination";
-import { toast } from "react-toastify";
-import Cookies from "js-cookie";
-import api from "services/api";
-import { mutate } from "swr";
 
 function Alerts() {
   const [incidents, setIncidents] = useState([]);
@@ -33,26 +29,6 @@ function Alerts() {
 
   if (isLoading) return <Loader />;
 
-  const handleCardClick = (id) => {
-    setOpenIncidentId(id === openIncidentId ? null : id);
-  };
-
-  const createIncident = async (teamId, packId, notifications) => {
-    setOpenIncidentId(null);
-    try {
-      const token = Cookies.get("token");
-      await api.post(
-        "/incident",
-        { packId, teamId, notifications },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      toast.success("incident created successfully");
-      mutate(`/pack?size=10&page=${page}`);
-    } catch (error) {
-      toast.error("error in creating incident");
-    }
-  };
-
   return (
     <div className="flex flex-col h-full justify-between p-5 overflow-y-auto scrollbar-none">
       {incidents ? (
@@ -62,13 +38,18 @@ function Alerts() {
               key={incident.id}
               incident={incident}
               isOpen={incident.id === openIncidentId}
-              onCardClick={() => handleCardClick(incident.id)}
+              onCardClick={() =>
+                setOpenIncidentId(
+                  incident.id === openIncidentId ? null : incident.id
+                )
+              }
+              setOpenIncidentId={setOpenIncidentId}
               showModal={showModal}
               setShowModal={setShowModal}
-              createIncident={createIncident}
+              alertsPage={page}
             />
           ))}
-          {totalPages > 1 && incidents.length > 0 && (
+          {totalPages > 1 && incidents && (
             <Pagination
               page={page}
               totalPages={totalPages}

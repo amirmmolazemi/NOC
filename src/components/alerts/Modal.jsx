@@ -2,17 +2,20 @@ import { useEffect, useState } from "react";
 import AssignedTeamSelector from "./AssignedTeamSelector";
 import NotificationDetails from "./NotificationDetails";
 import Pagination from "../pagination/Pagination";
+import { createIncident } from "api";
 
-function Modal({
-  setShowModal,
-  showModal,
-  incidentDetails,
-  darkMode,
-  createIncident,
-  page,
-  setPage,
-  totalPages,
-}) {
+function Modal(props) {
+  const {
+    setShowModal,
+    showModal,
+    incidentDetails,
+    darkMode,
+    page,
+    setPage,
+    totalPages,
+    alertsPage,
+    setOpenIncidentId,
+  } = props;
   const [assignedTeam, setAssignedTeam] = useState("");
   const [selectedNotification, setSelectedNotification] = useState([]);
 
@@ -29,7 +32,13 @@ function Modal({
   const saveHandler = async () => {
     const packId = incidentDetails.notifications[0].pack_id;
     const teamId = parseInt(assignedTeam, 10);
-    createIncident(teamId, packId, selectedNotification);
+    createIncident(
+      setOpenIncidentId,
+      teamId,
+      packId,
+      selectedNotification,
+      alertsPage
+    );
     setShowModal(false);
   };
 

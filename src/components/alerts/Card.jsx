@@ -8,6 +8,7 @@ import PrioritySelector from "./PrioritySelector";
 import NotificationDetails from "./NotificationDetails";
 import Modal from "./Modal";
 import Pagination from "../pagination/Pagination";
+import { getPriorityColor } from "src/utils/helpers";
 
 function Card(props) {
   const {
@@ -16,8 +17,9 @@ function Card(props) {
     onCardClick,
     showModal,
     setShowModal,
-    createIncident,
     isIncident,
+    alertsPage,
+    setOpenIncidentId,
   } = props;
   const darkMode = useSelector((state) => state.theme.darkMode);
   const [priority, setPriority] = useState(incident.priority || "");
@@ -43,19 +45,6 @@ function Card(props) {
       setTotalPages(incidentDetails.totalPages || 1);
     }
   }, [incidentDetails]);
-
-  const getPriorityColor = (priority) => {
-    switch (priority) {
-      case "High":
-        return "bg-red-500";
-      case "Medium":
-        return "bg-yellow-500";
-      case "Low":
-        return "bg-green-500";
-      default:
-        return "bg-gray-500";
-    }
-  };
 
   return (
     <div className="relative">
@@ -101,10 +90,11 @@ function Card(props) {
                   incidentDetails={incidentDetails}
                   showModal={showModal}
                   setShowModal={setShowModal}
-                  createIncident={createIncident}
                   page={page}
                   setPage={setPage}
                   totalPages={totalPages}
+                  alertsPage={alertsPage}
+                  setOpenIncidentId={setOpenIncidentId}
                 />
               </div>
             </div>

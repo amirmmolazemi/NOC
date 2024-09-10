@@ -9,13 +9,12 @@ const paths = [
   "feature",
   "hooks",
   "layout",
-  "services",
+  "api",
   "constants",
-  "router",
+  "routes",
   "pages",
   "styles",
   "utils",
-  "helpers",
 ];
 
 export default defineConfig({

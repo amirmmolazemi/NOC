@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import Cookies from "js-cookie";
-import partLogo from "assets/partLogo.png";
+import partLogo from "assets/images/partLogo.png";
 import LoginForm from "components/login/LoginForm";
 
 function Login() {
@@ -21,7 +21,7 @@ function Login() {
           <LoginForm />
         </div>
       </div>
-      <div className="hidden md:flex bg-[url('assets/bgPicture.png')] w-7/12 bg-cover bg-center rounded-[10px] h-[95vh] mt-6 mr-4" />
+      <div className="hidden md:flex bg-[url('assets/images/bgPicture.png')] w-7/12 bg-cover bg-center rounded-[10px] h-[95vh] mt-6 mr-4" />
     </div>
   );
 }
