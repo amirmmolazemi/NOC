@@ -18,32 +18,35 @@ function Dashboard() {
   if (loading) return <Loader />;
 
   return (
-    <section
-      className={`grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-3 mx-3 my-3 ${
-        language === "fa" && "rtl"
-      }`}
-    >
-      <DashboardCard
-        activeTorrents={activeTorrents}
-        darkMode={darkMode}
-        chart={<Bar data={chartData} />}
-      />
-      <DashboardCard
-        activeTorrents={activeTorrents}
-        darkMode={darkMode}
-        chart={<Line data={chartData} />}
-      />
-      <DashboardCard
-        activeTorrents={activeTorrents}
-        darkMode={darkMode}
-        chart={<Doughnut data={chartData} />}
-      />
-      <DashboardCard
-        activeTorrents={activeTorrents}
-        darkMode={darkMode}
-        chart={<Radar data={chartData} />}
-      />
-    </section>
+    <>
+      <section
+        className={`grid grid-cols-1 md:grid-cols-2 xl:grid-cols-2 gap-3 mx-3 my-3 ${
+          language === "fa" && "rtl"
+        }`}
+      >
+        <DashboardCard
+          activeTorrents={activeTorrents}
+          darkMode={darkMode}
+          chart={<Doughnut data={chartData} />}
+        />
+        <DashboardCard
+          activeTorrents={activeTorrents}
+          darkMode={darkMode}
+          chart={<Radar data={chartData} />}
+        />
+      </section>
+      <section
+        className={`grid grid-cols-1 gap-3 mx-3 my-3 ${
+          language === "fa" && "rtl"
+        }`}
+      >
+        <DashboardCard
+          activeTorrents={activeTorrents}
+          darkMode={darkMode}
+          chart={<Bar data={chartData} />}
+        />
+      </section>
+    </>
   );
 }
 
