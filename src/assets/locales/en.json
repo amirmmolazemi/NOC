@@ -1,7 +1,7 @@
 {
-  "activeTorrents": "Active Torrents",
-  "downloads": "Downloads",
-  "uploads": "Uploads",
+  "receive": "Amount of received alerts and incidents",
+  "topTeams": "Top 5 teams in handling incidents.",
+  "opens": "Amount of open and closed incidents and Alerts.",
   "seedRatio": "Seed Ratio",
   "notFound": {
     "title": "404",

@@ -8,6 +8,7 @@ import Pagination from "../pagination/Pagination";
 import AssignMemberModal from "./AssignMemberModal";
 import AssignMasterModal from "./AssignMasterModal";
 import { toast } from "react-toastify";
+import { getPriorityColor } from "src/utils/helpers";
 
 function Card({
   incident,
@@ -28,22 +29,22 @@ function Card({
   const [members, setMembers] = useState([]);
 
   const { data: incidentDetails, error } = useSWR(
-    isOpen ? `/pack/${incident.id}?size=10&page=${page}` : null,
+    isOpen ? `/pack/${incident?.id}?size=10&page=${page}` : null,
     fetcher,
     { refreshInterval: 10 * 1000, refreshWhenHidden: true }
   );
 
   useEffect(() => {
     if (incidentDetails) {
-      setPage(incidentDetails.page || 1);
-      setTotalPages(incidentDetails.totalPages || 1);
+      setPage(incidentDetails?.page || 1);
+      setTotalPages(incidentDetails?.totalPages || 1);
     }
   }, [incidentDetails]);
 
   const shouldShow =
     currentUser?.role?.name === "Team_724" ||
     currentUser?.username === incident?.assigned_team?.head?.username ||
-    incident.user.some((user) => user?.id === currentUser.id);
+    incident?.user?.some((user) => user?.id === currentUser?.id);
 
   const saveHandler = async () => {
     try {
@@ -51,22 +52,9 @@ function Card({
       if (members.includes(master))
         membersList = members.filter((member) => member !== master);
       else membersList = members;
-      await assignToMember(incident.id, master, membersList);
+      await assignToMember(incident?.id, master, membersList);
     } catch (error) {
       toast.error("Failed to save members. Please try again.");
-    }
-  };
-
-  const getPriorityColor = (priority) => {
-    switch (priority) {
-      case "High":
-        return "bg-red-500";
-      case "Medium":
-        return "bg-yellow-500";
-      case "Low":
-        return "bg-green-500";
-      default:
-        return "bg-gray-500";
     }
   };
 
@@ -107,7 +95,7 @@ function Card({
                   Master Member:
                   <span className="text-red-500 font-bold">
                     {!incident.master_member
-                      ? " Not Declare"
+                      ? " Not Declared"
                       : " " + incident.master_member.username}
                   </span>
                 </h3>
