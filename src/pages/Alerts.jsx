@@ -4,6 +4,8 @@ import useUserRole from "hooks/useUserRole";
 import Loader from "components/loader/Loader";
 import Card from "components/alerts/Card";
 import Pagination from "components/pagination/Pagination";
+import fetcher from "utils/fetcher";
+import useSWR from "swr";
 
 function Alerts() {
   const [incidents, setIncidents] = useState([]);
@@ -12,6 +14,7 @@ function Alerts() {
   const [totalPages, setTotalPages] = useState(1);
   const [page, setPage] = useState(1);
   const darkMode = useSelector((state) => state.theme.darkMode);
+  const { data: currentUser } = useSWR(`/user/me`, fetcher);
   const { data, isLoading } = useUserRole(
     false,
     "Team_724",
@@ -31,7 +34,7 @@ function Alerts() {
 
   return (
     <div className="flex flex-col h-full justify-between p-5 overflow-y-auto scrollbar-none">
-      {incidents ? (
+      {incidents.length ? (
         <div className="flex flex-col justify-between gap-[5px]">
           {incidents.map((incident) => (
             <Card
@@ -43,6 +46,7 @@ function Alerts() {
                   incident.id === openIncidentId ? null : incident.id
                 )
               }
+              currentUser={currentUser}
               setOpenIncidentId={setOpenIncidentId}
               showModal={showModal}
               setShowModal={setShowModal}

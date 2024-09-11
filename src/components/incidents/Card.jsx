@@ -8,7 +8,7 @@ import Pagination from "../pagination/Pagination";
 import AssignMemberModal from "./AssignMemberModal";
 import AssignMasterModal from "./AssignMasterModal";
 import { toast } from "react-toastify";
-import { getPriorityColor } from "src/utils/helpers";
+import { getPriorityColor } from "utils/helpers";
 
 function Card({
   incident,
@@ -69,7 +69,7 @@ function Card({
       <div
         className={`shadow-md rounded-lg p-3 transition-all duration-200 ease-in-out overflow-hidden ml-1 relative ${
           darkMode ? "text-white bg-gray-700" : "bg-white text-gray-700"
-        } ${isOpen ? "max-h-[706px]" : "sm:max-h-[120px] max-h-[98px]"}`}
+        } ${isOpen ? "max-h-[706px]" : "sm:max-h-[120px] max-h-[138px]"}`}
       >
         {shouldShow && (
           <>
@@ -82,16 +82,28 @@ function Card({
                   {utcChanger(incident.notifications[0]?.receive_time)}
                 </h3>
               </div>
-              <div className="mt-1 font-semibold text-[14px] text-gray-400">
+              <div className="flex justify-between mt-1 font-semibold text-[14px] text-gray-400">
                 <h3>{incident.notifications[0]?.service}</h3>
+                <h3>Assigned Team: {incident.assigned_team?.name}</h3>
               </div>
               <div className="flex justify-between mt-1 font-semibold text-[14px] text-gray-400">
                 <h3>Fingerprint: {incident.fingerprint}</h3>
                 <h3>Status: {incident.status}</h3>
               </div>
               <div className="flex justify-between mt-1 font-semibold text-[14px] text-gray-400">
-                <h3>Assigned Team: {incident.assigned_team?.name}</h3>
-                <h3>
+                <div className="flex gap-2">
+                  Members:{" "}
+                  {incident?.user.length > 0 ? (
+                    <>
+                      {incident?.user.map((user) => (
+                        <h3>{user.username}</h3>
+                      ))}
+                    </>
+                  ) : (
+                    <span>No One</span>
+                  )}
+                </div>
+                <h3 className="ml-2">
                   Master Member:
                   <span className="text-red-500 font-bold">
                     {!incident.master_member

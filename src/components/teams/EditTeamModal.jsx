@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import useSWR from "swr";
 import fetcher from "utils/fetcher";
-import { editTeamValidateFields } from "src/utils/helpers";
+import { editTeamValidateFields } from "utils/helpers";
 import EditTeamModalInputs from "./EditTeamModalInputs";
-import { editTeamHandler } from "src/api";
+import { editTeamHandler } from "api";
 
 function EditTeamModal({
   darkMode,

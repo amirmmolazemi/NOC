@@ -8,7 +8,9 @@ import PrioritySelector from "./PrioritySelector";
 import NotificationDetails from "./NotificationDetails";
 import Modal from "./Modal";
 import Pagination from "../pagination/Pagination";
-import { getPriorityColor } from "src/utils/helpers";
+import { getPriorityColor } from "utils/helpers";
+import { FaThumbsDown, FaThumbsUp } from "react-icons/fa";
+import { sendFeedBack } from "api";
 
 function Card(props) {
   const {
@@ -20,10 +22,15 @@ function Card(props) {
     isIncident,
     alertsPage,
     setOpenIncidentId,
+    currentUser,
   } = props;
   const darkMode = useSelector((state) => state.theme.darkMode);
   const [priority, setPriority] = useState(incident.priority || "");
   const [totalPages, setTotalPages] = useState(1);
+  const [feedback, setFeedback] = useState(
+    incident?.ai_predict?.feedback || null
+  );
+  const [feedbackGiven, setFeedbackGiven] = useState(false);
   const [page, setPage] = useState(1);
 
   const {
@@ -46,12 +53,17 @@ function Card(props) {
     }
   }, [incidentDetails]);
 
+  const feedbackHandler = (num) => {
+    setFeedback(num);
+    setFeedbackGiven(true);
+    sendFeedBack(incident.id, num, alertsPage, setOpenIncidentId);
+  };
+
   return (
     <div className="relative">
       <div
         className={`absolute h-full w-3 rounded ${getPriorityColor(priority)}`}
       ></div>
-
       <div
         className={`shadow-md rounded-lg p-3 transition-all duration-200 ease-in-out overflow-hidden ml-1 relative ${
           darkMode ? "text-white bg-gray-700" : "bg-white text-gray-700"
@@ -76,28 +88,87 @@ function Card(props) {
           } transition-opacity duration-100 ease-in-out`}
         >
           {!isIncident && (
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-4">
-              <PrioritySelector
-                darkMode={darkMode}
-                incident={incident}
-                setPriority={setPriority}
-                priority={priority}
-              />
-              <div className="flex items-center mt-8 w-full">
-                <Button isButtonActive={priority} setShowModal={setShowModal} />
-                <Modal
+            <>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-4">
+                <PrioritySelector
                   darkMode={darkMode}
-                  incidentDetails={incidentDetails}
-                  showModal={showModal}
-                  setShowModal={setShowModal}
-                  page={page}
-                  setPage={setPage}
-                  totalPages={totalPages}
-                  alertsPage={alertsPage}
-                  setOpenIncidentId={setOpenIncidentId}
+                  incident={incident}
+                  setPriority={setPriority}
+                  priority={priority}
                 />
+                <div className="flex items-center mt-8 w-full">
+                  <Button
+                    isButtonActive={priority}
+                    setShowModal={setShowModal}
+                  />
+                  <Modal
+                    darkMode={darkMode}
+                    incidentDetails={incidentDetails}
+                    showModal={showModal}
+                    setShowModal={setShowModal}
+                    page={page}
+                    setPage={setPage}
+                    totalPages={totalPages}
+                    alertsPage={alertsPage}
+                    setOpenIncidentId={setOpenIncidentId}
+                  />
+                </div>
               </div>
-            </div>
+              {currentUser?.role?.name === "Team_724" && (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
+                  <div className="flex items-center mt-8 w-full">
+                    <h1 className="font-semibold">
+                      AI Suggestion :
+                      {incident?.ai_predict
+                        ? incident?.ai_predict?.predict
+                          ? " Incident"
+                          : " Alert"
+                        : " Not declare"}
+                    </h1>
+                  </div>
+                  {priority &&
+                    incident?.ai_predict &&
+                    incident?.ai_predict?.feedback === -1 && (
+                      <>
+                        <div className="flex items-center mt-8 gap-4">
+                          <button
+                            className={`flex items-center px-4 py-2 rounded transition-colors duration-300 cursor-pointer
+                            ${
+                              feedback === 1
+                                ? darkMode
+                                  ? "text-green-900 bg-green-400"
+                                  : "text-green-900 bg-green-400"
+                                : darkMode
+                                ? "text-white bg-gray-800"
+                                : "text-gray-800 bg-gray-200"
+                            }`}
+                            onClick={() => feedbackHandler(1)}
+                            disabled={feedbackGiven}
+                          >
+                            <FaThumbsUp className="mr-2" /> Like
+                          </button>
+                          <button
+                            className={`flex items-center px-4 py-2 rounded transition-colors duration-300 cursor-pointer
+   ${
+     feedback === 0
+       ? darkMode
+         ? "bg-red-600 text-white"
+         : "bg-red-600 text-white"
+       : darkMode
+       ? "text-white bg-gray-800"
+       : "text-gray-800 bg-gray-200"
+   }`}
+                            onClick={() => feedbackHandler(0)}
+                            disabled={feedbackGiven}
+                          >
+                            <FaThumbsDown className="mr-2" /> Dislike
+                          </button>
+                        </div>
+                      </>
+                    )}
+                </div>
+              )}
+            </>
           )}
           <div className="overflow-y-auto h-[400px] scrollbar-thin scrollbar-thumb-gray-500 mt-3 scrollbar-track-gray-200">
             {isLoading ? (

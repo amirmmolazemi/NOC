@@ -1,10 +1,10 @@
 import { Bar, Doughnut, Line } from "react-chartjs-2";
 import DashboardCard from "./DashboardCard";
 import useSWR from "swr";
-import fetcher from "src/utils/fetcher";
+import fetcher from "utils/fetcher";
 import { useEffect, useState } from "react";
 
-function Team724Charts({ language, darkMode, opens, topTeamsText, receive }) {
+function Charts({ language, darkMode, opens, topTeamsText, receive }) {
   const { data: topTeams, error: topTeamsError } = useSWR(
     "/team/top-teams",
     fetcher,
@@ -216,10 +216,11 @@ function Team724Charts({ language, darkMode, opens, topTeamsText, receive }) {
             <Doughnut data={doughnutData} options={doughnutChartOptions} />
           }
         />
+
         <DashboardCard
-          activeTorrents={topTeamsText}
+          activeTorrents={receive}
           darkMode={darkMode}
-          chart={<Bar data={barChartData} options={stackedBarChartOptions} />}
+          chart={<Line data={lineChartData} options={lineChartOptions} />}
         />
       </section>
       <section
@@ -228,13 +229,13 @@ function Team724Charts({ language, darkMode, opens, topTeamsText, receive }) {
         }`}
       >
         <DashboardCard
-          activeTorrents={receive}
+          activeTorrents={topTeamsText}
           darkMode={darkMode}
-          chart={<Line data={lineChartData} options={lineChartOptions} />}
+          chart={<Bar data={barChartData} options={stackedBarChartOptions} />}
         />
       </section>
     </>
   );
 }
 
-export default Team724Charts;
+export default Charts;

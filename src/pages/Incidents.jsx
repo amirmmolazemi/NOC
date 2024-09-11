@@ -92,7 +92,7 @@ function Incidents() {
 
   return (
     <div className="flex flex-col h-full justify-between p-5 overflow-y-auto scrollbar-none">
-      {incidents && !error ? (
+      {incidents.length && !error ? (
         <div className="flex flex-col justify-between gap-[5px]">
           {incidents.map((incident) => (
             <Card

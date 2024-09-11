@@ -13,7 +13,11 @@ const NotificationDetails = ({ darkMode, incidentDetails }) => {
                     ? "border-red-500"
                     : "border-gray-500"
                 }`
-              : "bg-white "
+              : `bg-white ${
+                  item.type === "Incident"
+                    ? "border-red-500"
+                    : "border-gray-500"
+                } `
           }`}
         >
           <div className="flex justify-between">

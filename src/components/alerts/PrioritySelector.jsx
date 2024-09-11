@@ -1,4 +1,4 @@
-import { changePackPriority } from "src/api";
+import { changePackPriority } from "api";
 
 const PrioritySelector = ({ darkMode, incident, setPriority, priority }) => {
   return (

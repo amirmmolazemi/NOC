@@ -4,7 +4,7 @@ import useRegisterChart from "hooks/useRegisterChart";
 import Loader from "components/loader/Loader";
 import enLocale from "assets/locales/en.json";
 import faLocale from "assets/locales/fa.json";
-import Team724Charts from "src/components/dashboard/Team724Charts";
+import Charts from "components/dashboard/Charts";
 function Dashboard() {
   useRegisterChart();
   const darkMode = useSelector((state) => state.theme.darkMode);
@@ -15,7 +15,7 @@ function Dashboard() {
 
   return (
     <>
-      <Team724Charts
+      <Charts
         opens={opens}
         topTeamsText={topTeams}
         receive={receive}

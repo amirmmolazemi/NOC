@@ -20,7 +20,7 @@ export const addUserHandler = async (newUser, page) => {
     mutate(`/user?size=10&page=${page}`);
     toast.success("User added successfully!");
   } catch (error) {
-    toast.error(error.response.data.message);
+    toast.error(error?.response?.data?.message);
   }
 };
 
@@ -30,7 +30,7 @@ export const deleteHandler = async (id, page) => {
     mutate(`/user?size=10&page=${page}`);
     toast.success("User deleted successfully!");
   } catch (error) {
-    toast.error(error.response.data.message);
+    toast.error(error?.response?.data?.message);
   }
 };
 
@@ -41,7 +41,7 @@ export const editHandler = async (id, data, setShowModal, page) => {
     toast.success("User data saved successfully!");
     setShowModal(false);
   } catch (error) {
-    toast.error(error.response.data.message);
+    toast.error(error?.response?.data?.message);
   }
 };
 
@@ -51,7 +51,7 @@ export const addTeamHandler = async (newTeam, page) => {
     mutate(`/team?size=10&page=${page}`);
     toast.success("Team added successfully!");
   } catch (error) {
-    toast.error(error.response.data.message);
+    toast.error(error?.response?.data?.message);
   }
 };
 
@@ -74,7 +74,7 @@ export const editTeamHandler = async (
     toast.success("Team data saved successfully!");
     ShowModal(false);
   } catch (error) {
-    toast.error(error.response.data.message);
+    toast.error(error?.response?.data?.message);
   }
 };
 
@@ -84,7 +84,7 @@ export const deleteTeamHandler = async (id, page) => {
     mutate(`/team?size=10&page=${page}`);
     toast.success("Team deleted successfully!");
   } catch (error) {
-    toast.error(error.response.data.message);
+    toast.error(error?.response?.data?.message);
   }
 };
 
@@ -103,7 +103,7 @@ export const deleteMemberHandler = async (
     toast.success("Member deleted successfully!");
   } catch (error) {
     if (error.response) {
-      toast.error(`Error: ${error.response.data.message}`);
+      toast.error(`Error: ${error?.response?.data?.message}`);
     } else if (error.request) {
       toast.error("Network error, please try again later.");
     } else {
@@ -138,7 +138,7 @@ export const addMemberHandler = async (
     toast.success("Member added successfully!");
   } catch (error) {
     if (error.response) {
-      toast.error(`Error: ${error.response.data.message}`);
+      toast.error(`Error: ${error?.response?.data?.message}`);
     } else if (error.request) {
       toast.error("Network error, please try again later.");
     } else {
@@ -165,7 +165,7 @@ export const loginHandler = async (username, password, navigate) => {
   } catch (error) {
     toast.error(
       error.response.data.error ||
-        error.response.data.message ||
+        error?.response?.data?.message ||
         "internal server error"
     );
   }
@@ -184,7 +184,7 @@ export const createIncident = async (
     toast.success("incident created successfully");
     mutate(`/pack?size=10&page=${page}`);
   } catch (error) {
-    toast.error(error.response.data.message);
+    toast.error(error?.response?.data?.message);
   }
 };
 
@@ -198,7 +198,7 @@ export const changePackPriority = async (priority, setPriority, id) => {
     }
     return;
   } catch (error) {
-    toast.error(error.response.data.message);
+    toast.error(error?.response?.data?.message);
   }
 };
 
@@ -209,7 +209,7 @@ export const closeIncident = async (incidentId, setId, page) => {
     mutate(`pack/incidents?size=6&page=${page}`);
     toast.success("Pack Closed Successfully");
   } catch (error) {
-    toast.error(error.response.data.message);
+    toast.error(error?.response?.data?.message);
   }
 };
 
@@ -220,7 +220,27 @@ export const assignToMember = async (packId, master, members, setId, page) => {
     mutate(`pack/incidents?size=6&page=${page}`);
     toast.success("Pack Assigned successfully");
   } catch (error) {
-    toast.error(error.response.data.message);
+    toast.error(error?.response?.data?.message);
+  }
+};
+
+export const sendFeedBack = async (
+  packId,
+  feedback,
+  page,
+  setOpenIncidentId
+) => {
+  try {
+    await api.post(
+      `pack/${packId}/predict-feedback`,
+      { feedback },
+      { headers }
+    );
+    setOpenIncidentId(null);
+    mutate(`/pack?size=10&page=${page}`);
+    toast.success("Feedback send successfully");
+  } catch (error) {
+    toast.error(error?.response?.data?.message);
   }
 };
 

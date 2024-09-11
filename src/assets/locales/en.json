@@ -1,7 +1,7 @@
 {
-  "receive": "Amount of received alerts and incidents",
-  "topTeams": "Top 5 teams in handling incidents.",
-  "opens": "Amount of open and closed incidents and Alerts.",
+  "receive": "Received notifications count",
+  "topTeams": "Top 10 teams",
+  "opens": "Incidents and alerts count",
   "seedRatio": "Seed Ratio",
   "notFound": {
     "title": "404",

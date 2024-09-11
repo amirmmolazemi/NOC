@@ -4,7 +4,7 @@ import TextInput from "./TextInput";
 import Checkbox from "./Checkbox";
 import Button from "./Button";
 import { loginHandler } from "api";
-import { LoginValidateInputs } from "src/utils/helpers";
+import { LoginValidateInputs } from "utils/helpers";
 
 function LoginForm() {
   const [inputs, setInputs] = useState({
